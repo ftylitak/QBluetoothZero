@@ -283,7 +283,7 @@ TBool QBtSerialPortServerPrivate::IsConnected()
 void QBtSerialPortServerPrivate::HandleListenerDataReceivedL(const QString & aData)
 {
 	//QString dataStr = QString::fromUtf8((char*)aData.Ptr(), aData.Length());
-	emit p_ptr->dataReceived(aData);
+	QT_TRYCATCH_LEAVING (emit p_ptr->dataReceived(aData) );
 }
 
 
@@ -300,7 +300,7 @@ void QBtSerialPortServerPrivate::HandleListenerConnectedL()
 	QBtAddress clientAddress(devAddr);
 		
 	iIsConnected=ETrue;
-	emit p_ptr->clientConnected(clientAddress);
+	QT_TRYCATCH_LEAVING  (emit p_ptr->clientConnected(clientAddress) );
 }
 
 
@@ -312,7 +312,7 @@ void QBtSerialPortServerPrivate::HandleListenerConnectedL()
 void QBtSerialPortServerPrivate::HandleListenerDisconnectedL()
 {
 	iIsConnected=EFalse;
-	emit p_ptr->clientDisconnected();
+	QT_TRYCATCH_LEAVING (emit p_ptr->clientDisconnected() );
 }
 
 // ----------------------------------------------------------------------------
@@ -322,7 +322,7 @@ void QBtSerialPortServerPrivate::HandleListenerDisconnectedL()
 // ----------------------------------------------------------------------------
 void QBtSerialPortServerPrivate::HandleListenerDataSend()
 {
-	emit p_ptr->dataSent();
+	QT_TRYCATCH_LEAVING  (emit p_ptr->dataSent() );
 }
 
 void QBtSerialPortServerPrivate::SetListeningQueueSize(TInt size)

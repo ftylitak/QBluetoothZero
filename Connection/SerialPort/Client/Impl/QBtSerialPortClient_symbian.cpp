@@ -61,9 +61,7 @@ void QBtSerialPortClientPrivate::DoCancel()
 //
 // create a connection to given address on given port.
 // ----------------------------------------------------------------------------
-TBool QBtSerialPortClientPrivate::Connect(
-        const QBtDevice& remoteDevice,
-        const QBtService& remoteService)
+TBool QBtSerialPortClientPrivate::ConnectL (const QBtDevice& remoteDevice, const QBtService& remoteService)
 {
     if(iState != ENone)
         return false;
@@ -77,6 +75,7 @@ TBool QBtSerialPortClientPrivate::Connect(
 
     // open socket
     User::LeaveIfError(iSock.Open(iSocketServ, _L("RFCOMM")));
+    
     // set address and port
     TBTSockAddr addr;
     addr.SetBTAddr(device->getAddress().convertToSymbianBtDevAddr());
@@ -84,15 +83,22 @@ TBool QBtSerialPortClientPrivate::Connect(
 
     // connect socket
     TRequestStatus status;
-    iSock.Connect(addr, status);
+    iSock.Connect(addr, status);    
+    
+    // wait (should we wait here? or use the ActiveObject RunL ?)
     User::WaitForRequest(status);
+    
+    
     if ( status!=KErrNone )
     {
-        emit p_ptr->error(QBtSerialPortClient::BluetoothSPCErrorOpeningConnection);
+        QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtSerialPortClient::BluetoothSPCErrorOpeningConnection) );
         return false;
     }
 
     iState=EConnecting;
+    QT_TRYCATCH_LEAVING (emit p_ptr->connectedToServer() );
+    
+    
     ReceiveData();
     return true;
 }
@@ -173,7 +179,7 @@ void QBtSerialPortClientPrivate::RunL()
 {
     if ( iStatus!=KErrNone )
     {
-        HandleConnectorDisconnected();
+        HandleConnectorDisconnectedL();
         return;
     }
 
@@ -181,7 +187,7 @@ void QBtSerialPortClientPrivate::RunL()
     {
         case EConnecting:
         {
-            HandleConnectorConnected();
+            HandleConnectorConnectedL();
             // wait incoming data on socket
             ReceiveData();
             break;
@@ -193,7 +199,7 @@ void QBtSerialPortClientPrivate::RunL()
             text->Des()..Copy(iBuffer);*/
             // observer will handle data
             QString receivedString = QString::fromUtf8((char*)iBuffer.Ptr(), iBuffer.Size());
-            HandleConnectorDataReceived(receivedString);
+            HandleConnectorDataReceivedL(receivedString);
             //CleanupStack::PopAndDestroy(text);
 
             // start expecting new incoming data
@@ -202,7 +208,7 @@ void QBtSerialPortClientPrivate::RunL()
         }
         case ESending:
         {
-            HandleConnectorDataSent();
+            HandleConnectorDataSentL();
             // start expecting new incoming data
             ReceiveData();
             break;
@@ -219,13 +225,13 @@ TInt QBtSerialPortClientPrivate::RunError(TInt /*aError*/)
 }
 
 // ----------------------------------------------------------------------------
-// QBtSerialPortClientPrivate::HandleConnectorDataReceived(TDesC& aData)
+// QBtSerialPortClientPrivate::HandleConnectorDataReceivedL(TDesC& aData)
 //
 // connector has received data signal
 // ----------------------------------------------------------------------------
-void QBtSerialPortClientPrivate::HandleConnectorDataReceived(const QString aData)
+void QBtSerialPortClientPrivate::HandleConnectorDataReceivedL(const QString & aData)
 {
-    emit p_ptr->dataReceived(aData);
+	QT_TRYCATCH_LEAVING (emit p_ptr->dataReceived(aData) );
 }
 
 /*!
@@ -233,9 +239,9 @@ void QBtSerialPortClientPrivate::HandleConnectorDataReceived(const QString aData
  *
  * Handles the event of server connection
  */
-void QBtSerialPortClientPrivate::HandleConnectorConnected()
+void QBtSerialPortClientPrivate::HandleConnectorConnectedL()
 {
-    emit p_ptr->connectedToServer();
+	QT_TRYCATCH_LEAVING (emit p_ptr->connectedToServer() );
 }
 
 /*!
@@ -243,18 +249,18 @@ void QBtSerialPortClientPrivate::HandleConnectorConnected()
  *
  * Handles the event of server disconnection
  */
-void QBtSerialPortClientPrivate::HandleConnectorDisconnected()
+void QBtSerialPortClientPrivate::HandleConnectorDisconnectedL()
 {
-    emit p_ptr->disconnectedFromServer();
+	QT_TRYCATCH_LEAVING (emit p_ptr->disconnectedFromServer() );
 }
 
 /*!
- * HandleConnectorDataSent()
+ * HandleConnectorDataSentL()
  *
  * Data successfully sent to server
  */
-void QBtSerialPortClientPrivate::HandleConnectorDataSent()
+void QBtSerialPortClientPrivate::HandleConnectorDataSentL()
 {
-    emit p_ptr->dataSent();
+	QT_TRYCATCH_LEAVING  (emit p_ptr->dataSent() );
 }
 

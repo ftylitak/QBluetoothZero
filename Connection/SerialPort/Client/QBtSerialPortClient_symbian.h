@@ -51,7 +51,7 @@ public:
 	 *
 	 * return the status of connection attempt
 	 */
-	TBool Connect(const QBtDevice& remoteDevice, const QBtService& remoteService);
+	TBool ConnectL(const QBtDevice& remoteDevice, const QBtService& remoteService);
 
 	/*!
 	 * Disconnect()
@@ -120,28 +120,28 @@ private:
 	 * param aName the name of the slave that sent the data.
 	 * param aData the data received.
 	 */
-	void HandleConnectorDataReceived(const QString aData);
+	void HandleConnectorDataReceivedL(const QString & aData);
 
 	/*!
-	 * HandleConnectorConnected()
+	 * HandleConnectorConnectedL()
 	 *
 	 *  Handles the event of server connection
 	 */
-	void HandleConnectorConnected();
+	void HandleConnectorConnectedL();
 
 	/*!
-	 * HandleConnectorDisconnected()
+	 * HandleConnectorDisconnectedL()
 	 *
 	 *  Handles the event of server disconnection
 	 */
-	void HandleConnectorDisconnected();
+	void HandleConnectorDisconnectedL();
 	
 	/*!
-	 * HandleConnectorDataSent()
+	 * HandleConnectorDataSentL()
 	 * 
 	 * Data successfully sent to server
 	 */
-	void HandleConnectorDataSent();
+	void HandleConnectorDataSentL();
 
 	/*!
 	 * ReceiveData()
