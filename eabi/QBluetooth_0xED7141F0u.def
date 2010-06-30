@@ -38,7 +38,7 @@ EXPORTS
 	_ZN19QBtSerialPortClient11IsConnectedEv @ 37 NONAME ABSENT
 	_ZN19QBtSerialPortClient11qt_metacallEN11QMetaObject4CallEiPPv @ 38 NONAME
 	_ZN19QBtSerialPortClient11qt_metacastEPKc @ 39 NONAME
-	_ZN19QBtSerialPortClient12dataReceivedE7QString @ 40 NONAME
+	_ZN19QBtSerialPortClient12dataReceivedE7QString @ 40 NONAME ABSENT
 	_ZN19QBtSerialPortClient16staticMetaObjectE @ 41 NONAME DATA 16
 	_ZN19QBtSerialPortClient17connectedToServerEv @ 42 NONAME
 	_ZN19QBtSerialPortClient19getStaticMetaObjectEv @ 43 NONAME
@@ -297,4 +297,5 @@ EXPORTS
 	_ZN19QBtSerialPortServer26getTransmittingServiceInfoEv @ 296 NONAME
 	_ZNK23QBtObjectExchangeClient11isConnectedEv @ 297 NONAME
 	_ZNK23QBtObjectExchangeClient6isBusyEv @ 298 NONAME
+	_ZN19QBtSerialPortClient12dataReceivedERK7QString @ 299 NONAME
 

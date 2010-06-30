@@ -124,7 +124,7 @@ signals:
     /**
      * Emitted as feedback when data are received successfully.
      */
-    void dataReceived(const QString data);
+    void dataReceived(const QString & data);
 
     /**
      * Emitted in case of error.
