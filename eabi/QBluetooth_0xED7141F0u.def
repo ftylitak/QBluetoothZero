@@ -1,0 +1,298 @@
+EXPORTS
+	_ZN10QBtAddressC1ER10TBTDevAddr @ 1 NONAME ABSENT
+	_ZN10QBtAddressC1ER7QString @ 2 NONAME ABSENT
+	_ZN10QBtAddressC1ERK10QByteArray @ 3 NONAME
+	_ZN10QBtAddressC1ERKS_ @ 4 NONAME ABSENT
+	_ZN10QBtAddressC1Ev @ 5 NONAME
+	_ZN10QBtAddressC2ER10TBTDevAddr @ 6 NONAME ABSENT
+	_ZN10QBtAddressC2ER7QString @ 7 NONAME ABSENT
+	_ZN10QBtAddressC2ERK10QByteArray @ 8 NONAME
+	_ZN10QBtAddressC2ERKS_ @ 9 NONAME ABSENT
+	_ZN10QBtAddressC2Ev @ 10 NONAME
+	_ZN10QBtAddressD1Ev @ 11 NONAME
+	_ZN10QBtAddressD2Ev @ 12 NONAME
+	_ZN10QBtAddresseqERS_ @ 13 NONAME ABSENT
+	_ZN10QBtAddressltERS_ @ 14 NONAME ABSENT
+	_ZN10QBtAddressneERS_ @ 15 NONAME ABSENT
+	_ZN10QBtServiceC1Ev @ 16 NONAME
+	_ZN10QBtServiceC2Ev @ 17 NONAME
+	_ZN14QBtLocalDevice11qt_metacallEN11QMetaObject4CallEiPPv @ 18 NONAME
+	_ZN14QBtLocalDevice11qt_metacastEPKc @ 19 NONAME
+	_ZN14QBtLocalDevice16staticMetaObjectE @ 20 NONAME DATA 16
+	_ZN14QBtLocalDevice19getStaticMetaObjectEv @ 21 NONAME
+	_ZN19QBtDeviceDiscoverer11qt_metacallEN11QMetaObject4CallEiPPv @ 22 NONAME
+	_ZN19QBtDeviceDiscoverer11qt_metacastEPKc @ 23 NONAME
+	_ZN19QBtDeviceDiscoverer13stopDiscoveryEv @ 24 NONAME
+	_ZN19QBtDeviceDiscoverer14startDiscoveryEv @ 25 NONAME
+	_ZN19QBtDeviceDiscoverer16discoveryStartedEv @ 26 NONAME
+	_ZN19QBtDeviceDiscoverer16discoveryStoppedEv @ 27 NONAME
+	_ZN19QBtDeviceDiscoverer16staticMetaObjectE @ 28 NONAME DATA 16
+	_ZN19QBtDeviceDiscoverer19getStaticMetaObjectEv @ 29 NONAME
+	_ZN19QBtDeviceDiscoverer5errorENS_21DeviceDiscoveryErrorsE @ 30 NONAME
+	_ZN19QBtDeviceDiscovererC1EP7QObject @ 31 NONAME
+	_ZN19QBtDeviceDiscovererC2EP7QObject @ 32 NONAME
+	_ZN19QBtDeviceDiscovererD0Ev @ 33 NONAME
+	_ZN19QBtDeviceDiscovererD1Ev @ 34 NONAME
+	_ZN19QBtDeviceDiscovererD2Ev @ 35 NONAME
+	_ZN19QBtSerialPortClient10disconnectEv @ 36 NONAME
+	_ZN19QBtSerialPortClient11IsConnectedEv @ 37 NONAME ABSENT
+	_ZN19QBtSerialPortClient11qt_metacallEN11QMetaObject4CallEiPPv @ 38 NONAME
+	_ZN19QBtSerialPortClient11qt_metacastEPKc @ 39 NONAME
+	_ZN19QBtSerialPortClient12dataReceivedE7QString @ 40 NONAME
+	_ZN19QBtSerialPortClient16staticMetaObjectE @ 41 NONAME DATA 16
+	_ZN19QBtSerialPortClient17connectedToServerEv @ 42 NONAME
+	_ZN19QBtSerialPortClient19getStaticMetaObjectEv @ 43 NONAME
+	_ZN19QBtSerialPortClient22disconnectedFromServerEv @ 44 NONAME
+	_ZN19QBtSerialPortClient5errorENS_9ErrorCodeE @ 45 NONAME
+	_ZN19QBtSerialPortClient7connectERK9QBtDeviceRK10QBtService @ 46 NONAME
+	_ZN19QBtSerialPortClient8dataSentEv @ 47 NONAME
+	_ZN19QBtSerialPortClient8sendDataERK7QString @ 48 NONAME
+	_ZN19QBtSerialPortClientC1EP7QObject @ 49 NONAME
+	_ZN19QBtSerialPortClientC2EP7QObject @ 50 NONAME
+	_ZN19QBtSerialPortClientD0Ev @ 51 NONAME
+	_ZN19QBtSerialPortClientD1Ev @ 52 NONAME
+	_ZN19QBtSerialPortClientD2Ev @ 53 NONAME
+	_ZN19QBtSerialPortServer10stopServerEv @ 54 NONAME
+	_ZN19QBtSerialPortServer11IsConnectedEv @ 55 NONAME ABSENT
+	_ZN19QBtSerialPortServer11qt_metacallEN11QMetaObject4CallEiPPv @ 56 NONAME
+	_ZN19QBtSerialPortServer11qt_metacastEPKc @ 57 NONAME
+	_ZN19QBtSerialPortServer11startServerERK7QString @ 58 NONAME
+	_ZN19QBtSerialPortServer12dataReceivedE7QString @ 59 NONAME
+	_ZN19QBtSerialPortServer13serverStartedEv @ 60 NONAME
+	_ZN19QBtSerialPortServer13serverStoppedEv @ 61 NONAME
+	_ZN19QBtSerialPortServer15clientConnectedE10QBtAddress @ 62 NONAME
+	_ZN19QBtSerialPortServer16staticMetaObjectE @ 63 NONAME DATA 16
+	_ZN19QBtSerialPortServer18clientDisconnectedEv @ 64 NONAME
+	_ZN19QBtSerialPortServer19SetConnectionStatusEb @ 65 NONAME ABSENT
+	_ZN19QBtSerialPortServer19getStaticMetaObjectEv @ 66 NONAME
+	_ZN19QBtSerialPortServer22SetTransmittingServiceERK10QBtService @ 67 NONAME ABSENT
+	_ZN19QBtSerialPortServer22StopAdvertisingServiceEv @ 68 NONAME ABSENT
+	_ZN19QBtSerialPortServer23StartAdvertisingServiceERK10QBtService @ 69 NONAME ABSENT
+	_ZN19QBtSerialPortServer26GetTransmittingServiceInfoEv @ 70 NONAME ABSENT
+	_ZN19QBtSerialPortServer5errorENS_9ErrorCodeE @ 71 NONAME
+	_ZN19QBtSerialPortServer8dataSentEv @ 72 NONAME
+	_ZN19QBtSerialPortServer8sendDataE7QString @ 73 NONAME
+	_ZN19QBtSerialPortServerC1EP7QObject @ 74 NONAME
+	_ZN19QBtSerialPortServerC2EP7QObject @ 75 NONAME
+	_ZN19QBtSerialPortServerD0Ev @ 76 NONAME
+	_ZN19QBtSerialPortServerD1Ev @ 77 NONAME
+	_ZN19QBtSerialPortServerD2Ev @ 78 NONAME
+	_ZN20QBtServiceAdvertiser11qt_metacallEN11QMetaObject4CallEiPPv @ 79 NONAME
+	_ZN20QBtServiceAdvertiser11qt_metacastEPKc @ 80 NONAME
+	_ZN20QBtServiceAdvertiser16staticMetaObjectE @ 81 NONAME DATA 16
+	_ZN20QBtServiceAdvertiser18advertisingStartedERK10QBtService @ 82 NONAME
+	_ZN20QBtServiceAdvertiser18advertisingStoppedEv @ 83 NONAME
+	_ZN20QBtServiceAdvertiser19getStaticMetaObjectEv @ 84 NONAME
+	_ZN20QBtServiceAdvertiser5errorENS_10ErrorCodesE @ 85 NONAME
+	_ZN20QBtServiceAdvertiserC1EP7QObject @ 86 NONAME
+	_ZN20QBtServiceAdvertiserC2EP7QObject @ 87 NONAME
+	_ZN20QBtServiceAdvertiserD0Ev @ 88 NONAME
+	_ZN20QBtServiceAdvertiserD1Ev @ 89 NONAME
+	_ZN20QBtServiceAdvertiserD2Ev @ 90 NONAME
+	_ZN20QBtServiceDiscoverer11qt_metacallEN11QMetaObject4CallEiPPv @ 91 NONAME
+	_ZN20QBtServiceDiscoverer11qt_metacastEPKc @ 92 NONAME
+	_ZN20QBtServiceDiscoverer13stopDiscoveryEv @ 93 NONAME
+	_ZN20QBtServiceDiscoverer16discoveryStartedEv @ 94 NONAME
+	_ZN20QBtServiceDiscoverer16staticMetaObjectE @ 95 NONAME DATA 16
+	_ZN20QBtServiceDiscoverer19getStaticMetaObjectEv @ 96 NONAME
+	_ZN20QBtServiceDiscoverer5errorENS_21ServiceDiscoveryErrorE @ 97 NONAME
+	_ZN20QBtServiceDiscovererC1EP7QObject @ 98 NONAME
+	_ZN20QBtServiceDiscovererC2EP7QObject @ 99 NONAME
+	_ZN20QBtServiceDiscovererD0Ev @ 100 NONAME
+	_ZN20QBtServiceDiscovererD1Ev @ 101 NONAME
+	_ZN20QBtServiceDiscovererD2Ev @ 102 NONAME
+	_ZN23QBtObjectExchangeClient10objectSentEv @ 103 NONAME
+	_ZN23QBtObjectExchangeClient11qt_metacallEN11QMetaObject4CallEiPPv @ 104 NONAME
+	_ZN23QBtObjectExchangeClient11qt_metacastEPKc @ 105 NONAME
+	_ZN23QBtObjectExchangeClient12dataReceivedE10QByteArray @ 106 NONAME
+	_ZN23QBtObjectExchangeClient12fileReceivedE7QString @ 107 NONAME
+	_ZN23QBtObjectExchangeClient13remotePathSetE7QString @ 108 NONAME
+	_ZN23QBtObjectExchangeClient16staticMetaObjectE @ 109 NONAME DATA 16
+	_ZN23QBtObjectExchangeClient17connectedToServerEv @ 110 NONAME
+	_ZN23QBtObjectExchangeClient19getStaticMetaObjectEv @ 111 NONAME
+	_ZN23QBtObjectExchangeClient22disconnectedFromServerEv @ 112 NONAME
+	_ZN23QBtObjectExchangeClient5errorENS_9ErrorCodeE @ 113 NONAME
+	_ZN23QBtObjectExchangeClientC1EP7QObject @ 114 NONAME
+	_ZN23QBtObjectExchangeClientC2EP7QObject @ 115 NONAME
+	_ZN23QBtObjectExchangeClientD0Ev @ 116 NONAME
+	_ZN23QBtObjectExchangeClientD1Ev @ 117 NONAME
+	_ZN23QBtObjectExchangeClientD2Ev @ 118 NONAME
+	_ZN23QBtObjectExchangeServer10stopServerEv @ 119 NONAME
+	_ZN23QBtObjectExchangeServer11qt_metacallEN11QMetaObject4CallEiPPv @ 120 NONAME
+	_ZN23QBtObjectExchangeServer11qt_metacastEPKc @ 121 NONAME
+	_ZN23QBtObjectExchangeServer11startServerERK7QString @ 122 NONAME
+	_ZN23QBtObjectExchangeServer13serverStartedEv @ 123 NONAME
+	_ZN23QBtObjectExchangeServer13serverStoppedEv @ 124 NONAME
+	_ZN23QBtObjectExchangeServer16receivingStartedEv @ 125 NONAME
+	_ZN23QBtObjectExchangeServer16receivingStoppedE7QString @ 126 NONAME
+	_ZN23QBtObjectExchangeServer16staticMetaObjectE @ 127 NONAME DATA 16
+	_ZN23QBtObjectExchangeServer19getStaticMetaObjectEv @ 128 NONAME
+	_ZN23QBtObjectExchangeServer19receivingObjectInfoEii @ 129 NONAME
+	_ZN23QBtObjectExchangeServer19transmittingStartedE7QString @ 130 NONAME
+	_ZN23QBtObjectExchangeServer19transmittingStoppedE7QString @ 131 NONAME
+	_ZN23QBtObjectExchangeServer20transmittingRejectedEv @ 132 NONAME
+	_ZN23QBtObjectExchangeServer22transmittingObjectInfoEii @ 133 NONAME
+	_ZN23QBtObjectExchangeServer25clientAbortedTransmittionEv @ 134 NONAME
+	_ZN23QBtObjectExchangeServer5errorENS_9ErrorCodeE @ 135 NONAME
+	_ZN23QBtObjectExchangeServerC1EP7QObject @ 136 NONAME
+	_ZN23QBtObjectExchangeServerC2EP7QObject @ 137 NONAME
+	_ZN23QBtObjectExchangeServerD0Ev @ 138 NONAME
+	_ZN23QBtObjectExchangeServerD1Ev @ 139 NONAME
+	_ZN23QBtObjectExchangeServerD2Ev @ 140 NONAME
+	_ZN25QBtSingleDeviceSelectorUI11devSelectedEP15QListWidgetItem @ 141 NONAME
+	_ZN25QBtSingleDeviceSelectorUI11exitPressedEv @ 142 NONAME
+	_ZN25QBtSingleDeviceSelectorUI11qt_metacallEN11QMetaObject4CallEiPPv @ 143 NONAME
+	_ZN25QBtSingleDeviceSelectorUI11qt_metacastEPKc @ 144 NONAME
+	_ZN25QBtSingleDeviceSelectorUI13selectPressedEv @ 145 NONAME
+	_ZN25QBtSingleDeviceSelectorUI16discoveryStartedEv @ 146 NONAME
+	_ZN25QBtSingleDeviceSelectorUI16staticMetaObjectE @ 147 NONAME DATA 16
+	_ZN25QBtSingleDeviceSelectorUI18discoveryCompletedE9QBtDevice @ 148 NONAME
+	_ZN25QBtSingleDeviceSelectorUI18populateDeviceListERK9QBtDevice @ 149 NONAME
+	_ZN25QBtSingleDeviceSelectorUI19getStaticMetaObjectEv @ 150 NONAME
+	_ZN25QBtSingleDeviceSelectorUI4showEv @ 151 NONAME
+	_ZN25QBtSingleDeviceSelectorUIC1EP7QWidget @ 152 NONAME
+	_ZN25QBtSingleDeviceSelectorUIC2EP7QWidget @ 153 NONAME
+	_ZN25QBtSingleDeviceSelectorUID0Ev @ 154 NONAME
+	_ZN25QBtSingleDeviceSelectorUID1Ev @ 155 NONAME
+	_ZN25QBtSingleDeviceSelectorUID2Ev @ 156 NONAME
+	_ZN9QBtDeviceC1ERKS_ @ 157 NONAME
+	_ZN9QBtDeviceC1Ev @ 158 NONAME
+	_ZN9QBtDeviceC2ERKS_ @ 159 NONAME
+	_ZN9QBtDeviceC2Ev @ 160 NONAME
+	_ZN9QBtDeviceD1Ev @ 161 NONAME
+	_ZN9QBtDeviceD2Ev @ 162 NONAME
+	_ZNK10QBtAddress11toByteArrayEv @ 163 NONAME
+	_ZNK10QBtAddress7isValidEv @ 164 NONAME
+	_ZNK10QBtAddress8toStringEv @ 165 NONAME
+	_ZNK14QBtLocalDevice10metaObjectEv @ 166 NONAME
+	_ZNK19QBtDeviceDiscoverer10metaObjectEv @ 167 NONAME
+	_ZNK19QBtSerialPortClient10metaObjectEv @ 168 NONAME
+	_ZNK19QBtSerialPortServer10metaObjectEv @ 169 NONAME
+	_ZNK20QBtServiceAdvertiser10metaObjectEv @ 170 NONAME
+	_ZNK20QBtServiceDiscoverer10metaObjectEv @ 171 NONAME
+	_ZNK23QBtObjectExchangeClient10metaObjectEv @ 172 NONAME
+	_ZNK23QBtObjectExchangeServer10metaObjectEv @ 173 NONAME
+	_ZNK25QBtSingleDeviceSelectorUI10metaObjectEv @ 174 NONAME
+	_ZTI14QBtLocalDevice @ 175 NONAME
+	_ZTI19QBtDeviceDiscoverer @ 176 NONAME
+	_ZTI19QBtSerialPortClient @ 177 NONAME
+	_ZTI19QBtSerialPortServer @ 178 NONAME
+	_ZTI20QBtServiceAdvertiser @ 179 NONAME
+	_ZTI20QBtServiceDiscoverer @ 180 NONAME
+	_ZTI23QBtObjectExchangeClient @ 181 NONAME
+	_ZTI23QBtObjectExchangeServer @ 182 NONAME
+	_ZTI25QBtSingleDeviceSelectorUI @ 183 NONAME
+	_ZTI26QBtDeviceDiscovererPrivate @ 184 NONAME
+	_ZTI26QBtSerialPortClientPrivate @ 185 NONAME
+	_ZTI26QBtSerialPortServerPrivate @ 186 NONAME
+	_ZTI27QBtServiceAdvertiserPrivate @ 187 NONAME
+	_ZTI27QBtServiceDiscovererPrivate @ 188 NONAME
+	_ZTI30QBtObjectExchangeClientPrivate @ 189 NONAME
+	_ZTI30QBtObjectExchangeServerPrivate @ 190 NONAME
+	_ZTV14QBtLocalDevice @ 191 NONAME
+	_ZTV19QBtDeviceDiscoverer @ 192 NONAME
+	_ZTV19QBtSerialPortClient @ 193 NONAME
+	_ZTV19QBtSerialPortServer @ 194 NONAME
+	_ZTV20QBtServiceAdvertiser @ 195 NONAME
+	_ZTV20QBtServiceDiscoverer @ 196 NONAME
+	_ZTV23QBtObjectExchangeClient @ 197 NONAME
+	_ZTV23QBtObjectExchangeServer @ 198 NONAME
+	_ZTV25QBtSingleDeviceSelectorUI @ 199 NONAME
+	_ZTV26QBtDeviceDiscovererPrivate @ 200 NONAME
+	_ZTV26QBtSerialPortClientPrivate @ 201 NONAME
+	_ZTV26QBtSerialPortServerPrivate @ 202 NONAME
+	_ZTV27QBtServiceAdvertiserPrivate @ 203 NONAME
+	_ZTV27QBtServiceDiscovererPrivate @ 204 NONAME
+	_ZTV30QBtObjectExchangeClientPrivate @ 205 NONAME
+	_ZTV30QBtObjectExchangeServerPrivate @ 206 NONAME
+	_ZThn8_N25QBtSingleDeviceSelectorUID0Ev @ 207 NONAME
+	_ZThn8_N25QBtSingleDeviceSelectorUID1Ev @ 208 NONAME
+	_ZN25QBtSingleDeviceSelectorUI12userCanceledEv @ 209 NONAME
+	_ZN20QBtServiceDiscoverer14startDiscoveryERK9QBtDevice @ 210 NONAME
+	_ZN20QBtServiceDiscoverer14startDiscoveryERK9QBtDeviceN12QBtConstants12ServiceClassE @ 211 NONAME
+	_ZN20QBtServiceDiscoverer14startDiscoveryERK9QBtDeviceN12QBtConstants15ServiceProtocolE @ 212 NONAME
+	_ZN20QBtServiceDiscoverer15newServiceFoundERK9QBtDeviceRK10QBtService @ 213 NONAME
+	_ZNK19QBtDeviceDiscoverer18GetInquiredDevicesEv @ 214 NONAME ABSENT
+	_ZN19QBtDeviceDiscoverer14newDeviceFoundERK9QBtDevice @ 215 NONAME
+	_ZN10QBtAddress25convertToSymbianBtDevAddrEv @ 216 NONAME
+	_ZN10QBtAddress27getAddressFromReversedArrayE10QByteArray @ 217 NONAME ABSENT
+	_ZN10QBtService11addProtocolEN12QBtConstants15ServiceProtocolE @ 218 NONAME
+	_ZN10QBtService11setCommPortEj @ 219 NONAME
+	_ZN10QBtService12setProtocolsE5QListIN12QBtConstants15ServiceProtocolEE @ 220 NONAME
+	_ZN10QBtService14removeProtocolEN12QBtConstants15ServiceProtocolE @ 221 NONAME
+	_ZN10QBtService14setDescriptionERK7QString @ 222 NONAME
+	_ZN10QBtService7setNameERK7QString @ 223 NONAME
+	_ZN10QBtService8setClassEN12QBtConstants12ServiceClassE @ 224 NONAME
+	_ZN10QBtService9setHandleEj @ 225 NONAME
+	_ZN14QBtLocalDevice12addNewDeviceERK9QBtDevice @ 226 NONAME
+	_ZN14QBtLocalDevice12deleteDeviceERK10QBtAddress @ 227 NONAME
+	_ZN14QBtLocalDevice12deleteDeviceERK9QBtDevice @ 228 NONAME
+	_ZN14QBtLocalDevice12unpairDeviceERK10QBtAddress @ 229 NONAME
+	_ZN14QBtLocalDevice12unpairDeviceERK9QBtDevice @ 230 NONAME
+	_ZN14QBtLocalDevice14getDeviceClassEv @ 231 NONAME
+	_ZN14QBtLocalDevice14setDeviceClassEN9QBtDevice11DeviceMajorE @ 232 NONAME
+	_ZN14QBtLocalDevice18getLocalDeviceNameEv @ 233 NONAME
+	_ZN14QBtLocalDevice18setLocalDeviceNameE7QString @ 234 NONAME
+	_ZN14QBtLocalDevice20askUserTurnOnBtPowerEv @ 235 NONAME
+	_ZN14QBtLocalDevice20isBluetoothSupportedEv @ 236 NONAME
+	_ZN14QBtLocalDevice21getLocalDeviceAddressEv @ 237 NONAME
+	_ZN14QBtLocalDevice22getBluetoothPowerStateEv @ 238 NONAME
+	_ZN14QBtLocalDevice22setBluetoothPowerStateEb @ 239 NONAME
+	_ZN14QBtLocalDevice28getLimitedDiscoverableStatusEv @ 240 NONAME
+	_ZN14QBtLocalDevice28setLimitedDiscoverableStatusEb @ 241 NONAME
+	_ZN20QBtServiceAdvertiser15stopAdvertisingEv @ 242 NONAME
+	_ZN20QBtServiceAdvertiser16startAdvertisingERK10QBtService @ 243 NONAME
+	_ZN20QBtServiceAdvertiser18updateAvailabilityEb @ 244 NONAME
+	_ZN20QBtServiceDiscoverer16discoveryStoppedEv @ 245 NONAME
+	_ZN20QBtServiceDiscoverer19getInquiredServicesEv @ 246 NONAME
+	_ZN23QBtObjectExchangeClient10disconnectEv @ 247 NONAME
+	_ZN23QBtObjectExchangeClient13getByteBufferERK7QString @ 248 NONAME
+	_ZN23QBtObjectExchangeClient13putByteBufferERK10QByteArrayRK7QString @ 249 NONAME
+	_ZN23QBtObjectExchangeClient15connectToServerERK9QBtDeviceRK10QBtService @ 250 NONAME
+	_ZN23QBtObjectExchangeClient5abortEv @ 251 NONAME
+	_ZN23QBtObjectExchangeClient7getFileERK7QStringS2_ @ 252 NONAME
+	_ZN23QBtObjectExchangeClient7putFileERK7QString @ 253 NONAME
+	_ZN23QBtObjectExchangeClient7setPathE7QString @ 254 NONAME
+	_ZN23QBtObjectExchangeServer11isConnectedEv @ 255 NONAME
+	_ZN23QBtObjectExchangeServer22setTransmittingServiceERK10QBtService @ 256 NONAME
+	_ZN23QBtObjectExchangeServer22stopAdvertisingServiceEv @ 257 NONAME
+	_ZN23QBtObjectExchangeServer23startAdvertisingServiceERK10QBtService @ 258 NONAME
+	_ZN23QBtObjectExchangeServer26getTransmittingServiceInfoEv @ 259 NONAME
+	_ZN9QBtDevice10setAddressERK10QBtAddress @ 260 NONAME
+	_ZN9QBtDevice13addNewServiceERK10QBtService @ 261 NONAME
+	_ZN9QBtDevice20setSupportedServicesERK5QListI10QBtServiceE @ 262 NONAME
+	_ZN9QBtDevice7setNameERK7QString @ 263 NONAME
+	_ZN9QBtDevice7setTypeENS_11DeviceMajorE @ 264 NONAME
+	_ZN9QBtDeviceC1ERK7QStringRK10QBtAddressNS_11DeviceMajorE @ 265 NONAME
+	_ZN9QBtDeviceC2ERK7QStringRK10QBtAddressNS_11DeviceMajorE @ 266 NONAME
+	_ZNK10QBtAddress19toReversedByteArrayEv @ 267 NONAME
+	_ZNK10QBtService12getProtocolsEv @ 268 NONAME
+	_ZNK10QBtService14getDescriptionEv @ 269 NONAME
+	_ZNK10QBtService7getNameEv @ 270 NONAME
+	_ZNK10QBtService7getPortEv @ 271 NONAME
+	_ZNK10QBtService8getClassEv @ 272 NONAME
+	_ZNK10QBtService9getHandleEv @ 273 NONAME
+	_ZNK20QBtServiceDiscoverer15getTargetDeviceEv @ 274 NONAME
+	_ZNK9QBtDevice10getAddressEv @ 275 NONAME
+	_ZNK9QBtDevice15getTypeAsStringEv @ 276 NONAME
+	_ZNK9QBtDevice18serviceListUpdatedEv @ 277 NONAME
+	_ZNK9QBtDevice20getSupportedServicesEv @ 278 NONAME
+	_ZNK9QBtDevice7getNameEv @ 279 NONAME
+	_ZNK9QBtDevice7getTypeEv @ 280 NONAME
+	_ZNK19QBtDeviceDiscoverer18getInquiredDevicesEv @ 281 NONAME
+	_ZN10QBtAddress27getAddressFromReversedArrayERK10QByteArray @ 282 NONAME
+	_ZN10QBtAddressC1ERK10TBTDevAddr @ 283 NONAME
+	_ZN10QBtAddressC1ERK7QString @ 284 NONAME
+	_ZN10QBtAddressC2ERK10TBTDevAddr @ 285 NONAME
+	_ZN10QBtAddressC2ERK7QString @ 286 NONAME
+	_ZN10QBtAddresseqERKS_ @ 287 NONAME
+	_ZN10QBtAddressltERKS_ @ 288 NONAME
+	_ZN10QBtAddressneERKS_ @ 289 NONAME
+	_ZN19QBtSerialPortClient11isConnectedEv @ 290 NONAME
+	_ZN19QBtSerialPortServer11isConnectedEv @ 291 NONAME
+	_ZN19QBtSerialPortServer19setConnectionStatusEb @ 292 NONAME
+	_ZN19QBtSerialPortServer22setTransmittingServiceERK10QBtService @ 293 NONAME
+	_ZN19QBtSerialPortServer22stopAdvertisingServiceEv @ 294 NONAME
+	_ZN19QBtSerialPortServer23startAdvertisingServiceERK10QBtService @ 295 NONAME
+	_ZN19QBtSerialPortServer26getTransmittingServiceInfoEv @ 296 NONAME
+
