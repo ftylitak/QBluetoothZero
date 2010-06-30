@@ -163,6 +163,20 @@ public:
      * @return An object containing the remote server device info.
      */
     QBtDevice getServerDevice();
+    
+    
+    /**
+     * Checks if the client is performing some operation.
+     */
+    bool isBusy() const;
+    
+    /**
+     * Checks if the client got a connection (it does not check *now* if the client is still connected).
+     */
+    bool isConnected() const;
+    
+    
+    
 
 public slots:
     void disconnect();

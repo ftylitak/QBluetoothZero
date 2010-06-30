@@ -89,3 +89,14 @@ QBtDevice GetServerDevice()
     return QBtDevice();
 }
 
+
+bool QBtObjectExchangeClient::isBusy() const
+{
+	return _implPtr->IsBusy();
+}
+
+
+bool QBtObjectExchangeClient::isConnected() const
+{
+	return _implPtr->IsConnected();
+}

@@ -295,4 +295,6 @@ EXPORTS
 	_ZN19QBtSerialPortServer22stopAdvertisingServiceEv @ 294 NONAME
 	_ZN19QBtSerialPortServer23startAdvertisingServiceERK10QBtService @ 295 NONAME
 	_ZN19QBtSerialPortServer26getTransmittingServiceInfoEv @ 296 NONAME
+	_ZNK23QBtObjectExchangeClient11isConnectedEv @ 297 NONAME
+	_ZNK23QBtObjectExchangeClient6isBusyEv @ 298 NONAME
 
