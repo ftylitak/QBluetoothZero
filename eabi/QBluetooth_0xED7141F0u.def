@@ -57,10 +57,10 @@ EXPORTS
 	_ZN19QBtSerialPortServer11qt_metacallEN11QMetaObject4CallEiPPv @ 56 NONAME
 	_ZN19QBtSerialPortServer11qt_metacastEPKc @ 57 NONAME
 	_ZN19QBtSerialPortServer11startServerERK7QString @ 58 NONAME
-	_ZN19QBtSerialPortServer12dataReceivedE7QString @ 59 NONAME
+	_ZN19QBtSerialPortServer12dataReceivedE7QString @ 59 NONAME ABSENT
 	_ZN19QBtSerialPortServer13serverStartedEv @ 60 NONAME
 	_ZN19QBtSerialPortServer13serverStoppedEv @ 61 NONAME
-	_ZN19QBtSerialPortServer15clientConnectedE10QBtAddress @ 62 NONAME
+	_ZN19QBtSerialPortServer15clientConnectedE10QBtAddress @ 62 NONAME ABSENT
 	_ZN19QBtSerialPortServer16staticMetaObjectE @ 63 NONAME DATA 16
 	_ZN19QBtSerialPortServer18clientDisconnectedEv @ 64 NONAME
 	_ZN19QBtSerialPortServer19SetConnectionStatusEb @ 65 NONAME ABSENT
@@ -71,7 +71,7 @@ EXPORTS
 	_ZN19QBtSerialPortServer26GetTransmittingServiceInfoEv @ 70 NONAME ABSENT
 	_ZN19QBtSerialPortServer5errorENS_9ErrorCodeE @ 71 NONAME
 	_ZN19QBtSerialPortServer8dataSentEv @ 72 NONAME
-	_ZN19QBtSerialPortServer8sendDataE7QString @ 73 NONAME
+	_ZN19QBtSerialPortServer8sendDataE7QString @ 73 NONAME ABSENT
 	_ZN19QBtSerialPortServerC1EP7QObject @ 74 NONAME
 	_ZN19QBtSerialPortServerC2EP7QObject @ 75 NONAME
 	_ZN19QBtSerialPortServerD0Ev @ 76 NONAME
@@ -298,4 +298,7 @@ EXPORTS
 	_ZNK23QBtObjectExchangeClient11isConnectedEv @ 297 NONAME
 	_ZNK23QBtObjectExchangeClient6isBusyEv @ 298 NONAME
 	_ZN19QBtSerialPortClient12dataReceivedERK7QString @ 299 NONAME
+	_ZN19QBtSerialPortServer12dataReceivedERK7QString @ 300 NONAME
+	_ZN19QBtSerialPortServer15clientConnectedERK10QBtAddress @ 301 NONAME
+	_ZN19QBtSerialPortServer8sendDataERK7QString @ 302 NONAME
 

@@ -160,7 +160,7 @@ void QBtSerialPortServerPrivate::StopListener()
 //
 // send data to remote device, write data to socket.
 // ----------------------------------------------------------------------------
-void QBtSerialPortServerPrivate::SendData(const QString data)
+void QBtSerialPortServerPrivate::SendData(const QString & data)
 {
 	if ( iState!=EWaiting )
 		return;
@@ -280,7 +280,7 @@ TBool QBtSerialPortServerPrivate::IsConnected()
 // emit signal to indicate successfull data receiving
 // @param the data received
 // ----------------------------------------------------------------------------
-void QBtSerialPortServerPrivate::HandleListenerDataReceivedL(const QString aData)
+void QBtSerialPortServerPrivate::HandleListenerDataReceivedL(const QString & aData)
 {
 	//QString dataStr = QString::fromUtf8((char*)aData.Ptr(), aData.Length());
 	emit p_ptr->dataReceived(aData);

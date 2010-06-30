@@ -67,7 +67,7 @@ public:
 	 *
 	 * param aData the message to be send.
 	 */
-	void SendData(const QString data);
+	void SendData(const QString & data);
 
 	/*!
 	 * IsConnected()
@@ -129,7 +129,7 @@ private:
 	 *
 	 * param aData the data received.
 	 */
-	void HandleListenerDataReceivedL(const QString aData);
+	void HandleListenerDataReceivedL(const QString & aData);
 
 	/*!
 	 * HandleListenerConnectedL()

@@ -51,7 +51,7 @@ void QBtSerialPortServer::stopServer()
     _implPtr->StopListener();
 }
 
-void QBtSerialPortServer::sendData(const QString data)
+void QBtSerialPortServer::sendData(const QString & data)
 {
     _implPtr->SendData(data);
 }

@@ -120,7 +120,7 @@ public slots:
      *
      * @param data The data to be send.
      */
-    void sendData(const QString data);
+    void sendData(const QString & data);
 
 signals:
     /**
@@ -137,7 +137,7 @@ signals:
     /**
      * Emitted when a remote client is connected to the local running server.
      */
-    void clientConnected(QBtAddress clientAddress);
+    void clientConnected (const QBtAddress & clientAddress);
 
     /**
      * Emitted when a remote client is disconnected either by a normal disconnection
@@ -153,7 +153,7 @@ signals:
     /**
      * Emitted when data are received successfully from the remote client.
      */
-    void dataReceived(QString data);
+    void dataReceived(const QString & data);
 
     /**
      * Emitted in case of error.
