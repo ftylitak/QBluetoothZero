@@ -69,7 +69,7 @@ signals:
      * Emitted after device discovery stops and user selects the desired device.
      * @param selectedDevice The selected device.
      */
-    void discoveryCompleted(const QBtDevice selectedDev);
+    void discoveryCompleted (const QBtDevice & selectedDev);
 
     /**
      * Emitted after calling show() if and only if the device discovery starts successfully
