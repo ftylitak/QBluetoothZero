@@ -7,6 +7,20 @@
 #ifndef AUXFUNCTIONS_SYMBIAN_H_
 #define AUXFUNCTIONS_SYMBIAN_H_
 
+
+#ifdef Q_OS_SYMBIAN
+
+	#ifdef _DEBUG
+		#include <QDebug.h>
+		inline void DEBUG_MSG (const QString & m)
+		{
+			qDebug() << m;
+		}
+	#endif
+
+#endif
+
+
 template<class T> inline void SafeDelete(T* &ptr)
 {
 	if(ptr)
@@ -15,6 +29,8 @@ template<class T> inline void SafeDelete(T* &ptr)
 		ptr = NULL; 
 	}
 }
+
+
 
 
 #ifdef Q_OS_WIN32

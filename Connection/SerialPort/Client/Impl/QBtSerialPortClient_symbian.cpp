@@ -2,11 +2,12 @@
  * QBtSerialPortClient_symbian.cpp
  *
  *
- *      Author: Ftylitakis Nikolaos
+ *      Author: Ftylitakis Nikolaos, Luis Valente
  */
 
 #include "../QBtSerialPortClient_symbian.h"
 #include <QBtAuxFunctions.h>
+
 
 QBtSerialPortClientPrivate* QBtSerialPortClientPrivate::NewL(QBtSerialPortClient* publicClass)
 {
@@ -27,15 +28,20 @@ QBtSerialPortClientPrivate* QBtSerialPortClientPrivate::NewLC(QBtSerialPortClien
 
 void QBtSerialPortClientPrivate::ConstructL()
 {
-    if(iSocketServ.Connect() != KErrNone)
-        emit p_ptr->error(QBtSerialPortClient::BluetoothSPCUnavailable);
+    if (iSocketServ.Connect() != KErrNone)
+       QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtSerialPortClient::BluetoothSPCUnavailable) );
+    
+    
+    // timer
+    iTimer = CPeriodic::NewL (CIdle::EPriorityIdle);
+    
 }
 
 
-QBtSerialPortClientPrivate::QBtSerialPortClientPrivate(QBtSerialPortClient* publicClass):
-            CActive(CActive::EPriorityStandard),
-            iState(ENone),
-            p_ptr(publicClass)
+QBtSerialPortClientPrivate::QBtSerialPortClientPrivate(QBtSerialPortClient* publicClass)
+ : CActive(CActive::EPriorityStandard),
+   iState(ENone),
+   p_ptr(publicClass)
 {
     CActiveScheduler::Add(this);
 }
@@ -44,9 +50,14 @@ QBtSerialPortClientPrivate::QBtSerialPortClientPrivate(QBtSerialPortClient* publ
 QBtSerialPortClientPrivate::~QBtSerialPortClientPrivate()
 {
     Disconnect();
+    
+    // delete connect timer
+    CancelConnectionTimer();
+    delete iTimer;
+    
     // disconnect and kill socket
     if(IsActive())
-            Cancel();
+       Cancel();
 }
 
 
@@ -56,18 +67,19 @@ void QBtSerialPortClientPrivate::DoCancel()
 }
 
 
+
 // ----------------------------------------------------------------------------
 // QBtSerialPortClientPrivate::ConnectL(THostName aName, TBTDevAddr aAddr, TInt aPort)
 //
 // create a connection to given address on given port.
 // ----------------------------------------------------------------------------
 TBool QBtSerialPortClientPrivate::ConnectL (const QBtDevice& remoteDevice, const QBtService& remoteService)
-{
+{		
     if(iState != ENone)
         return false;
 
-    device = new QBtDevice(remoteDevice);
-    service = new QBtService(remoteService);
+    device =  remoteDevice;
+    service = remoteService;
 
     // load protocol, RFCOMM
     TProtocolDesc pdesc;
@@ -78,31 +90,106 @@ TBool QBtSerialPortClientPrivate::ConnectL (const QBtDevice& remoteDevice, const
     
     // set address and port
     TBTSockAddr addr;
-    addr.SetBTAddr(device->getAddress().convertToSymbianBtDevAddr());
-    addr.SetPort(service->getPort());
+    addr.SetBTAddr(device.getAddress().convertToSymbianBtDevAddr());
+    addr.SetPort(service.getPort());
 
     // connect socket
     TRequestStatus status;
-    iSock.Connect(addr, status);    
+    iSock.Connect(addr, status);  
     
+    
+    iState = EConnecting;
+    
+    // start connection timer    
+    StartConnectionTimer();
+    
+            
     // wait (should we wait here? or use the ActiveObject RunL ?)
     User::WaitForRequest(status);
     
     
-    if ( status!=KErrNone )
+    // cancel timers    
+    CancelConnectionTimer();
+    
+    
+    if (status != KErrNone)
     {
-        QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtSerialPortClient::BluetoothSPCErrorOpeningConnection) );
+    	DEBUG_MSG (QString ("[QBtSerialPortClientPrivate::connect] error detected: %1").arg (status.Int()) );
+    	
+    	iState = ENone;
+    	
+    	if (status == KErrTimedOut || status == KErrCancel)
+        	{ QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtSerialPortClient::BluetoothSPCConnectionTimeout) ); }
+        else
+        	{ QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtSerialPortClient::BluetoothSPCErrorOpeningConnection) ); }
+        
         return false;
     }
 
-    iState=EConnecting;
+       
+    // prepare for receive
+    ReceiveData();
+   
+    // notify
     QT_TRYCATCH_LEAVING (emit p_ptr->connectedToServer() );
     
-    
-    ReceiveData();
+        
+    //SetActive();   
     return true;
+    
 }
 
+
+// ----------------------------------------------------------------------------
+// callback for notifying connection timeout 
+//
+// ----------------------------------------------------------------------------
+
+TInt QBtSerialPortClientPrivate::ConnectTimerCallBack (TAny* aPtr)
+{	
+	QBtSerialPortClientPrivate* p = (QBtSerialPortClientPrivate*) aPtr;
+		
+	// ignore if connection was successful
+	if (p->iState != EConnecting)
+	{
+		DEBUG_MSG ("[timer] got connection, ignoring timeout event");
+		return EFalse;
+	}	
+	
+	DEBUG_MSG ("[timer] canceling ActiveObject");
+	
+	
+	if (p->IsActive())
+		p->Cancel();
+	
+	// change state
+	p->iState = ENone;
+	
+	DEBUG_MSG ("[timer] emit error signal");
+	
+	// emit error
+	QT_TRYCATCH_LEAVING (emit p->p_ptr->error (QBtSerialPortClient::BluetoothSPCConnectionTimeout));
+	
+	DEBUG_MSG ("[timer] end");
+	
+	return EFalse;	
+}
+
+
+void QBtSerialPortClientPrivate::StartConnectionTimer()
+{	
+	// 30s interval (should be a parameter)
+	TTimeIntervalMicroSeconds32 interval (30 * 1000*1000);	
+	
+	if (iTimer)
+		iTimer->Start (interval, interval, TCallBack (ConnectTimerCallBack, this) );	
+}
+
+void QBtSerialPortClientPrivate::CancelConnectionTimer()
+{
+	if (iTimer)
+		iTimer->Cancel();
+}
 
 // ----------------------------------------------------------------------------
 // QBtSerialPortClientPrivate::Disconnect()
@@ -110,52 +197,51 @@ TBool QBtSerialPortClientPrivate::ConnectL (const QBtDevice& remoteDevice, const
 // disconnect from remote device, shutdown connected socket
 // ----------------------------------------------------------------------------
 void QBtSerialPortClientPrivate::Disconnect()
-{
-    TRequestStatus status;
+{    
+    if (iState == ENone || iState == EDisconnecting)
+    	return;
+    
+    // 
+    iState = EDisconnecting;
+    
+    
+    // cancel timers
+    CancelConnectionTimer();
+    
+    
     // shutdown socket
-    if (iState == ENone)
-    {
-        return;
-    }
-
+    TRequestStatus status;
+    
+    
+    // cancel all
     iSock.CancelAll();
     iSock.Shutdown(RSocket::ENormal, status);
     User::WaitForRequest(status);
     iSock.Close();
 
-    SafeDelete(device);
-    SafeDelete(service);
-
     iState = ENone;
+    
+    // check 
+    if (status == KErrNone)
+    {    	
+    	QT_TRYCATCH_LEAVING (emit p_ptr->disconnectedFromServer() );	
+    }
+    else
+    {
+    	QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtSerialPortClient::BluetoothSPCErrorOnDisconnecting) );
+    }        
+    
+        
+    //iState = EDisconnecting;    
+    // SetActive();
+    // notification will be in RunL with KErrCancel (in case of using SetActive)
+    
 }
 
 TBool QBtSerialPortClientPrivate::IsConnected()
 {
     return (iState == ESending || iState == EWaiting);
 }
-
-
-// ----------------------------------------------------------------------------
-// QBtSerialPortClientPrivate::SendData(const QString& data)
-//
-// send given data to remote device, write to connected socket
-// ----------------------------------------------------------------------------
-void QBtSerialPortClientPrivate::SendData(const QString& data)
-{
-    QByteArray tmpArray = data.toUtf8();
-    TPtrC8 message8;
-    message8.Set((const TUint8 *)tmpArray.constData(), tmpArray.size());
-
-    // cancel any read requests on socket
-    iSock.CancelRead();
-    if(IsActive())
-        Cancel();
-    // send message
-    iState=ESending;
-    iSock.Write(message8, iStatus);
-    SetActive();
-}
-
 
 // ----------------------------------------------------------------------------
 // QBtSerialPortClientPrivate::ReceiveDataL()
@@ -168,6 +254,7 @@ void QBtSerialPortClientPrivate::ReceiveData()
     iSock.CancelRead();
     if(IsActive())
         Cancel();
+    
     // receive data from socket
     iState=EWaiting;
     iSock.RecvOneOrMore(iBuffer, 0, iStatus, iLen);
@@ -175,46 +262,154 @@ void QBtSerialPortClientPrivate::ReceiveData()
 }
 
 
+// ----------------------------------------------------------------------------
+// QBtSerialPortClientPrivate::SendData(const QString& data)
+//
+// send given data to remote device, write to connected socket
+// ----------------------------------------------------------------------------
+void QBtSerialPortClientPrivate::SendData(const QString& data)
+{
+	QByteArray tmpArray = data.toUtf8();
+    TPtrC8 message8;
+    message8.Set((const TUint8 *)tmpArray.constData(), tmpArray.size());
+
+    // cancel any read requests on socket
+    iSock.CancelRead();
+    
+    if (IsActive())
+    	Cancel();
+    
+    // send message
+    iState = ESending;
+    
+    iSock.Write(message8, iStatus);
+    SetActive();
+    
+}
+
+
+// ----------------------------------------------------------------------------
+// 
+// ----------------------------------------------------------------------------
 void QBtSerialPortClientPrivate::RunL()
 {
-    if ( iStatus!=KErrNone )
+	DEBUG_MSG (QString ("[RunL status: %1 state: %2]").arg (iStatus.Int()).arg (iState) );
+	
+	// cancel possible timers
+	CancelConnectionTimer();
+	
+	
+	// see what's happened
+    if (iStatus != KErrNone)
     {
-        HandleConnectorDisconnectedL();
+    	switch (iStatus.Int() )
+    	{    		    		
+    		// we were disconnected (by us)    		
+    		case KErrCancel:
+    		{    			
+    			iState = ENone;    			
+    			// ignore this signal for now as Disconnect() is using WaitForRequest
+    			// QT_TRYCATCH_LEAVING (emit p_ptr->disconnectedFromServer() );
+    			
+    			return;
+    		}
+    		
+    			
+    		// we were disconnected by peer	
+    		case KErrDisconnected:
+    		{
+    			iState = ENone;
+    			QT_TRYCATCH_LEAVING (emit p_ptr->connectionResetByPeer() );
+    			return;
+    		}
+    			
+    			
+    		// not ready to initiate new operation (something is still underway)
+    		case KErrNotReady:
+    		{	
+    			// no change in current state (?)    			
+    			QT_TRYCATCH_LEAVING (emit p_ptr->error (QBtSerialPortClient::BluetoothSPCAlreadyInUse) );
+    			return;
+    		}
+    		
+    	}
+    	
+    	
+    	
+    	DEBUG_MSG (QString ("[RunL error: %1]").arg (iStatus.Int()));    	
+    	iState = ENone; 
+    	
+    	// get the error
+    	switch (iState)
+    	{
+    		case EConnecting:
+    		{
+    			QT_TRYCATCH_LEAVING (emit p_ptr->error (QBtSerialPortClient::BluetoothSPCErrorOpeningConnection) );
+    			return;
+    		}	
+    		
+    		case EWaiting:
+    		case ESending:
+    		{
+    			QT_TRYCATCH_LEAVING (emit p_ptr->error (QBtSerialPortClient::BluetoothSpCConnectionError));
+    			return;
+    		}
+    		
+    		default:
+    			QT_TRYCATCH_LEAVING (emit p_ptr->error (QBtSerialPortClient::BluetoothSPCUndefinedError));
+    			
+    			
+    	}   	
+    	
+    	
         return;
     }
 
+    
+    
+    // no error
     switch (iState)
     {
+    	// notification should be the last thing because the user might change the state of the
+    	// object, for example, by calling SendData() in a slot for the 'connectedToServer' signal
+    	
         case EConnecting:
-        {
-            HandleConnectorConnectedL();
-            // wait incoming data on socket
+        {	
+        	// this one would run only if SetActive() is called in connect()        	
+        	iState = EIdle;
+        	
+        	// wait incoming data on socket
             ReceiveData();
+        	
+        	// notify
+        	QT_TRYCATCH_LEAVING (emit p_ptr->connectedToServer() );     	
             break;
         }
+        
         case EWaiting:
-        {
-            // we got incoming data!
-            /*HBufC8* text = HBufC8::NewLC(iBuffer.Length());
-            text->Des()..Copy(iBuffer);*/
-            // observer will handle data
+        {                	
+        	// we got incoming data!            
             QString receivedString = QString::fromUtf8((char*)iBuffer.Ptr(), iBuffer.Size());
-            HandleConnectorDataReceivedL(receivedString);
-            //CleanupStack::PopAndDestroy(text);
-
+            
             // start expecting new incoming data
             ReceiveData();
+            
+            // notify
+            QT_TRYCATCH_LEAVING (emit p_ptr->dataReceived (receivedString) );            
             break;
         }
         case ESending:
-        {
-            HandleConnectorDataSentL();
+        {                	
             // start expecting new incoming data
             ReceiveData();
+            
+            // notify
+            QT_TRYCATCH_LEAVING  (emit p_ptr->dataSent() );
             break;
-        }
-        default:
-            break;
+        }        
+                
+        default:         
+        	break;
     }
 }
 
@@ -231,7 +426,7 @@ TInt QBtSerialPortClientPrivate::RunError(TInt /*aError*/)
 // ----------------------------------------------------------------------------
 void QBtSerialPortClientPrivate::HandleConnectorDataReceivedL(const QString & aData)
 {
-	QT_TRYCATCH_LEAVING (emit p_ptr->dataReceived(aData) );
+	
 }
 
 /*!
@@ -241,7 +436,7 @@ void QBtSerialPortClientPrivate::HandleConnectorDataReceivedL(const QString & aD
  */
 void QBtSerialPortClientPrivate::HandleConnectorConnectedL()
 {
-	QT_TRYCATCH_LEAVING (emit p_ptr->connectedToServer() );
+	
 }
 
 /*!
@@ -251,7 +446,7 @@ void QBtSerialPortClientPrivate::HandleConnectorConnectedL()
  */
 void QBtSerialPortClientPrivate::HandleConnectorDisconnectedL()
 {
-	QT_TRYCATCH_LEAVING (emit p_ptr->disconnectedFromServer() );
+	
 }
 
 /*!
@@ -261,6 +456,6 @@ void QBtSerialPortClientPrivate::HandleConnectorDisconnectedL()
  */
 void QBtSerialPortClientPrivate::HandleConnectorDataSentL()
 {
-	QT_TRYCATCH_LEAVING  (emit p_ptr->dataSent() );
+	
 }
 

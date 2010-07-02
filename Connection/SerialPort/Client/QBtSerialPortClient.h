@@ -56,7 +56,10 @@ public:
         BluetoothSPCUndefinedError,
         BluetoothSPCUnableToInitializePort,
         BluetoothSPCNoDeviceSelected,
-        BluetoothSpCNoServiceSelected
+        BluetoothSpCNoServiceSelected,
+        BluetoothSpCConnectionError,
+        BluetoothSPCConnectionTimeout,
+        BluetoothSPCErrorOnDisconnecting
     };
 
 public:
@@ -106,9 +109,14 @@ public slots:
 
 signals:
     /**
-     * Emitted when successfully disconnected from the remote server.
+     * Emitted when successfully disconnected from the remote server (initiated from client).
      */
     void disconnectedFromServer();
+    
+    /**
+     * Emitted when the server initiated a disconnection.
+     */
+    void connectionResetByPeer ();    
 
     /**
      * Emitted when successfully connected to the remote server.

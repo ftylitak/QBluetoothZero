@@ -146,7 +146,7 @@ EXPORTS
 	_ZN25QBtSingleDeviceSelectorUI13selectPressedEv @ 145 NONAME
 	_ZN25QBtSingleDeviceSelectorUI16discoveryStartedEv @ 146 NONAME
 	_ZN25QBtSingleDeviceSelectorUI16staticMetaObjectE @ 147 NONAME DATA 16
-	_ZN25QBtSingleDeviceSelectorUI18discoveryCompletedE9QBtDevice @ 148 NONAME
+	_ZN25QBtSingleDeviceSelectorUI18discoveryCompletedE9QBtDevice @ 148 NONAME ABSENT
 	_ZN25QBtSingleDeviceSelectorUI18populateDeviceListERK9QBtDevice @ 149 NONAME
 	_ZN25QBtSingleDeviceSelectorUI19getStaticMetaObjectEv @ 150 NONAME
 	_ZN25QBtSingleDeviceSelectorUI4showEv @ 151 NONAME
@@ -301,4 +301,6 @@ EXPORTS
 	_ZN19QBtSerialPortServer12dataReceivedERK7QString @ 300 NONAME
 	_ZN19QBtSerialPortServer15clientConnectedERK10QBtAddress @ 301 NONAME
 	_ZN19QBtSerialPortServer8sendDataERK7QString @ 302 NONAME
+	_ZN25QBtSingleDeviceSelectorUI18discoveryCompletedERK9QBtDevice @ 303 NONAME
+	_ZN19QBtSerialPortClient21connectionResetByPeerEv @ 304 NONAME
 

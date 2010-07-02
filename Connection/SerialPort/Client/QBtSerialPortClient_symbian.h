@@ -2,13 +2,14 @@
  * QBtSerialPortClient_symbian.h
  *
  *  
- *      Author: Ftylitakis Nikolaos
+ *      Author: Ftylitakis Nikolaos, Luis Valente
  */
 
 #ifndef QBTSERIALPORTCLIENT_SYMBIAN_H_
 #define QBTSERIALPORTCLIENT_SYMBIAN_H_
 
 #include "QBtSerialPortClient.h"
+#include <QTimer.h>
 
 #include <e32base.h>
 #include <es_sock.h>
@@ -17,6 +18,7 @@
 
 class QBtSerialPortClientPrivate : public CActive
 {
+		
 public:
 
 	/*!
@@ -149,13 +151,20 @@ private:
 	 *  Wait for and receive data from slave.
 	 */
 	void ReceiveData();
+	
+private:
+	
+	static TInt ConnectTimerCallBack (TAny* aPtr);
+	
+	void StartConnectionTimer();
+	void CancelConnectionTimer();
 
 private: // data
 
 	// remote device
-	QBtDevice* device;
+	QBtDevice device;
 	// remote service
-	QBtService* service;
+	QBtService service;
 	// connecting socket
 	RSocket iSock;
 	// buffer holding received data
@@ -164,11 +173,14 @@ private: // data
 	TSockXfrLength iLen;
 	// socket server handle
 	RSocketServ iSocketServ;
+	
 	// the state of the connector
 	enum TState
 	{
 		ENone = 1,
+		EIdle,
 		EConnecting,
+		EDisconnecting,
 		EWaiting,
 		ESending
 	};
@@ -176,6 +188,8 @@ private: // data
 	TState iState;
 
 	QBtSerialPortClient* p_ptr;
+	
+	CPeriodic* iTimer;
 };
 
 #endif /* QBTSERIALPORTCLIENT_SYMBIAN_H_ */
