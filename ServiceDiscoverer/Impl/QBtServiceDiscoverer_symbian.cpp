@@ -62,7 +62,8 @@ QBtServiceDiscovererPrivate::QBtServiceDiscovererPrivate(QBtServiceDiscoverer* p
 
 QBtServiceDiscovererPrivate::~QBtServiceDiscovererPrivate()
 {
-	StopDiscovery();
+	// must not throw/leave
+	TRAPD (error, StopDiscovery() );
 }
 
 
@@ -163,8 +164,8 @@ void QBtServiceDiscovererPrivate::StopDiscovery()
 	
 	
 	if(iAgent && iSpat)
-		//{ emit p_ptr->discoveryStopped("StopDiscovery"); }
-		{ discoveryInProgress = false; emit p_ptr->discoveryStopped(); }
+	//{ emit p_ptr->discoveryStopped("StopDiscovery"); }
+		{ discoveryInProgress = false; QT_TRYCATCH_LEAVING (emit p_ptr->discoveryStopped() ) ; }
 	
 	_StopDiscovery();
 }
@@ -218,9 +219,10 @@ void QBtServiceDiscovererPrivate::NextRecordRequestComplete(
 	if ( aError != KErrNone )
 	{
 		//discovering new service on target device
-		emit p_ptr->error(QBtServiceDiscoverer::ServiceDiscoveryNotAbleToComplete);	
+		QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtServiceDiscoverer::ServiceDiscoveryNotAbleToComplete) );
+		
 		//emit p_ptr->discoveryStopped("Error-ServiceDiscoveryNotAbleToComplete");		
-		emit p_ptr->discoveryStopped();
+		QT_TRYCATCH_LEAVING(emit p_ptr->discoveryStopped() );
 		discoveryInProgress = false;
 		return;
 	}
@@ -265,7 +267,7 @@ void QBtServiceDiscovererPrivate::AttributeRequestResult(
 	if( err != KErrNone)
 	{
 		// error retrieving service attributes
-		emit p_ptr->error(QBtServiceDiscoverer::UnableToRetrieveServiceAttributes); 
+		QT_TRYCATCH_LEAVING(emit p_ptr->error(QBtServiceDiscoverer::UnableToRetrieveServiceAttributes) ); 
 	}
 
 	delete aAttrValue;
@@ -282,9 +284,7 @@ void QBtServiceDiscovererPrivate::AttributeRequestResult(
 // record completes.  if there are more service records, proceed resolving
 // the next service record.
 // ----------------------------------------------------------------------------
-void QBtServiceDiscovererPrivate::AttributeRequestComplete(
-		TSdpServRecordHandle aHandle,
-		TInt aError)
+void QBtServiceDiscovererPrivate::AttributeRequestComplete (TSdpServRecordHandle aHandle, TInt aError)
 {
 	if ( aError==KErrNone )
 	{
@@ -293,15 +293,13 @@ void QBtServiceDiscovererPrivate::AttributeRequestComplete(
 			try
 			{
 				if(iAgent)
-				{
-					QT_TRAP_THROWING(iAgent->AttributeRequestL(aHandle, attrList[attrIndex]));
-				}
+					iAgent->AttributeRequestL(aHandle, attrList[attrIndex]);				
 				else
-					emit p_ptr->error(QBtServiceDiscoverer::UnknownError);
+					QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtServiceDiscoverer::UnknownError) );
 			}
 			catch(char* str)
 			{
-				emit p_ptr->error(QBtServiceDiscoverer::UnableToRetrieveServiceAttributes);
+				QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtServiceDiscoverer::UnableToRetrieveServiceAttributes) );
 			}
 		}
 		else
@@ -309,28 +307,26 @@ void QBtServiceDiscovererPrivate::AttributeRequestComplete(
 			// done with attributes for this record, request next
 			// service record
 			device->addNewService(*(handleMap[aHandle]));
-			emit p_ptr->newServiceFound(*device, *(handleMap[aHandle]));
+			QT_TRYCATCH_LEAVING (emit p_ptr->newServiceFound(*device, *(handleMap[aHandle])) );
 	
 			try
 			{
 				if(iAgent)
-				{
-					QT_TRAP_THROWING(iAgent->NextRecordRequestL());
-				}
+				 iAgent->NextRecordRequestL();				
 				else
-					emit p_ptr->error(QBtServiceDiscoverer::UnknownError);
+					QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtServiceDiscoverer::UnknownError) );
 			}
 			catch(char* str)
 			{
 				//error requesting next service
-				emit p_ptr->error(QBtServiceDiscoverer::ProblemRequestingNextServiceRecord); 
+				QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtServiceDiscoverer::ProblemRequestingNextServiceRecord) ); 
 			}
 		}
 	}
 	else
 	{
 		// error acquiring service's next attribute
-		emit p_ptr->error(QBtServiceDiscoverer::ProblemAcquiringNextServiceAttributes); 
+		QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtServiceDiscoverer::ProblemAcquiringNextServiceAttributes) ); 
 	}
 }
 
@@ -438,11 +434,11 @@ void QBtServiceDiscovererPrivate::SearchNextUUIDorReportCompletion()
 			DiscoverSpecificClass(device, uuidList[uuidIndex]);
 		else
 			//{  emit p_ptr->discoveryStopped("[qdll] search next uiid I"); }
-			{  discoveryInProgress = false; emit p_ptr->discoveryStopped();  }
+			{  discoveryInProgress = false; QT_TRYCATCH_LEAVING (emit p_ptr->discoveryStopped() );  }
 	}
 	else
 		//{ emit p_ptr->discoveryStopped("[qdll] multiple search=false"); }
-		{ discoveryInProgress = false; emit p_ptr->discoveryStopped(); }
+		{ discoveryInProgress = false; QT_TRYCATCH_LEAVING (emit p_ptr->discoveryStopped() ); }
 }
 
 
