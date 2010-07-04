@@ -46,20 +46,21 @@ class DLL_EXPORT QBtSerialPortClient : public QObject
 {
     Q_OBJECT
 
-public:
-    //SPC stands for SerialPortClient
-    enum ErrorCode{
-        BluetoothSPCAlreadyInUse,
-        BluetoothSPCNotSupported,
-        BluetoothSPCUnavailable,
-        BluetoothSPCErrorOpeningConnection,
-        BluetoothSPCUndefinedError,
-        BluetoothSPCUnableToInitializePort,
-        BluetoothSPCNoDeviceSelected,
-        BluetoothSpCNoServiceSelected,
-        BluetoothSpCConnectionError,
-        BluetoothSPCConnectionTimeout,
-        BluetoothSPCErrorOnDisconnecting
+public:    
+    enum ErrorCode
+    {
+        ErrorAlreadyInUse,
+        ErrorNotSupported,
+        ErrorUnavailable,
+        ErrorOpeningConnection,
+        ErrorAlreadyConnected,
+        ErrorUndefinedError,
+        ErrorUnableToInitializePort,
+        ErrorNoDeviceSelected,
+        ErrorNoServiceSelected,
+        ErrorConnectionError,
+        ErrorConnectionTimeout,
+        ErrorOnDisconnecting
     };
 
 public:

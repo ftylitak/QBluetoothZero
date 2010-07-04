@@ -22,7 +22,7 @@ public:
     static void SetLimitedDiscoverableStatus(bool isDiscoverabilityLimited);
     static QBtDevice::DeviceMajor GetDeviceClass();
     static void SetDeviceClass(QBtDevice::DeviceMajor classId);
-    static void SetLocalDeviceName(QString devName);
+    static void SetLocalDeviceName(const QString & devName);
     static QString GetLocalDeviceName();
 
 

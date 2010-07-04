@@ -34,7 +34,7 @@ public:
     static void SetLimitedDiscoverableStatus(TBool limited);
     static QBtDevice::DeviceMajor GetDeviceClass();
     static void SetDeviceClass(QBtDevice::DeviceMajor classId);
-    static void SetLocalDeviceName(QString devName);
+    static void SetLocalDeviceName (const QString & deviceName);
     static QString GetLocalDeviceName();
 
 

@@ -2,7 +2,7 @@
  * QBtSerialPortServer.cpp
  *
  *
- *      Author: Ftylitakis Nikolaos
+ *      Author: Ftylitakis Nikolaos, Luis Valente
  */
 
 #include "../QBtSerialPortServer.h"
@@ -43,12 +43,23 @@ void QBtSerialPortServer::startServer(const QString& serviceName)
     tmpService.setName(serviceName);
     setTransmittingService(tmpService);
 
-    _implPtr->StartListener();
+	#ifdef Q_OS_SYMBIAN
+		QT_TRAP_THROWING (_implPtr->StartListenerL());
+	#else
+		_implPtr->StartListener();
+	#endif
+    
 }
 
 void QBtSerialPortServer::stopServer()
 {
-    _implPtr->StopListener();
+	#ifdef Q_OS_SYMBIAN
+		QT_TRAP_THROWING (_implPtr->StopListenerL() );
+	#else
+		_implPtr->StopListener();
+	#endif	
+	
+    
 }
 
 void QBtSerialPortServer::sendData(const QString & data)

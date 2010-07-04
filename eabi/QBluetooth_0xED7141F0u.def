@@ -232,7 +232,7 @@ EXPORTS
 	_ZN14QBtLocalDevice14getDeviceClassEv @ 231 NONAME
 	_ZN14QBtLocalDevice14setDeviceClassEN9QBtDevice11DeviceMajorE @ 232 NONAME
 	_ZN14QBtLocalDevice18getLocalDeviceNameEv @ 233 NONAME
-	_ZN14QBtLocalDevice18setLocalDeviceNameE7QString @ 234 NONAME
+	_ZN14QBtLocalDevice18setLocalDeviceNameE7QString @ 234 NONAME ABSENT
 	_ZN14QBtLocalDevice20askUserTurnOnBtPowerEv @ 235 NONAME
 	_ZN14QBtLocalDevice20isBluetoothSupportedEv @ 236 NONAME
 	_ZN14QBtLocalDevice21getLocalDeviceAddressEv @ 237 NONAME
@@ -303,4 +303,5 @@ EXPORTS
 	_ZN19QBtSerialPortServer8sendDataERK7QString @ 302 NONAME
 	_ZN25QBtSingleDeviceSelectorUI18discoveryCompletedERK9QBtDevice @ 303 NONAME
 	_ZN19QBtSerialPortClient21connectionResetByPeerEv @ 304 NONAME
+	_ZN14QBtLocalDevice18setLocalDeviceNameERK7QString @ 305 NONAME
 

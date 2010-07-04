@@ -2,7 +2,7 @@
  * QBtLocalDevice_symbian.cpp
  *
  *
- *      Author: Ftylitakis Nikolaos -> mesa sto katarameno treno....
+ *      Author: Ftylitakis Nikolaos, Luis Valente
  */
 
 #include "../QBtLocalDevice_symbian.h"
@@ -86,13 +86,12 @@ QString QBtLocalDevicePrivate::GetLocalDeviceName()
     return QString::fromUtf16((unsigned short*)value.Ptr());
 }
 
-void QBtLocalDevicePrivate::SetLocalDeviceName(QString devName)
+void QBtLocalDevicePrivate::SetLocalDeviceName (const QString & deviceName)
 {
     DefineProperty(KPropertyKeyBluetoothSetDeviceName, RProperty::EText);
 
-    TPtr16 value((TUint16*)devName.utf16(), devName.size());
-    RProperty::Set( KPropertyUidBluetoothControlCategory,
-            KPropertyKeyBluetoothSetDeviceName, value );
+    TPtr16 value ((TUint16*)deviceName.utf16(), deviceName.size());
+    RProperty::Set (KPropertyUidBluetoothControlCategory, KPropertyKeyBluetoothSetDeviceName, value );
 }
 
 

@@ -32,14 +32,14 @@ void QBtSerialPortClientPrivate::Connect(
 {
 	if(!remoteDevice.getAddress().isValid())
 	{
-		emit p_ptr->error(QBtSerialPortClient::BluetoothSPCNoDeviceSelected);
+		emit p_ptr->error(QBtSerialPortClient::ErrorNoDeviceSelected);
 		return;
 	}
 		
 	if(remoteService.getClass() == QBtConstants::UndefinedClass &&
 		remoteService.getHandle() == 0)
 	{
-		emit p_ptr->error(QBtSerialPortClient::BluetoothSpCNoServiceSelected);
+		emit p_ptr->error(QBtSerialPortClient::ErrorNoServiceSelected);
 		return;
 	}
 	
@@ -56,20 +56,20 @@ void QBtSerialPortClientPrivate::Connect(
 	{
 		if(!ConnectBtSerialPortProfile_Handle())
 		{
-			emit p_ptr->error(QBtSerialPortClient::BluetoothSPCErrorOpeningConnection);
+			emit p_ptr->error(QBtSerialPortClient::ErrorOpeningConnection);
 			return;
 		}
 	}
 	else
 		if(!ConnectBtSerialPortProfile_ServClass())
 		{
-			emit p_ptr->error(QBtSerialPortClient::BluetoothSPCErrorOpeningConnection);
+			emit p_ptr->error(QBtSerialPortClient::ErrorOpeningConnection);
 			return;
 		}
 		
 	if(!InitializeSerialPortHandle())
 	{
-		emit p_ptr->error(QBtSerialPortClient::BluetoothSPCErrorOpeningConnection);
+		emit p_ptr->error(QBtSerialPortClient::ErrorOpeningConnection);
 		return;
 	}
 		
@@ -89,7 +89,7 @@ void QBtSerialPortClientPrivate::SendData(const QString& data)
 {
 	if(!IsConnected() || com == NULL)
 	{
-		emit p_ptr->error(QBtSerialPortClient::BluetoothSPCUnavailable);
+		emit p_ptr->error(QBtSerialPortClient::ErrorUnavailable);
 		return;
 	}
 
@@ -134,7 +134,7 @@ bool QBtSerialPortClientPrivate::ConnectBtSerialPortProfile_Handle()
 
 	connCnt = 0;
 	if(ulRet != BTSDK_OK)
-		emit p_ptr->error(QBtSerialPortClient::BluetoothSPCErrorOpeningConnection);
+		emit p_ptr->error(QBtSerialPortClient::ErrorOpeningConnection);
 
 	return (ulRet == BTSDK_OK);
 }
@@ -158,7 +158,7 @@ bool QBtSerialPortClientPrivate::ConnectBtSerialPortProfile_ServClass()
 
 	connCnt = 0;
 	if(ulRet != BTSDK_OK)
-		emit p_ptr->error(QBtSerialPortClient::BluetoothSPCErrorOpeningConnection);
+		emit p_ptr->error(QBtSerialPortClient::ErrorOpeningConnection);
 
 	return (ulRet == BTSDK_OK);
 }
@@ -180,7 +180,7 @@ bool QBtSerialPortClientPrivate::PLugInCommPort()
 
 	if(ulRet != BTSDK_OK)
 	{
-		emit p_ptr->error(QBtSerialPortClient::BluetoothSPCUnableToInitializePort);
+		emit p_ptr->error(QBtSerialPortClient::ErrorUnableToInitializePort);
 		return false;
 	}
 
@@ -296,7 +296,7 @@ void QBtSerialPortClientPrivate::SerialCallback(Tserial_event *com_source, uint3
 				//}
 			}
 			else
-				emit p_ptr->error(QBtSerialPortClient::BluetoothSPCUndefinedError);
+				emit p_ptr->error(QBtSerialPortClient::ErrorUndefinedError);
 
 			com->dataHasBeenRead();
 			break;

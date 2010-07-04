@@ -44,12 +44,13 @@ class DLL_EXPORT QBtSerialPortServer : public QObject
     Q_OBJECT
 
 public:
-    //SPS stands for SerialPortServer
-    enum ErrorCode{
-        BluetoothSPSAlreadyInUse,
-        BluetoothSPSNotSupported,
-        BluetoothSPSUnavailable,
-        BluetoothSPSUndefinedError
+    
+    enum ErrorCode
+    {
+        ErrorAlreadyInUse,
+        ErrorNotSupported,
+        ErrorUnavailable,
+        ErrorUndefinedError
     };
 
 public:
@@ -102,7 +103,7 @@ public slots:
      * getTransmittingServiceInfo(). If needed, the user can set the name
      * of the transmitting service when calling this function.
      */
-    void startServer(const QString& serviceName = "MyRFCOMM");
+    void startServer (const QString& serviceName = "MyRFCOMM");
 
     /**
      * stopServer()
@@ -120,7 +121,7 @@ public slots:
      *
      * @param data The data to be send.
      */
-    void sendData(const QString & data);
+    void sendData (const QString & data);
 
 signals:
     /**

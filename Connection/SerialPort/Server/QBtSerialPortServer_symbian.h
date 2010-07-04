@@ -50,14 +50,14 @@ public:
 	 * Starts the listener.  listener will open a listening socket and
 	 * listen on incoming connections.
 	 */
-	void StartListener();
+	void StartListenerL();
 
 	/*!
 	 * StopListener()
 	 *
 	 * Stops the listener, closes the listening socket.
 	 */
-	void StopListener();
+	void StopListenerL();
 
 	/*!
 	 * SendData()
@@ -152,7 +152,7 @@ private:
 	 *
 	 * Handles the event of sending successfully data to the server.
 	 */
-	void HandleListenerDataSend();
+	void HandleListenerDataSendL();
 
 
 private: // data

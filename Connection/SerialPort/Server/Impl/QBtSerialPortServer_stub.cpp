@@ -7,7 +7,7 @@
 
 #include "../QBtSerialPortServer_stub.h"
 
-QBtSerialPortServerPrivate::QBtSerialPortServerPrivate(QBtSerialPortServer* punlicClsass) : 
+QBtSerialPortServerPrivate::QBtSerialPortServerPrivate(QBtSerialPortServer* publicClass) : 
 		p_ptr(publicClass)
 {	
 }

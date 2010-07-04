@@ -49,7 +49,7 @@ public:
      * Sets the name of the device throught which it will be identified by other
      * devices during SDP discovery.
      */
-    static void setLocalDeviceName(QString devName);
+    static void setLocalDeviceName (const QString & deviceName);
 
     /**
      * GetDeviceName()
@@ -66,7 +66,7 @@ public:
 
     /**
      * Symbian specific function.
-     * Used if bluetooth is powered off, showing a dialog that requests
+     * Used if bluetooth is powered off, showing a dialog that asks permission
      * from the user to power on bluetooth.
      */
     static void askUserTurnOnBtPower();
@@ -74,7 +74,7 @@ public:
     
     /**
      * Symbian specific function.
-     * Turns on/off bluetooth. Returns true is opeations was sucessful.     
+     * Turns on/off bluetooth. Returns true is operation was sucessful.     
      */
     static bool setBluetoothPowerState (bool value);    
 

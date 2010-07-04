@@ -92,7 +92,7 @@ void QBtLocalDevicePrivate::SetDeviceClass(QBtDevice::DeviceMajor classId)
     Btsdk_SetLocalDeviceClass(newDevClass);
 }
 
-void QBtLocalDevicePrivate::SetLocalDeviceName(QString devName)
+void QBtLocalDevicePrivate::SetLocalDeviceName(const QString & devName)
 {
     Btsdk_SetLocalName((BTUINT8*)devName.toUtf8().constData(), devName.size());
 }

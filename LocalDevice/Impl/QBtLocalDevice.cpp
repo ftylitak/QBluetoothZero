@@ -2,7 +2,7 @@
  * QBtLocalDevice.cpp
  *
  *
- *      Author: Ftylitakis Nikolaos
+ *      Author: Ftylitakis Nikolaos, Luis Valente
  */
 
 #include <QBtLocalDevice.h>
@@ -41,9 +41,9 @@ void QBtLocalDevice::setDeviceClass(QBtDevice::DeviceMajor classId)
     QBtLocalDevicePrivate::SetDeviceClass(classId);
 }
 
-void QBtLocalDevice::setLocalDeviceName(QString devName)
+void QBtLocalDevice::setLocalDeviceName (const QString & deviceName)
 {
-    QBtLocalDevicePrivate::SetLocalDeviceName(devName);
+    QBtLocalDevicePrivate::SetLocalDeviceName (deviceName);
 }
 
 QString QBtLocalDevice::getLocalDeviceName()

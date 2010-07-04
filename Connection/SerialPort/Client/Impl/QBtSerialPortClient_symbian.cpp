@@ -29,7 +29,7 @@ QBtSerialPortClientPrivate* QBtSerialPortClientPrivate::NewLC(QBtSerialPortClien
 void QBtSerialPortClientPrivate::ConstructL()
 {
     if (iSocketServ.Connect() != KErrNone)
-       QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtSerialPortClient::BluetoothSPCUnavailable) );
+       QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtSerialPortClient::ErrorUnavailable) );
     
     
     // timer
@@ -75,8 +75,10 @@ void QBtSerialPortClientPrivate::DoCancel()
 // ----------------------------------------------------------------------------
 TBool QBtSerialPortClientPrivate::ConnectL (const QBtDevice& remoteDevice, const QBtService& remoteService)
 {		
-    if(iState != ENone)
-        return false;
+	//DEBUG_MSG ("[connect] entering");
+	
+    if (iState != ENone)        
+    { DEBUG_MSG("warning: trying to connect and state != ENone"); return false; }
 
     device =  remoteDevice;
     service = remoteService;
@@ -101,40 +103,58 @@ TBool QBtSerialPortClientPrivate::ConnectL (const QBtDevice& remoteDevice, const
     iState = EConnecting;
     
     // start connection timer    
+    DEBUG_MSG ("[connect] start timer");
     StartConnectionTimer();
     
             
     // wait (should we wait here? or use the ActiveObject RunL ?)
+    DEBUG_MSG ("[connect] waiting for request");
     User::WaitForRequest(status);
     
     
     // cancel timers    
+    DEBUG_MSG ("[connect] ok, canceling timer");
     CancelConnectionTimer();
     
     
     if (status != KErrNone)
     {
-    	DEBUG_MSG (QString ("[QBtSerialPortClientPrivate::connect] error detected: %1").arg (status.Int()) );
+    	DEBUG_MSG (QString ("error detected: %1").arg (status.Int()) );
     	
     	iState = ENone;
     	
-    	if (status == KErrTimedOut || status == KErrCancel)
-        	{ QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtSerialPortClient::BluetoothSPCConnectionTimeout) ); }
-        else
-        	{ QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtSerialPortClient::BluetoothSPCErrorOpeningConnection) ); }
-        
+    	switch (status.Int())
+    	{
+    		case KErrTimedOut:
+    		case KErrCancel:
+    			QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtSerialPortClient::ErrorConnectionTimeout) );
+    			break;
+    			
+    		case KErrAlreadyExists:
+				QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtSerialPortClient::ErrorAlreadyConnected) );
+				break;
+    			
+    		case KErrCouldNotConnect:
+    		default:
+    			QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtSerialPortClient::ErrorOpeningConnection) );
+    	
+    	}
+    	
         return false;
     }
 
        
     // prepare for receive
+    DEBUG_MSG ("[connect] prepare for receive");
     ReceiveData();
    
     // notify
+    DEBUG_MSG ("[connect] emit signal");
     QT_TRYCATCH_LEAVING (emit p_ptr->connectedToServer() );
     
         
     //SetActive();   
+    DEBUG_MSG ("[connect] return");
     return true;
     
 }
@@ -146,7 +166,9 @@ TBool QBtSerialPortClientPrivate::ConnectL (const QBtDevice& remoteDevice, const
 // ----------------------------------------------------------------------------
 
 TInt QBtSerialPortClientPrivate::ConnectTimerCallBack (TAny* aPtr)
-{	
+{
+	DEBUG_MSG ("[timer] entering");
+	
 	QBtSerialPortClientPrivate* p = (QBtSerialPortClientPrivate*) aPtr;
 		
 	// ignore if connection was successful
@@ -168,7 +190,7 @@ TInt QBtSerialPortClientPrivate::ConnectTimerCallBack (TAny* aPtr)
 	DEBUG_MSG ("[timer] emit error signal");
 	
 	// emit error
-	QT_TRYCATCH_LEAVING (emit p->p_ptr->error (QBtSerialPortClient::BluetoothSPCConnectionTimeout));
+	QT_TRYCATCH_LEAVING (emit p->p_ptr->error (QBtSerialPortClient::ErrorConnectionTimeout));
 	
 	DEBUG_MSG ("[timer] end");
 	
@@ -178,7 +200,7 @@ TInt QBtSerialPortClientPrivate::ConnectTimerCallBack (TAny* aPtr)
 
 void QBtSerialPortClientPrivate::StartConnectionTimer()
 {	
-	// 30s interval (should be a parameter)
+	// 30s interval (this should be a parameter)
 	TTimeIntervalMicroSeconds32 interval (30 * 1000*1000);	
 	
 	if (iTimer)
@@ -198,7 +220,9 @@ void QBtSerialPortClientPrivate::CancelConnectionTimer()
 // ----------------------------------------------------------------------------
 void QBtSerialPortClientPrivate::Disconnect()
 {    
-    if (iState == ENone || iState == EDisconnecting)
+    DEBUG_MSG ("disconnected called")
+	
+	if (iState == ENone || iState == EDisconnecting)
     	return;
     
     // 
@@ -228,7 +252,7 @@ void QBtSerialPortClientPrivate::Disconnect()
     }
     else
     {
-    	QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtSerialPortClient::BluetoothSPCErrorOnDisconnecting) );
+    	QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtSerialPortClient::ErrorOnDisconnecting) );
     }        
     
         
@@ -328,7 +352,7 @@ void QBtSerialPortClientPrivate::RunL()
     		case KErrNotReady:
     		{	
     			// no change in current state (?)    			
-    			QT_TRYCATCH_LEAVING (emit p_ptr->error (QBtSerialPortClient::BluetoothSPCAlreadyInUse) );
+    			QT_TRYCATCH_LEAVING (emit p_ptr->error (QBtSerialPortClient::ErrorAlreadyInUse) );
     			return;
     		}
     		
@@ -337,31 +361,31 @@ void QBtSerialPortClientPrivate::RunL()
     	
     	
     	DEBUG_MSG (QString ("[RunL error: %1]").arg (iStatus.Int()));    	
-    	iState = ENone; 
-    	
+    	    	
     	// get the error
     	switch (iState)
     	{
     		case EConnecting:
     		{
-    			QT_TRYCATCH_LEAVING (emit p_ptr->error (QBtSerialPortClient::BluetoothSPCErrorOpeningConnection) );
-    			return;
+    			QT_TRYCATCH_LEAVING (emit p_ptr->error (QBtSerialPortClient::ErrorOpeningConnection) );
+    			break;
     		}	
     		
     		case EWaiting:
     		case ESending:
     		{
-    			QT_TRYCATCH_LEAVING (emit p_ptr->error (QBtSerialPortClient::BluetoothSpCConnectionError));
-    			return;
+    			QT_TRYCATCH_LEAVING (emit p_ptr->error (QBtSerialPortClient::ErrorConnectionError));
+    			break;
     		}
     		
     		default:
-    			QT_TRYCATCH_LEAVING (emit p_ptr->error (QBtSerialPortClient::BluetoothSPCUndefinedError));
+    			QT_TRYCATCH_LEAVING (emit p_ptr->error (QBtSerialPortClient::ErrorUndefinedError));
+    			break;
     			
     			
     	}   	
     	
-    	
+    	iState = ENone; 
         return;
     }
 

@@ -54,7 +54,7 @@ void QBtLocalDevicePrivate::SetDeviceClass(QBtDevice::DeviceMajor classId)
 	
 }
 
-void QBtLocalDevicePrivate::SetLocalDeviceName(QString devName)
+void QBtLocalDevicePrivate::SetLocalDeviceName(const QString & deviceName)
 {
 	
 }

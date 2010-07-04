@@ -13,7 +13,7 @@
 class QBtSerialPortServerPrivate
 {
 public:
-    QBtSerialPortServerPrivate(QBtSerialPortServer* punlicClsass);
+    QBtSerialPortServerPrivate (QBtSerialPortServer* publicClass);
     ~QBtSerialPortServerPrivate();
 
     void StartListener();

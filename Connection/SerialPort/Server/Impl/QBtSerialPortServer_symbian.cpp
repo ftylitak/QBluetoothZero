@@ -2,7 +2,7 @@
  * QBtSerialPortServer_symbian.cpp
  *
  *  
- *      Author: Ftylitakis Nikolaos
+ *      Author: Ftylitakis Nikolaos, Luis Valente
  */
 
 #include "../QBtSerialPortServer_symbian.h"
@@ -27,7 +27,7 @@ QBtSerialPortServerPrivate* QBtSerialPortServerPrivate::NewLC(QBtSerialPortServe
 void QBtSerialPortServerPrivate::ConstructL()
 {
 	if(iSocketServ.Connect() != KErrNone)
-		emit p_ptr->error(QBtSerialPortServer::BluetoothSPSUnavailable);
+		emit p_ptr->error(QBtSerialPortServer::ErrorUnavailable);
 }
 
 
@@ -55,8 +55,8 @@ QBtSerialPortServerPrivate::QBtSerialPortServerPrivate(QBtSerialPortServer* publ
 // ----------------------------------------------------------------------------
 QBtSerialPortServerPrivate::~QBtSerialPortServerPrivate()
 {
-	// close sockets
-	StopListener();
+	// close sockets, must not throw
+	TRAPD (error, StopListenerL() );
 	
 	// cancel active object
 	if(IsActive())
@@ -70,14 +70,14 @@ QBtSerialPortServerPrivate::~QBtSerialPortServerPrivate()
 // start listener.  listener will open a listening socket on a channel (port)
 // gotten from GetOpt() call.  
 // ----------------------------------------------------------------------------
-void QBtSerialPortServerPrivate::StartListener()
+void QBtSerialPortServerPrivate::StartListenerL()
 {
 	TInt aChannel;
 	
 	// get out if we're already running..
-	if ( iState!=ENone )
+	if (iState != ENone)
 	{
-		emit p_ptr->error(QBtSerialPortServer::BluetoothSPSAlreadyInUse);
+		QT_TRYCATCH_LEAVING (emit p_ptr->error(QBtSerialPortServer::ErrorAlreadyInUse) );
 		return;
 	}
 
@@ -86,25 +86,22 @@ void QBtSerialPortServerPrivate::StartListener()
 
 	// load protocol, RFCOMM
 	TProtocolDesc pdesc;
-	User::LeaveIfError(iSocketServ.FindProtocol(_L("RFCOMM"), pdesc));
+	User::LeaveIfError (iSocketServ.FindProtocol(_L("RFCOMM"), pdesc));
 
 	// open a socket
-	User::LeaveIfError(
-			iListenSock.Open(iSocketServ,
-					pdesc.iAddrFamily,pdesc.iSockType,QBtConstants::RFCOMM)
-	);
+	User::LeaveIfError (iListenSock.Open (iSocketServ, pdesc.iAddrFamily,pdesc.iSockType,QBtConstants::RFCOMM) );
 
 	// get listening channel
-	User::LeaveIfError(iListenSock.GetOpt(KRFCOMMGetAvailableServerChannel, 
-			KSolBtRFCOMM, aChannel));
+	User::LeaveIfError (iListenSock.GetOpt(KRFCOMMGetAvailableServerChannel, KSolBtRFCOMM, aChannel));
 
 	// bluetooth socket address object
 	TBTSockAddr btsockaddr;
 	btsockaddr.SetPort(aChannel);
+	
 	// bind socket
-	User::LeaveIfError(iListenSock.Bind(btsockaddr));
+	User::LeaveIfError (iListenSock.Bind(btsockaddr));
 	// listen on port
-	iListenSock.Listen(queueSize);
+	iListenSock.Listen (queueSize);
 	
 	// advertise service
 	QBtService newService;
@@ -125,10 +122,11 @@ void QBtSerialPortServerPrivate::StartListener()
 
 	// set to accept incoming connections, active object will handle
 	iListenSock.Accept(iSock,iStatus);
+	
 	if(!IsActive())
 		SetActive();
 	
-	emit p_ptr->serverStarted();
+	QT_TRYCATCH_LEAVING (emit p_ptr->serverStarted() );
 }
 
 // ----------------------------------------------------------------------------
@@ -136,10 +134,10 @@ void QBtSerialPortServerPrivate::StartListener()
 //
 // stops the listener by closing the listening socket
 // ----------------------------------------------------------------------------
-void QBtSerialPortServerPrivate::StopListener()
+void QBtSerialPortServerPrivate::StopListenerL()
 {
 	// kill sockets
-	if ( iState!=ENone )
+	if (iState != ENone)
 	{       
 		// cancel all pending socket operations
 		iSock.CancelAll();
@@ -151,7 +149,7 @@ void QBtSerialPortServerPrivate::StopListener()
 		
 		p_ptr->stopAdvertisingService();
 		
-		emit p_ptr->serverStopped();
+		QT_TRYCATCH_LEAVING (emit p_ptr->serverStopped() );
 	}
 }
 
@@ -179,8 +177,10 @@ void QBtSerialPortServerPrivate::SendData(const QString & data)
 	// try to send message by writing to socket
 	// - set the state of this active object to "sending"
 	iState=ESending;
+	
 	// - make async socket write request
 	iSock.Write(message8, iStatus);
+	
 	// - start waiting async req response (iState) from active scheduler
 	SetActive();
 }
@@ -194,8 +194,10 @@ void QBtSerialPortServerPrivate::ReceiveData()
 {
 	// set state to waiting - for RunL()
 	iState = EWaiting;
+	
 	// make async request
 	iSock.RecvOneOrMore(iBuffer, 0, iStatus, iLen);
+	
 	// set as active to get the async req response (iState) in RunL()
 	SetActive();
 }
@@ -206,11 +208,11 @@ void QBtSerialPortServerPrivate::RunL()
 {
 	if ( iStatus!=KErrNone )
 	{
-		StopListener();
+		StopListenerL();
 		HandleListenerDisconnectedL();
 		
 		if(restartAtDisconnect)
-			StartListener();
+			StartListenerL();
 		
 		return;
 	}
@@ -241,7 +243,7 @@ void QBtSerialPortServerPrivate::RunL()
 		{
 			// returned from sending the date, check the state
 			// start expecting next data to be read
-			HandleListenerDataSend();
+			HandleListenerDataSendL();
 			ReceiveData();
 			break;
 		}
@@ -320,7 +322,7 @@ void QBtSerialPortServerPrivate::HandleListenerDisconnectedL()
 //
 // emit signal that client sent successfully data to the server
 // ----------------------------------------------------------------------------
-void QBtSerialPortServerPrivate::HandleListenerDataSend()
+void QBtSerialPortServerPrivate::HandleListenerDataSendL()
 {
 	QT_TRYCATCH_LEAVING  (emit p_ptr->dataSent() );
 }

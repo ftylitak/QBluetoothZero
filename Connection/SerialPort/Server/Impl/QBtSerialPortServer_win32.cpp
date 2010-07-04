@@ -14,20 +14,20 @@ QBtSerialPortServerPrivate::QBtSerialPortServerPrivate(QBtSerialPortServer* publ
 
 QBtSerialPortServerPrivate::~QBtSerialPortServerPrivate()
 {
-	emit p_ptr->error(QBtSerialPortServer::BluetoothSPSNotSupported);
+	emit p_ptr->error(QBtSerialPortServer::ErrorNotSupported);
 }
 
 void QBtSerialPortServerPrivate::StartListener()
 {
-	emit p_ptr->error(QBtSerialPortServer::BluetoothSPSNotSupported);
+	emit p_ptr->error(QBtSerialPortServer::ErrorNotSupported);
 }
 
 void QBtSerialPortServerPrivate::StopListener()
 {
-	emit p_ptr->error(QBtSerialPortServer::BluetoothSPSNotSupported);
+	emit p_ptr->error(QBtSerialPortServer::ErrorNotSupported);
 }
 
 void QBtSerialPortServerPrivate::SendData(const QString /*data*/)
 {
-	emit p_ptr->error(QBtSerialPortServer::BluetoothSPSNotSupported);
+	emit p_ptr->error(QBtSerialPortServer::ErrorNotSupported);
 }
