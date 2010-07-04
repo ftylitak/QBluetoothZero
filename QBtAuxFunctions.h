@@ -12,45 +12,44 @@
 
 #include <QMessageBox>
 #include <QDir>
+#include <QDebug.h>
+
+inline void _DEBUG_MSG (const QString & m, const QString & file, const QString& line)
+{
+	qDebug() << "file: " << file << " line: " << line << " " << m;
+}
+
+inline void _Assert_Msg (const QString msg, const QString & file, const QString & line)
+{
+	// strip directory info
+	int index = file.lastIndexOf("/");
+	QString f = file.mid (index+1);
+	QString m = QString ("file: %1 line: %2\n%3").arg (f, line, msg);
+
+	QMessageBox::information(0, "assert failed", m);		
+	Q_ASSERT (false);
+}
+
+inline void _Break_Here (const QString & file, const QString & line)
+{
+	// strip directory info
+	int index = file.lastIndexOf("/");
+	QString f = file.mid (index+1);
+	QString m = QString ("file: %1 line: %2").arg (f, line);
+
+	QMessageBox::information(0, "code break", m);
+	Q_ASSERT (false);
+}
 
 	#ifdef _DEBUG
-		#include <QDebug.h>
-		inline void DEBUG_MSG (const QString & m)
-		{
-			qDebug() << m;
-		}
-	#endif
-		
-	inline void _Assert_Msg (const QString msg, const QString & file, const QString & line)
-	{
-		// strip directory info
-		int index = file.lastIndexOf("/");
-		QString f = file.mid (index+1);
-		QString m = QString ("file: %1 line: %2\n%3").arg (f, line, msg);
-
-		QMessageBox::information(0, "assert failed", m);		
-		Q_ASSERT (false);
-	}
-	
-	inline void _Break_Here (const QString & file, const QString & line)
-	{
-		// strip directory info
-		int index = file.lastIndexOf("/");
-		QString f = file.mid (index+1);
-		QString m = QString ("file: %1 line: %2").arg (f, line);
-
-		QMessageBox::information(0, "code break", m);
-		Q_ASSERT (false);
-	}
-
-
-	#ifdef _DEBUG
+		#define DEBUG_MSG(msg) { _DEBUG_MSG((msg),__FILE__,QString::number(__LINE__)); }
 		#define BREAK_HERE() { _Break_Here(__FILE__, QString::number(__LINE__)); }
 		#define ASSERT_MSG(test, msg) { if (!(test)) _Assert_Msg ((msg), __FILE__, QString::number(__LINE__) ); }
 		
 		//#define ASSERT_MSG_X(test, where, msg) { if (!(test)) Assert_Msg ((msg), __FILE__, QString::number(__LINE__) ); }
 	#else
 	
+		#define DEBUG_MSG(msg) 0
 		#define ASSERT_MSG_X(test, where, msg) 0
 		#define ASSERT_MSG(test, msg) 0
 		#define BREAK_HERE() 0
