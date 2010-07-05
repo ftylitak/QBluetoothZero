@@ -148,7 +148,7 @@ public:
      * Set the current path of the remote device OBEX session.
      * @param path The remote folder to be set as current
      */
-    void setPath(const QString path);
+    void setPath(const QString & path);
 
     // accessor commands
 
@@ -207,17 +207,17 @@ signals:
      * Emitted when a file is received from the server
      */
 
-    void fileReceived(const QString fileName);
+    void fileReceived (const QString & fileName);
 
     /**
      * Emitted when a byte buffer is received from the server
      */
-    void dataReceived(const QByteArray data);
+    void dataReceived (const QByteArray & data);
 
     /**
      * Emitted upon successfull set of the remote current working directory.
      */
-    void remotePathSet(const QString pathName);
+    void remotePathSet (const QString & pathName);
 
 private:
     friend class QBtObjectExchangeClientPrivate;

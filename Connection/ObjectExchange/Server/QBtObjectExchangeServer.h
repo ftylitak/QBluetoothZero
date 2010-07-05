@@ -133,7 +133,7 @@ signals:
      *
      * @param receivedFileName
      */
-    void receivingStopped(QString receivedFileName);
+    void receivingStopped (const QString & receivedFileName);
 
     /**
      * If the server (local device) sends a request to start a transmittion to the remote client
@@ -151,13 +151,13 @@ signals:
     /**
      * Emitted when a transmittion is started from the local device to a remote device.
      */
-    void transmittingStarted(QString transmittingfileName);
+    void transmittingStarted (const QString & transmittingfileName);
 
     /**
      * Emitted upon successfull or not end of transmittion from
      * the local device to a remote client.
      */
-    void transmittingStopped(QString transmittingfileName);
+    void transmittingStopped (const QString & transmittingfileName);
 
     /**
      * Emitted if during a transmittion the client aborts it.

@@ -73,7 +73,7 @@ void QBtObjectExchangeClient::abort()
     _implPtr->Abort();
 }
 
-void QBtObjectExchangeClient::setPath(const QString path)
+void QBtObjectExchangeClient::setPath(const QString & path)
 {
     _implPtr->SetPath(path);
 }

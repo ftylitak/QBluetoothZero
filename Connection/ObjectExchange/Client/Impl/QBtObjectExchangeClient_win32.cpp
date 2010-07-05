@@ -210,7 +210,7 @@ void QBtObjectExchangeClientPrivate::Abort()
 * SetPath()
 * Set the current path of the remote device OBEX session.
 */
-bool QBtObjectExchangeClientPrivate::SetPath(const QString path)
+bool QBtObjectExchangeClientPrivate::SetPath (const QString & path)
 {
 	if (connectionHandle == BTSDK_INVALID_HANDLE)
 	{

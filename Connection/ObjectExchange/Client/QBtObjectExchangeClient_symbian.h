@@ -94,7 +94,7 @@ public: // Constructors and destructor.
      * SetPath()
      * Set the current path of the remote device OBEX session.
      */
-    void SetPath(const QString path);
+    void SetPath(const QString & path);
 
     /**
      * GetFile

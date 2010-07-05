@@ -104,9 +104,9 @@ EXPORTS
 	_ZN23QBtObjectExchangeClient10objectSentEv @ 103 NONAME
 	_ZN23QBtObjectExchangeClient11qt_metacallEN11QMetaObject4CallEiPPv @ 104 NONAME
 	_ZN23QBtObjectExchangeClient11qt_metacastEPKc @ 105 NONAME
-	_ZN23QBtObjectExchangeClient12dataReceivedE10QByteArray @ 106 NONAME
-	_ZN23QBtObjectExchangeClient12fileReceivedE7QString @ 107 NONAME
-	_ZN23QBtObjectExchangeClient13remotePathSetE7QString @ 108 NONAME
+	_ZN23QBtObjectExchangeClient12dataReceivedE10QByteArray @ 106 NONAME ABSENT
+	_ZN23QBtObjectExchangeClient12fileReceivedE7QString @ 107 NONAME ABSENT
+	_ZN23QBtObjectExchangeClient13remotePathSetE7QString @ 108 NONAME ABSENT
 	_ZN23QBtObjectExchangeClient16staticMetaObjectE @ 109 NONAME DATA 16
 	_ZN23QBtObjectExchangeClient17connectedToServerEv @ 110 NONAME
 	_ZN23QBtObjectExchangeClient19getStaticMetaObjectEv @ 111 NONAME
@@ -124,12 +124,12 @@ EXPORTS
 	_ZN23QBtObjectExchangeServer13serverStartedEv @ 123 NONAME
 	_ZN23QBtObjectExchangeServer13serverStoppedEv @ 124 NONAME
 	_ZN23QBtObjectExchangeServer16receivingStartedEv @ 125 NONAME
-	_ZN23QBtObjectExchangeServer16receivingStoppedE7QString @ 126 NONAME
+	_ZN23QBtObjectExchangeServer16receivingStoppedE7QString @ 126 NONAME ABSENT
 	_ZN23QBtObjectExchangeServer16staticMetaObjectE @ 127 NONAME DATA 16
 	_ZN23QBtObjectExchangeServer19getStaticMetaObjectEv @ 128 NONAME
 	_ZN23QBtObjectExchangeServer19receivingObjectInfoEii @ 129 NONAME
-	_ZN23QBtObjectExchangeServer19transmittingStartedE7QString @ 130 NONAME
-	_ZN23QBtObjectExchangeServer19transmittingStoppedE7QString @ 131 NONAME
+	_ZN23QBtObjectExchangeServer19transmittingStartedE7QString @ 130 NONAME ABSENT
+	_ZN23QBtObjectExchangeServer19transmittingStoppedE7QString @ 131 NONAME ABSENT
 	_ZN23QBtObjectExchangeServer20transmittingRejectedEv @ 132 NONAME
 	_ZN23QBtObjectExchangeServer22transmittingObjectInfoEii @ 133 NONAME
 	_ZN23QBtObjectExchangeServer25clientAbortedTransmittionEv @ 134 NONAME
@@ -252,7 +252,7 @@ EXPORTS
 	_ZN23QBtObjectExchangeClient5abortEv @ 251 NONAME
 	_ZN23QBtObjectExchangeClient7getFileERK7QStringS2_ @ 252 NONAME
 	_ZN23QBtObjectExchangeClient7putFileERK7QString @ 253 NONAME
-	_ZN23QBtObjectExchangeClient7setPathE7QString @ 254 NONAME
+	_ZN23QBtObjectExchangeClient7setPathE7QString @ 254 NONAME ABSENT
 	_ZN23QBtObjectExchangeServer11isConnectedEv @ 255 NONAME
 	_ZN23QBtObjectExchangeServer22setTransmittingServiceERK10QBtService @ 256 NONAME
 	_ZN23QBtObjectExchangeServer22stopAdvertisingServiceEv @ 257 NONAME

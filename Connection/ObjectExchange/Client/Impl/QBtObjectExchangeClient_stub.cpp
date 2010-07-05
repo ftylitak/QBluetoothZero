@@ -32,8 +32,7 @@ void QBtObjectExchangeClientPrivate::SendFile(const QString& fileName)
 	
 }
 
-void QBtObjectExchangeClientPrivate::SendData(
-		const QByteArray& data, const QString& bufferName)
+void QBtObjectExchangeClientPrivate::SendData (const QByteArray& data, const QString& bufferName)
 {
 	
 }
@@ -53,7 +52,7 @@ bool QBtObjectExchangeClientPrivate::IsBusy()
 	return false;
 }
 
-bool QBtObjectExchangeClientPrivate::SetPath(const QString path)
+bool QBtObjectExchangeClientPrivate::SetPath (const QString & path)
 {
 	return false;
 }

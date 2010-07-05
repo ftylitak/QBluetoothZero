@@ -350,7 +350,7 @@ TBool QBtObjectExchangeClientPrivate::IsConnected()
 }
 
 //if KErrArgument -> invalid path!!!
-void QBtObjectExchangeClientPrivate::SetPath(const QString path)
+void QBtObjectExchangeClientPrivate::SetPath (const QString & path)
 {
     if(!CheckServiceAvailability())
         return;

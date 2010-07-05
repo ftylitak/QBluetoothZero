@@ -69,7 +69,7 @@ public:
 	* SetPath()
 	* Set the current path of the remote device OBEX session.
 	*/
-	bool SetPath(const QString path);
+	bool SetPath(const QString & path);
 
 	/**
 	* GetFile
