@@ -7,6 +7,17 @@
 #ifndef AUXFUNCTIONS_SYMBIAN_H_
 #define AUXFUNCTIONS_SYMBIAN_H_
 
+#include <QtGlobal>
+
+template <class T> inline void SafeDelete(T* &ptr)
+{
+	if(ptr)
+	{
+		delete ptr;
+		ptr = 0; 
+	}
+}
+
 
 #ifdef Q_OS_SYMBIAN
 
@@ -41,34 +52,24 @@ inline void _Break_Here (const QString & file, const QString & line)
 	Q_ASSERT (false);
 }
 
-	#ifdef _DEBUG
-		#define DEBUG_MSG(msg) { _DEBUG_MSG((msg),__FILE__,QString::number(__LINE__)); }
-		#define BREAK_HERE() { _Break_Here(__FILE__, QString::number(__LINE__)); }
-		#define ASSERT_MSG(test, msg) { if (!(test)) _Assert_Msg ((msg), __FILE__, QString::number(__LINE__) ); }
-		
-		//#define ASSERT_MSG_X(test, where, msg) { if (!(test)) Assert_Msg ((msg), __FILE__, QString::number(__LINE__) ); }
-	#else
+
+#ifdef QT_DEBUG
+	#define DEBUG_MSG(msg) { _DEBUG_MSG((msg),__FILE__,QString::number(__LINE__)); }
+	#define BREAK_HERE() { _Break_Here(__FILE__, QString::number(__LINE__)); }
+	#define ASSERT_MSG(test, msg) { if (!(test)) _Assert_Msg ((msg), __FILE__, QString::number(__LINE__) ); }
 	
-		#define DEBUG_MSG(msg) 0
-		#define ASSERT_MSG_X(test, where, msg) 0
-		#define ASSERT_MSG(test, msg) 0
-		#define BREAK_HERE() 0
-	
-	#endif
+	//#define ASSERT_MSG_X(test, where, msg) { if (!(test)) Assert_Msg ((msg), __FILE__, QString::number(__LINE__) ); }
+#else
+
+	#define DEBUG_MSG(msg) 0
+	#define ASSERT_MSG_X(test, where, msg) 0
+	#define ASSERT_MSG(test, msg) 0
+	#define BREAK_HERE() 0
+
+#endif
 	
 	
 #endif
-
-
-template<class T> inline void SafeDelete(T* &ptr)
-{
-	if(ptr)
-	{
-		delete ptr;
-		ptr = NULL; 
-	}
-}
-
 
 
 
