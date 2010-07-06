@@ -176,7 +176,7 @@ void QBtDeviceDiscovererPrivate::RunL()
 		
 		//QBtDevice* remoteDevice = new QBtDevice(qtNameDevice, qtBtDeviceAddress, qtDeviceMajorClass);
 		QBtDevice remoteDevice (qtNameDevice, qtBtDeviceAddress, qtDeviceMajorClass);		
-		QT_TRYCATCH_LEAVING (EmitNewDeviceFoundSignal (remoteDevice)));
+		QT_TRYCATCH_LEAVING (EmitNewDeviceFoundSignal (remoteDevice));
 		
 		
 		// store on list
