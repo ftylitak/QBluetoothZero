@@ -69,6 +69,12 @@ public:
      * Gets the list of devices that where found during the last search
      */
     const QBtDevice::List& GetInquiredDevices() const;
+    
+    
+    /**
+     * Returns true if the class is busy discovering devices.
+     */
+    TBool IsBusy() const;
 
 protected:
 
@@ -98,6 +104,13 @@ private:
  * ConstructL()
  */
     void ConstructL();
+    
+    
+private:
+    
+    void EmitErrorSignal (QBtDeviceDiscoverer::DeviceDiscoveryErrors error);
+    void EmitDiscoveryStoppedSignal();
+    void EmitNewDeviceFoundSignal (const QBtDevice & device);
 
 private: //data
 
@@ -110,12 +123,14 @@ private: //data
     TInquirySockAddr iAddr;
     TProtocolDesc iProtocolInfo;
     TNameEntry iEntry;
-    TBool iLIAC;
-
     TInt sizeOfListeningQueue;
 
     //pointer to parent object (from constructor). Not owned by this class
     QBtDeviceDiscoverer *p_ptr;
+    
+    TBool iLIAC;
+    TBool iIsBusy;
+
 };
 
 #endif /* QBTDEVICEDISCOVERER_SYMBIAN_H_ */

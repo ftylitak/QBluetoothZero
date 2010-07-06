@@ -44,6 +44,12 @@ public:
      * returns a reference to the list of devices found (if any)
      */
     const QBtDevice::List& getInquiredDevices() const;
+    
+    
+    /**
+     * Returns true if the class if performing a device discovery.
+     */
+    bool isBusy () const;
 
 public slots:
     /**

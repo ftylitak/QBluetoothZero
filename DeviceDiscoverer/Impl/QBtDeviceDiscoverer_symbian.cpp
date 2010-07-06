@@ -2,7 +2,7 @@
  * QBtDeviceDiscoverer_symbian.cpp
  *
  *  
- *      Author: Ftylitakis Nikolaos
+ *      Author: Ftylitakis Nikolaos, Luis Valente
  */
 #include "../QBtDeviceDiscoverer_symbian.h"
 #include "../QBtDeviceDiscoverer.h"
@@ -42,8 +42,12 @@ void QBtDeviceDiscovererPrivate::ConstructL()
 //
 // constructor
 // ----------------------------------------------------------------------------
-QBtDeviceDiscovererPrivate::QBtDeviceDiscovererPrivate(QBtDeviceDiscoverer *publicClass):
-	CActive(CActive::EPriorityStandard), iLIAC(false), sizeOfListeningQueue(4), p_ptr(publicClass) 
+QBtDeviceDiscovererPrivate::QBtDeviceDiscovererPrivate (QBtDeviceDiscoverer *publicClass)
+:	CActive (CActive::EPriorityStandard),
+ 	sizeOfListeningQueue(4),
+ 	p_ptr(publicClass),
+ 	iLIAC (false),
+ 	iIsBusy (false)
 {
 	CActiveScheduler::Add(this);
 	iDevList = new QBtDevice::List();
@@ -82,9 +86,12 @@ void QBtDeviceDiscovererPrivate::DiscoverDevices()
 		TInt err = iResolver.Open(iSocketServ, iProtocolInfo.iAddrFamily, iProtocolInfo.iProtocol);
 		if (err) 
 		{
-			emit p_ptr->error(QBtDeviceDiscoverer::UnknownError);
+			EmitErrorSignal (QBtDeviceDiscoverer::BluetoothInUse);
 			return;
 		}
+		
+		// set as busy
+		iIsBusy = true;
 
 		// wipe existing device data list, start fresh
 		iDevList->clear();
@@ -100,7 +107,7 @@ void QBtDeviceDiscovererPrivate::DiscoverDevices()
 	}
 	else
 	{
-		emit p_ptr->error(QBtDeviceDiscoverer::BluetoothInUse);
+		EmitErrorSignal (QBtDeviceDiscoverer::BluetoothInUse) ;		
 		return;
 	}
 }
@@ -156,8 +163,7 @@ void QBtDeviceDiscovererPrivate::RunL()
 		
 		//QBtDevice* remoteDevice = new QBtDevice(qtNameDevice, qtBtDeviceAddress, qtDeviceMajorClass);
 		QBtDevice remoteDevice (qtNameDevice, qtBtDeviceAddress, qtDeviceMajorClass);		
-		
-		QT_TRYCATCH_LEAVING (emit p_ptr->newDeviceFound(remoteDevice) );
+		QT_TRYCATCH_LEAVING (EmitNewDeviceFoundSignal (remoteDevice)));
 		
 		
 		// store on list
@@ -169,23 +175,24 @@ void QBtDeviceDiscovererPrivate::RunL()
 		SetActive();
 	}
 	else if (iStatus == KErrHostResNoMoreResults) {
-        //Note emit may throw. We translate to Leave here.
-        QT_TRYCATCH_LEAVING (emit p_ptr->discoveryStopped() );
+        // Note emit may throw. We translate to Leave here.
+		QT_TRYCATCH_LEAVING (EmitDiscoveryStoppedSignal() );
 	}
     else {
-        QT_TRYCATCH_LEAVING (emit p_ptr->discoveryStopped());
+    	QT_TRYCATCH_LEAVING (EmitDiscoveryStoppedSignal() );
 		//ErrorConvertToLocalL(iStatus.Int());
     }
 }
 
 void QBtDeviceDiscovererPrivate::DoCancel()
 {
-	//Note that must trap any errors here - Cancel is called in destructor and destructor must not throw.
+	// Note that must trap any errors here - Cancel is called in destructor and destructor must not throw.
 	QT_TRY
 	{
-		emit p_ptr->discoveryStopped();
+		EmitDiscoveryStoppedSignal();
 	}
-	QT_CATCH (std::exception&) {}
+	QT_CATCH (std::exception& e)
+	{}
 	
 	iResolver.Cancel();
 }
@@ -218,8 +225,8 @@ void QBtDeviceDiscovererPrivate::StopDiscovery()
 		Cancel();
 	else
 	{
-		//Note, may throw. That is OK, stopSearch() is called from Qt code only.
-		emit p_ptr->error(QBtDeviceDiscoverer::BluetoothAlreadyStopped);
+		// Note, may throw. That is OK, stopSearch() is called from Qt code only.
+		EmitErrorSignal (QBtDeviceDiscoverer::BluetoothAlreadyStopped) ;
 	}
 }
 
@@ -230,4 +237,67 @@ void QBtDeviceDiscovererPrivate::StopDiscovery()
 const QBtDevice::List& QBtDeviceDiscovererPrivate::GetInquiredDevices() const
 {
 	return *iDevList;	
+}
+
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+TBool QBtDeviceDiscovererPrivate::IsBusy() const
+{
+	return iIsBusy;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void QBtDeviceDiscovererPrivate::EmitErrorSignal (QBtDeviceDiscoverer::DeviceDiscoveryErrors error)
+{
+	try
+	{
+		emit p_ptr->error (error);
+		iIsBusy = false;
+	}
+	catch (...)
+	{
+		iIsBusy = false;
+		throw;
+	}
+	
+}
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void QBtDeviceDiscovererPrivate::EmitDiscoveryStoppedSignal()
+{
+	try
+	{
+		emit p_ptr->discoveryStopped();
+		iIsBusy = false;
+	}
+	catch (...)
+	{
+		iIsBusy = false;
+		throw;
+	}
+		
+	
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void QBtDeviceDiscovererPrivate::EmitNewDeviceFoundSignal (const QBtDevice & device)
+{
+	try
+	{
+		emit p_ptr->newDeviceFound (device);		
+		iIsBusy = false;
+	}
+	catch (...)
+	{
+		iIsBusy = false;
+		throw;
+	}
+	
 }

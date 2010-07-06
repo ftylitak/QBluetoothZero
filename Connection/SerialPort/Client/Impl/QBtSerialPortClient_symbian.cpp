@@ -75,8 +75,6 @@ void QBtSerialPortClientPrivate::DoCancel()
 // ----------------------------------------------------------------------------
 TBool QBtSerialPortClientPrivate::ConnectL (const QBtDevice& remoteDevice, const QBtService& remoteService)
 {		
-	//DEBUG_MSG ("[connect] entering");
-	
     if (iState != ENone)        
     { DEBUG_MSG("warning: trying to connect and state != ENone"); return false; }
 
@@ -103,23 +101,20 @@ TBool QBtSerialPortClientPrivate::ConnectL (const QBtDevice& remoteDevice, const
     iState = EConnecting;
     
     // start connection timer    
-    DEBUG_MSG ("[connect] start timer");
     StartConnectionTimer();
     
             
     // wait (should we wait here? or use the ActiveObject RunL ?)
-    DEBUG_MSG ("[connect] waiting for request");
     User::WaitForRequest(status);
     
     
     // cancel timers    
-    DEBUG_MSG ("[connect] ok, canceling timer");
     CancelConnectionTimer();
     
     
     if (status != KErrNone)
     {
-    	DEBUG_MSG (QString ("error detected: %1").arg (status.Int()) );
+    	DEBUG_MSG (QString ("[connect] error detected: %1").arg (status.Int()) );
     	
     	iState = ENone;
     	
@@ -145,18 +140,14 @@ TBool QBtSerialPortClientPrivate::ConnectL (const QBtDevice& remoteDevice, const
 
        
     // prepare for receive
-    DEBUG_MSG ("[connect] prepare for receive");
     ReceiveData();
    
     // notify
-    DEBUG_MSG ("[connect] emit signal");
     QT_TRYCATCH_LEAVING (emit p_ptr->connectedToServer() );
     
         
     //SetActive();   
-    DEBUG_MSG ("[connect] return");
-    return true;
-    
+    return true;    
 }
 
 
@@ -219,9 +210,7 @@ void QBtSerialPortClientPrivate::CancelConnectionTimer()
 // disconnect from remote device, shutdown connected socket
 // ----------------------------------------------------------------------------
 void QBtSerialPortClientPrivate::Disconnect()
-{    
-    DEBUG_MSG ("disconnected called")
-	
+{   	
 	if (iState == ENone || iState == EDisconnecting)
     	return;
     
@@ -292,11 +281,11 @@ void QBtSerialPortClientPrivate::ReceiveData()
 // send given data to remote device, write to connected socket
 // ----------------------------------------------------------------------------
 void QBtSerialPortClientPrivate::SendData(const QString& data)
-{
-	QByteArray tmpArray = data.toUtf8();
+{	
+	QByteArray array = data.toUtf8();
     TPtrC8 message8;
-    message8.Set((const TUint8 *)tmpArray.constData(), tmpArray.size());
-
+    message8.Set((const TUint8 *)array.constData(), array.size());
+ 
     // cancel any read requests on socket
     iSock.CancelRead();
     
@@ -304,11 +293,10 @@ void QBtSerialPortClientPrivate::SendData(const QString& data)
     	Cancel();
     
     // send message
-    iState = ESending;
-    
-    iSock.Write(message8, iStatus);
-    SetActive();
-    
+    iState = ESending;    
+ 
+    iSock.Write(message8, iStatus); 
+    SetActive();    
 }
 
 

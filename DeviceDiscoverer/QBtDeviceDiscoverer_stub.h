@@ -21,6 +21,7 @@ public:
     void DiscoverDevices();
     void StopDiscovery();
     const QBtDevice::List& GetInquiredDevices() const;
+    bool IsBusy() const;
 
 private: // Daa
     QBtDeviceDiscoverer *d_ptr;  //Pointer to public interface

@@ -30,7 +30,9 @@ class DLL_EXPORT QBtDevice
 {
 public:
     typedef QList<QBtDevice> List;
-    enum DeviceMajor{
+    
+    enum DeviceMajor
+    {
         Uncategorized, 	//Uncategorized device
         Computer,		//Computer device
         Phone,			//Phone device

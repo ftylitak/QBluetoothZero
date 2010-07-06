@@ -65,3 +65,9 @@ const QBtDevice::List& QBtDeviceDiscoverer::getInquiredDevices() const
     return _implPtr->GetInquiredDevices();
 }
 
+
+bool QBtDeviceDiscoverer::isBusy() const
+{
+	return _implPtr->IsBusy();
+}
+
