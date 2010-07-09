@@ -82,6 +82,7 @@ public:
 	 * param aData the message to send to slave.
 	 */
 	void SendData(const QString& data);
+	void SendData(const QByteArray& data);
 	
 	/*!
 	 * IsConnected()
@@ -202,6 +203,8 @@ private: // data
 	QBtSerialPortClient* p_ptr;
 	
 	CPeriodic* iTimer;
+		
+	TBTSockAddr _addr;
 };
 
 #endif /* QBTSERIALPORTCLIENT_SYMBIAN_H_ */

@@ -66,7 +66,15 @@ void QBtSerialPortClient::disconnect()
 {
     _implPtr->Disconnect();
 }
+
+
 void QBtSerialPortClient::sendData(const QString& data)
 {
     _implPtr->SendData(data);
+}
+
+
+void QBtSerialPortClient::sendData (const QByteArray & data)
+{
+	_implPtr->SendData(data);
 }

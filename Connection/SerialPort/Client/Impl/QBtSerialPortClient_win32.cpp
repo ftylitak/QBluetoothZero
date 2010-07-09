@@ -97,6 +97,12 @@ void QBtSerialPortClientPrivate::Disconnect()
 	}
 }
 
+void QBtSerialPortClientPrivate::SendData(const QByteArray& data)
+{
+	// not implemented
+	Q_ASSERT_X (false, "[windows] QBtSerialPortClientPrivate::SendData(const QByteArray& data)", "not implemented");
+}
+
 void QBtSerialPortClientPrivate::SendData(const QString& data)
 {
 	if(!IsConnected() || com == NULL)

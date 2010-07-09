@@ -312,4 +312,5 @@ EXPORTS
 	_ZN23QBtObjectExchangeServer19transmittingStartedERK7QString @ 311 NONAME
 	_ZN23QBtObjectExchangeServer19transmittingStoppedERK7QString @ 312 NONAME
 	_ZNK19QBtDeviceDiscoverer6isBusyEv @ 313 NONAME
+	_ZN19QBtSerialPortClient8sendDataERK10QByteArray @ 314 NONAME
 

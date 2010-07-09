@@ -80,7 +80,13 @@ symbian {
         -lcone \
         -lbtdevice \
         -lbtmanclient \
-        -lesock
+        -lesock \    	
+    	-lapmime \
+    	-lcommonui \
+    	-lplatformenv \
+    	-lcharconv
+    	
+    	
     LIBS += $$BT_PLUGIN_LIB
     TARGET.CAPABILITY = LocalServices \
         NetworkServices \

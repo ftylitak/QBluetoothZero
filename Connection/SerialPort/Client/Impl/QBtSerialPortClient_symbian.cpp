@@ -20,6 +20,7 @@
 #include "../QBtSerialPortClient_symbian.h"
 #include <QBtAuxFunctions.h>
 
+#include "utf.h"
 
 QBtSerialPortClientPrivate* QBtSerialPortClientPrivate::NewL(QBtSerialPortClient* publicClass)
 {
@@ -94,9 +95,12 @@ TBool QBtSerialPortClientPrivate::ConnectL (const QBtDevice& remoteDevice, const
     service = remoteService;
 
     // load protocol, RFCOMM
-    TProtocolDesc pdesc;
-    User::LeaveIfError(iSocketServ.FindProtocol(_L("RFCOMM"), pdesc));
+    //TProtocolDesc pdesc;
+    //User::LeaveIfError(iSocketServ.FindProtocol(_L("RFCOMM"), pdesc));
 
+    
+    // see doc: NOTE: Deprecated default connection scenario
+    
     // open socket
     User::LeaveIfError(iSock.Open(iSocketServ, _L("RFCOMM")));
     
@@ -104,6 +108,7 @@ TBool QBtSerialPortClientPrivate::ConnectL (const QBtDevice& remoteDevice, const
     TBTSockAddr addr;
     addr.SetBTAddr(device.getAddress().convertToSymbianBtDevAddr());
     addr.SetPort(service.getPort());
+    _addr = addr;
 
     // connect socket
     TRequestStatus status;
@@ -292,12 +297,32 @@ void QBtSerialPortClientPrivate::ReceiveData()
 //
 // send given data to remote device, write to connected socket
 // ----------------------------------------------------------------------------
-void QBtSerialPortClientPrivate::SendData(const QString& data)
-{	
-	QByteArray array = data.toUtf8();
-    TPtrC8 message8;
-    message8.Set((const TUint8 *)array.constData(), array.size());
- 
+void QBtSerialPortClientPrivate::SendData (const QString& data)
+{
+	QByteArray array = data.toUtf8();	
+	SendData (array);
+}
+
+
+// ----------------------------------------------------------------------------
+// QBtSerialPortClientPrivate::SendData(const QByteArray& data)
+//
+// send given data to remote device, write to connected socket
+// ----------------------------------------------------------------------------
+void QBtSerialPortClientPrivate:: SendData (const QByteArray& data)
+{
+	TPtrC8 desc8 (reinterpret_cast<const TText8*> (data.constData()), data.size());
+	 
+	/*
+	DEBUG_MSG (QString ("descriptor length: %1").arg (desc8.Length()) );
+		
+		for (int i = 0; i < desc8.Length(); ++i)
+		{
+			TUint8 u = desc8.operator [](i);
+			DEBUG_MSG (QString ("char: %1 num: %2").arg (char(u)).arg (QString::number(u)) );	
+		}
+	*/	
+	
     // cancel any read requests on socket
     iSock.CancelRead();
     
@@ -307,10 +332,9 @@ void QBtSerialPortClientPrivate::SendData(const QString& data)
     // send message
     iState = ESending;    
  
-    iSock.Write(message8, iStatus); 
-    SetActive();    
+    iSock.Write (desc8, iStatus);    
+    SetActive();  
 }
-
 
 // ----------------------------------------------------------------------------
 // 

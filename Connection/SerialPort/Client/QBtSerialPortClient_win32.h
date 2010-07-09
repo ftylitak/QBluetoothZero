@@ -42,6 +42,7 @@ public:
 	*/
 	void Connect(const QBtDevice& remoteDevice, const QBtService& remoteService);
 	void SendData(const QString& data);
+	void SendData(const QByteArray& data);
 	
 private:
 	/**

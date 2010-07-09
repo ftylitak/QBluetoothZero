@@ -114,11 +114,17 @@ public slots:
 
     /**
      * sendData()
-     * Send an array of bytes to the server.
+     * Send a string to the server.
      * If text is transmitted, it is up to the user to decide which text encoding to use.
      * Upon succesfull transmittion, dataSent() signal is emitted.
      */
     void sendData(const QString& data);
+    
+    /**
+     * Send a array of bytes to the server, as is.
+     * Upon succesfull transmittion, dataSent() signal is emitted.
+     */         
+    void sendData (const QByteArray & data);
 
 signals:
     /**
