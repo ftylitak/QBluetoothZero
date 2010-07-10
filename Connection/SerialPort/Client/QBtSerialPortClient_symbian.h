@@ -205,6 +205,8 @@ private: // data
 	CPeriodic* iTimer;
 		
 	TBTSockAddr _addr;
+	
+	HBufC8* iMessage;
 };
 
 #endif /* QBTSERIALPORTCLIENT_SYMBIAN_H_ */

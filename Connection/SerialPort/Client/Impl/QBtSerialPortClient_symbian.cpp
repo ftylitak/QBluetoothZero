@@ -19,9 +19,14 @@
 
 #include "../QBtSerialPortClient_symbian.h"
 #include <QBtAuxFunctions.h>
-
 #include "utf.h"
 
+
+// protocol constants
+_LIT(KStrRFCOMM, "RFCOMM");
+
+
+//
 QBtSerialPortClientPrivate* QBtSerialPortClientPrivate::NewL(QBtSerialPortClient* publicClass)
 {
     QBtSerialPortClientPrivate* self = QBtSerialPortClientPrivate::NewLC(publicClass);
@@ -54,9 +59,10 @@ void QBtSerialPortClientPrivate::ConstructL()
 QBtSerialPortClientPrivate::QBtSerialPortClientPrivate(QBtSerialPortClient* publicClass)
  : CActive(CActive::EPriorityStandard),
    iState(ENone),
-   p_ptr(publicClass)
+   p_ptr(publicClass),
+   iMessage (0)
 {
-    CActiveScheduler::Add(this);
+    CActiveScheduler::Add(this);    
 }
 
 
@@ -71,6 +77,10 @@ QBtSerialPortClientPrivate::~QBtSerialPortClientPrivate()
     // disconnect and kill socket
     if(IsActive())
        Cancel();
+    
+    
+    //
+    delete iMessage;    
 }
 
 
@@ -102,12 +112,21 @@ TBool QBtSerialPortClientPrivate::ConnectL (const QBtDevice& remoteDevice, const
     // see doc: NOTE: Deprecated default connection scenario
     
     // open socket
-    User::LeaveIfError(iSock.Open(iSocketServ, _L("RFCOMM")));
+    User::LeaveIfError(iSock.Open(iSocketServ, KStrRFCOMM));
     
     // set address and port
     TBTSockAddr addr;
     addr.SetBTAddr(device.getAddress().convertToSymbianBtDevAddr());
     addr.SetPort(service.getPort());
+    
+    
+    // what about these fields?
+    //TBTServiceSecurity sec;
+    //sec.SetAuthentication(ETrue);
+    //sec.SetEncryption(ETrue);
+    //addr.SetSecurity(sec);   
+    
+    
     _addr = addr;
 
     // connect socket
@@ -297,12 +316,12 @@ void QBtSerialPortClientPrivate::ReceiveData()
 //
 // send given data to remote device, write to connected socket
 // ----------------------------------------------------------------------------
+
 void QBtSerialPortClientPrivate::SendData (const QString& data)
 {
 	QByteArray array = data.toUtf8();	
 	SendData (array);
 }
-
 
 // ----------------------------------------------------------------------------
 // QBtSerialPortClientPrivate::SendData(const QByteArray& data)
@@ -313,17 +332,15 @@ void QBtSerialPortClientPrivate:: SendData (const QByteArray& data)
 {
 	TPtrC8 desc8 (reinterpret_cast<const TText8*> (data.constData()), data.size());
 	 
-	/*
-	DEBUG_MSG (QString ("descriptor length: %1").arg (desc8.Length()) );
-		
-		for (int i = 0; i < desc8.Length(); ++i)
-		{
-			TUint8 u = desc8.operator [](i);
-			DEBUG_MSG (QString ("char: %1 num: %2").arg (char(u)).arg (QString::number(u)) );	
-		}
-	*/	
+	// delete previous data
+	if (iMessage)
+		delete iMessage;
 	
-    // cancel any read requests on socket
+	iMessage = HBufC8::NewL(desc8.Length());
+	iMessage->Des().Copy(desc8);	
+	
+    
+	// cancel any read requests on socket
     iSock.CancelRead();
     
     if (IsActive())
@@ -332,7 +349,7 @@ void QBtSerialPortClientPrivate:: SendData (const QByteArray& data)
     // send message
     iState = ESending;    
  
-    iSock.Write (desc8, iStatus);    
+    iSock.Write (*iMessage, iStatus);    
     SetActive();  
 }
 
