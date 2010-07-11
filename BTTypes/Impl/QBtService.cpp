@@ -102,7 +102,7 @@ void QBtService::setHandle(unsigned int newHandle)
 	handle = newHandle;
 }
 
-void QBtService::setProtocols(QBtService::ProtocolList newUUIDs)
+void QBtService::setProtocols(const QBtService::ProtocolList & newUUIDs)
 {
 	protocolUUID = newUUIDs;
 }

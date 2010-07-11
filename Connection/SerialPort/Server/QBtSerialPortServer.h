@@ -30,23 +30,24 @@ class QBtSerialPortServerPrivate;
  *
  * After instantiation user can call startServer(const QString&)
  * to start the server and wait for a client to connect. From the
- * serviceName argument user can specify the name of the OBEX service
- * which is how the service will be identified by other devices.
- * By default the name is MyRFCOMM.
+ * serviceName argument user can specify the name of the RFCOMM service
+ * which is how the service will be identified by other devices. By default
+ * the name is MyRFCOMM.
+ * 
  * If server is started successfully then serverStarted() signal is emitted.
  *
  * When a remote client is connected to the local running server
- * clientConnected(QBtAddress) is emitted and from that point and
+ * clientConnected(const QBtAddress &) is emitted and from that point and
  * on the data transmittion can start.
  *
- * To send data to the client use sendData(const QString). If successfull
+ * To send data to the client use sendData(const QString &). If successfull
  * dataSent() signal is emitted.
  *
- * When data are received successfully from the remote client dataReceived(QString)
+ * When data are received successfully from the remote client dataReceived(const QString &)
  * signal is emitted.
  *
  * If client disconnects,  clientDisconnected() will be emitted and user must
- * call startServer(const QString&) to initialize server again to be ready to
+ * call startServer(const QString &) to initialize server again to be ready to
  * accept new connection.
  *
  * The connection to a client (if any) is closed when stopServer() is called along

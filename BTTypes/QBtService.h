@@ -60,7 +60,7 @@ public:
     void addProtocol(QBtConstants::ServiceProtocol uuid);
     bool removeProtocol(QBtConstants::ServiceProtocol uuid);
 
-    void setProtocols(ProtocolList newUUIDs);
+    void setProtocols(const ProtocolList & newUUIDs);
     void setClass(QBtConstants::ServiceClass newClass);
     void setName(const QString& newName);
     void setDescription(const QString& newDescription);
