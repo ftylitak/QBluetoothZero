@@ -218,7 +218,7 @@ EXPORTS
 	_ZN10QBtAddress27getAddressFromReversedArrayE10QByteArray @ 217 NONAME ABSENT
 	_ZN10QBtService11addProtocolEN12QBtConstants15ServiceProtocolE @ 218 NONAME
 	_ZN10QBtService11setCommPortEj @ 219 NONAME
-	_ZN10QBtService12setProtocolsE5QListIN12QBtConstants15ServiceProtocolEE @ 220 NONAME
+	_ZN10QBtService12setProtocolsE5QListIN12QBtConstants15ServiceProtocolEE @ 220 NONAME ABSENT
 	_ZN10QBtService14removeProtocolEN12QBtConstants15ServiceProtocolE @ 221 NONAME
 	_ZN10QBtService14setDescriptionERK7QString @ 222 NONAME
 	_ZN10QBtService7setNameERK7QString @ 223 NONAME
@@ -313,4 +313,6 @@ EXPORTS
 	_ZN23QBtObjectExchangeServer19transmittingStoppedERK7QString @ 312 NONAME
 	_ZNK19QBtDeviceDiscoverer6isBusyEv @ 313 NONAME
 	_ZN19QBtSerialPortClient8sendDataERK10QByteArray @ 314 NONAME
+	_ZN10QBtService12setProtocolsERK5QListIN12QBtConstants15ServiceProtocolEE @ 315 NONAME
+	_ZNK20QBtServiceDiscoverer6isBusyEv @ 316 NONAME
 

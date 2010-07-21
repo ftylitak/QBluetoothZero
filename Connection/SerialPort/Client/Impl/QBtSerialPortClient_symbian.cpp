@@ -26,7 +26,11 @@
 _LIT(KStrRFCOMM, "RFCOMM");
 
 
+
+//-----------------------------------------------------------------------------
 //
+//-----------------------------------------------------------------------------
+
 QBtSerialPortClientPrivate* QBtSerialPortClientPrivate::NewL(QBtSerialPortClient* publicClass)
 {
     QBtSerialPortClientPrivate* self = QBtSerialPortClientPrivate::NewLC(publicClass);

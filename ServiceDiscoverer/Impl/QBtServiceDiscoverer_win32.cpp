@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+#include <QtGlobal>
 #include "../QBtServiceDiscoverer_win32.h"
 
 QBtServiceDiscovererPrivate::QBtServiceDiscovererPrivate(QBtServiceDiscoverer* publicClass):
@@ -167,4 +168,10 @@ void QBtServiceDiscovererPrivate::RetrieveSPPAttributes(QBtService* currService,
 		return;
 	
 	currService->setCommPort((unsigned int)infoStructure.server_channel);
+}
+
+
+bool QBtServiceDiscovererPrivate::IsBusy() const
+{
+	Q_ASSERT_X(false, "QBtServiceDiscovererPrivate::IsBusy()", "not implemented");
 }

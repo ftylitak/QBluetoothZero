@@ -48,3 +48,9 @@ QBtService::List QBtServiceDiscovererPrivate::GetSupportedServices()
 {
 	return QBtService::List();
 }
+
+
+bool QBtServiceDiscovererPrivate::IsBusy()
+{
+	return false;
+}

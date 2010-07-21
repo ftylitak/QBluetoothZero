@@ -105,3 +105,7 @@ QBtService::List QBtServiceDiscoverer::getInquiredServices()
 }
 
 
+bool QBtServiceDiscoverer::isBusy () const
+{
+	return _implPtr->IsBusy();
+}

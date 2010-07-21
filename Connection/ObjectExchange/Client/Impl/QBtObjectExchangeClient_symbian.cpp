@@ -135,7 +135,7 @@ void QBtObjectExchangeClientPrivate::RunL()
             default:
                 break;
         }
-        TInt statusId = iStatus.Int();
+        //TInt statusId = iStatus.Int();
         return;
     }
     else

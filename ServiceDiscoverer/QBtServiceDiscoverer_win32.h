@@ -33,6 +33,8 @@ public:
     void DiscoverSpecificClass(QBtDevice* targetDevice, QBtConstants::ServiceClass uuid);
     void DiscoverSpecificProtocol(QBtDevice* targetDevice, QBtConstants::ServiceProtocol uuid);
     void StopDiscovery();
+    
+    bool IsBusy() const;
 
 protected:
     void Construct();

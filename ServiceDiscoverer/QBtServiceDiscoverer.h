@@ -87,6 +87,11 @@ public:
      *  else returns NULL
      */
     const QBtDevice & getTargetDevice() const;
+    
+    /**
+     * Returns true if a discovery operation is in progress.
+     */
+    bool isBusy () const;
 
 public slots:
 

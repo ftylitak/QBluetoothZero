@@ -94,6 +94,11 @@ public:
      */
     void StopDiscovery();
 
+    
+    /**
+     * 
+     */
+    bool IsBusy() const;
 
 private:
 

@@ -454,3 +454,7 @@ void QBtServiceDiscovererPrivate::SearchNextUUIDorReportCompletion()
 }
 
 
+bool QBtServiceDiscovererPrivate::IsBusy() const
+{
+	return discoveryInProgress;
+}

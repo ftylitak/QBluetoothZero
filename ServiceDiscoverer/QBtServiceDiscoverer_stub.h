@@ -34,6 +34,8 @@ public:
     void StopDiscovery();
     QBtService::List GetSupportedServices();
     
+    bool IsBusy() const;
+    
     
 
 private:

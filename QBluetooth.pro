@@ -1,12 +1,15 @@
-uid3 = 0xED7141F0
-suffix = $$uid3
+uid3 = 0x2003328D
 
-# suffix = 0xEFA23255
-underscore = _
+
 TEMPLATE = lib
-TARGET = QBluetooth$$underscore$$suffix
-DEFINES += BLUETOOTH_LIB
+TARGET   = QBluetooth_0x2003328D
+DEFINES  += BLUETOOTH_LIB
+
 QT += core
+
+# fix for Qt Creator to find the symbian headers
+INCLUDEPATH += $$EPOCROOT\epoc32\include
+
 PUBLIC_HEADERS += DeviceDiscoverer/QBtDeviceDiscoverer.h \
     BTTypes/QBtAddress.h \
     BTTypes/QBtDevice.h \
@@ -24,7 +27,9 @@ PUBLIC_HEADERS += DeviceDiscoverer/QBtDeviceDiscoverer.h \
     LocalDevice/QBtLocalDevice.h \
     Connection/ObjectExchange/Server/QBtObjectExchangeServer.h \
     QBluetooth.h
+
 HEADERS += $$PUBLIC_HEADERS
+
 SOURCES += Connection/ObjectExchange/Server/Impl/QBtObjectExchangeServer.cpp \
     LocalDevice/Impl/QBtLocalDevice.cpp \
     Connection/ObjectExchange/Client/Impl/QBtObjectExchangeClient.cpp \
@@ -37,15 +42,25 @@ SOURCES += Connection/ObjectExchange/Server/Impl/QBtObjectExchangeServer.cpp \
     DeviceDiscoverer/Impl/QBtDeviceDiscoverer.cpp \
     BTTypes/Impl/QBtAddress.cpp \
     BTTypes/Impl/QBtDevice.cpp
+
 FORMS += 
-RESOURCES += 
+
+RESOURCES +=  
+
 symbian { 
     deploy.path = $$EPOCROOT
     exportheaders.sources = $$PUBLIC_HEADERS
     exportheaders.path = epoc32/include
-    INCLUDEPATH += $$deploy.path$$exportheaders.path/QBlueTooth/
-    TARGET.UID3 = $$uid3
+
+    INCLUDEPATH += $$deploy.path$$exportheaders.path/QBluetooth/
+
+    INCLUDEPATH += $$deploy.path$$exportheaders.path
+
+
+    TARGET.UID3 = 0x2003328D
+
     TARGET.EPOCALLOWDLLDATA = 1
+
     HEADERS += Connection/ObjectExchange/Server/QBtObjectExchangeServer_symbian.h \
         LocalDevice/QBtLocalDevice_symbian.h \
         Connection/ObjectExchange/Client/QBtObjectExchangeClient_symbian.h \
@@ -54,6 +69,7 @@ symbian {
         ServiceAdvertiser/QBtServiceAdvertiser_symbian.h \
         ServiceDiscoverer/QBtServiceDiscoverer_symbian.h \
         DeviceDiscoverer/QBtDeviceDiscoverer_symbian.h
+
     SOURCES += Connection/ObjectExchange/Server/Impl/QBtObjectExchangeServer_symbian.cpp \
         LocalDevice/Impl/QBtLocalDevice_symbian.cpp \
         Connection/ObjectExchange/Client/Impl/QBtObjectExchangeClient_symbian.cpp \
@@ -67,7 +83,7 @@ symbian {
     contains (S60_VERSION, 3.1):BT_PLUGIN_LIB = -lbteng
     else:BT_PLUGIN_LIB = -lbtengsettings
     
-    # QBluetooth_reg.rss
+    #
     LIBS += -lbluetooth \
         -lsdpdatabase \
         -lsdpagent \
@@ -88,12 +104,15 @@ symbian {
     	
     	
     LIBS += $$BT_PLUGIN_LIB
-    TARGET.CAPABILITY = LocalServices \
-        NetworkServices \
-        ReadUserData \
-        UserEnvironment \
-        WriteUserData \
-        ReadDeviceData \
-        WriteDeviceData
-    for(header, exportheaders.sources):BLD_INF_RULES.prj_exports += "$$header $$deploy.path$$exportheaders.path/QBlueTooth/$$basename(header)"
+    
+    TARGET.CAPABILITY = All -TCB -AllFiles -DRM
+    
+    for(header, exportheaders.sources):BLD_INF_RULES.prj_exports += "$$header $$deploy.path$$exportheaders.path/QBluetooth/$$basename(header)"
+    
 }
+
+
+# add this for Qt Creator to generate a pkg file, it seems to be a bug in the current version (2.0.0)
+addFiles.sources = QBluetooth_0x2003328D.dll
+addFiles.path = !:\sys\bin
+DEPLOYMENT += addFiles
