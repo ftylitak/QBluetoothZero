@@ -42,8 +42,8 @@ public:
     ///	 Bluetooth local properties		///
     ///////////////////////////////////////
     static QBtAddress GetLocalDeviceAddress();
-    static TBool GetLimitedDiscoverableStatus();
-    static void SetLimitedDiscoverableStatus(TBool limited);
+    static TBool IsVisible();
+    static void SetVisible (TBool value);
     static QBtDevice::DeviceMajor GetDeviceClass();
     static void SetDeviceClass(QBtDevice::DeviceMajor classId);
     static void SetLocalDeviceName (const QString & deviceName);

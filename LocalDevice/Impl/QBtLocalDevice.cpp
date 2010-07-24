@@ -33,14 +33,14 @@ QBtAddress QBtLocalDevice::getLocalDeviceAddress()
     return QBtLocalDevicePrivate::GetLocalDeviceAddress();
 }
 
-bool QBtLocalDevice::getLimitedDiscoverableStatus()
+bool QBtLocalDevice::isVisible()
 {
-    return QBtLocalDevicePrivate::GetLimitedDiscoverableStatus();
+    return QBtLocalDevicePrivate::IsVisible();
 }
 
-void QBtLocalDevice::setLimitedDiscoverableStatus(bool isDiscoverabilityLimited)
+void QBtLocalDevice::setVisible (bool value)
 {
-    QBtLocalDevicePrivate::SetLimitedDiscoverableStatus(isDiscoverabilityLimited);
+    QBtLocalDevicePrivate::SetVisible (value);
 }
 
 QBtDevice::DeviceMajor QBtLocalDevice::getDeviceClass()

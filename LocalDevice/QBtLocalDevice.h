@@ -30,23 +30,20 @@ public:
     ///	 Bluetooth local properties		///
     ///////////////////////////////////////
     /**
-     * getLocalDeviceAddress()
      * Returns if possible the local device address
      */
     static QBtAddress getLocalDeviceAddress();
 
     /**
-     * getLimitedDiscoverableStatus()
-     * Returns true if local device is in Limited Discoverable Mode
+     * Returns true if local device is visible to other devices.
      */
-    static bool getLimitedDiscoverableStatus();
+    static bool isVisible ();
 
     /**
-     * setLimitedDiscoverableStatus()
-     * Sets Limited Discoverability Mode on/off
-     * @param isDiscoveryLimited true -> on, false -> off
+     * Sets the device visibility to other devices.
+     * @param value true -> visible, false -> invisible
      */
-    static void setLimitedDiscoverableStatus(bool isDiscoverabilityLimited);
+    static void setVisible (bool value);
     
     
     static QBtDevice::DeviceMajor getDeviceClass();

@@ -19,6 +19,7 @@
 
 #include "../QBtLocalDevice_symbian.h"
 #include <QBtAuxFunctions.h>
+#include <QtGlobal>
 
 
 // bluetooth engine api plugin
@@ -54,21 +55,94 @@ QBtAddress QBtLocalDevicePrivate::GetLocalDeviceAddress()
     return QBtAddress(bArray);
 }
 
-TBool QBtLocalDevicePrivate::GetLimitedDiscoverableStatus()
+TBool QBtLocalDevicePrivate::IsVisible()
 {
+    /*
     TInt value;
     RProperty::Get( KPropertyUidBluetoothControlCategory,
             KPropertyKeyBluetoothGetLimitedDiscoverableStatus, value );
 
     return value;
+    */
+
+  TBool value = EFalse;
+
+
+  QT_TRAP_THROWING(
+      {
+          #ifdef __SERIES60_31__
+            TBTDiscoverabilityMode mode;
+            CBTMCMSettings* b = CBTMCMSettings::NewLC ();
+            User::LeaveIfError (b->GetDiscoverabilityMode (mode) );
+
+            if (EBTDiscModeHidden == mode)
+              value = EFalse;
+            else
+              value = ETrue;
+
+          #else
+              TBTVisibilityMode mode;
+              CBTEngSettings* b = CBTEngSettings::NewLC();
+              User::LeaveIfError(b->GetVisibilityMode (mode) );
+
+              if (EBTVisibilityModeHidden  == mode)
+                value = EFalse;
+              else
+                value = ETrue;
+
+          #endif
+
+          CleanupStack::PopAndDestroy();
+      }
+  );
+
+
+  return value;
+
 }
 
-void QBtLocalDevicePrivate::SetLimitedDiscoverableStatus(TBool limited)
+
+void QBtLocalDevicePrivate::SetVisible (TBool value)
 {
+    /*
     DefineProperty(KPropertyKeyBluetoothGetLimitedDiscoverableStatus, RProperty::EInt);
 
     RProperty::Set( KPropertyUidBluetoothControlCategory,
             KPropertyKeyBluetoothSetLimitedDiscoverableStatus, limited);
+            */
+
+  QT_TRAP_THROWING(
+      {
+          #ifdef __SERIES60_31__
+            TBTDiscoverabilityMode mode;
+
+            if (value)
+              mode = EBTDiscModeGeneral;
+            else
+              mode = EBTDiscModeHidden;
+
+
+            CBTMCMSettings* b = CBTMCMSettings::NewLC ();
+            User::LeaveIfError (b->SetDiscoverabilityModeL (mode) );
+
+          #else
+              TBTVisibilityMode mode;
+
+              if (value)
+                mode = EBTVisibilityModeGeneral;
+              else
+                mode = EBTVisibilityModeHidden;
+
+              CBTEngSettings* b = CBTEngSettings::NewLC();
+              User::LeaveIfError(b->SetVisibilityMode (mode) );
+
+          #endif
+
+          CleanupStack::PopAndDestroy();
+      }
+  );
+
+
 }
 
 QBtDevice::DeviceMajor QBtLocalDevicePrivate::GetDeviceClass()
@@ -137,18 +211,16 @@ TBool QBtLocalDevicePrivate::GetBluetoothPowerState()
 {
     TInt value=0;
 
-    try{
-        QT_TRAP_THROWING(
-                {
-                    CRepository* crep = CRepository::NewLC(KCRUidBluetoothPowerState);                    
-                    User::LeaveIfError( crep->Get(KBTPowerState, value) );                    
-                    CleanupStack::PopAndDestroy();
-                });
-    }
-    catch(char* str)
-    {
-        return false;
-    }
+
+    QT_TRAP_THROWING(
+         {
+              CRepository* crep = CRepository::NewLC(KCRUidBluetoothPowerState);
+              User::LeaveIfError( crep->Get(KBTPowerState, value) );
+              CleanupStack::PopAndDestroy();
+         }
+    );
+
+
 
     return value;
 }
@@ -156,34 +228,24 @@ TBool QBtLocalDevicePrivate::GetBluetoothPowerState()
 
 TBool QBtLocalDevicePrivate::SetBluetoothPowerState (TBool value)
 {		  
-	try
-	{
-		QT_TRAP_THROWING(
-				{
-					#ifdef __SERIES60_31__
-						CBTMCMSettings* b = CBTMCMSettings::NewLC ();
-						User::LeaveIfError(b->SetPowerState (value) );
-					
-					#else			
-						TBTPowerStateValue v = value? EBTPowerOn: EBTPowerOff;			
-						CBTEngSettings* b = CBTEngSettings::NewLC(); 
-						User::LeaveIfError(b->SetPowerState (v) );
-					#endif
-						
-					CleanupStack::PopAndDestroy();
-				}
-		);
-	}
-	catch(char* str)
-	{
-		return false;
-	}
-	
-	
-	return true;
-	
+  QT_TRAP_THROWING(
+      {
+          #ifdef __SERIES60_31__
+              CBTMCMSettings* b = CBTMCMSettings::NewLC ();
+              User::LeaveIfError(b->SetPowerState (value) );
+
+          #else
+              TBTPowerStateValue v = value? EBTPowerOn: EBTPowerOff;
+              CBTEngSettings* b = CBTEngSettings::NewLC();
+              User::LeaveIfError(b->SetPowerState (v) );
+          #endif
+
+          CleanupStack::PopAndDestroy();
+    }
+    );
 
 	
+  return true;
 
 }
 
