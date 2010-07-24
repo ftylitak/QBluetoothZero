@@ -64,7 +64,7 @@ public:
     void setClass(QBtConstants::ServiceClass newClass);
     void setName(const QString& newName);
     void setDescription(const QString& newDescription);
-    void setCommPort(unsigned int newPort);
+    void setPort(unsigned int newPort);
     void setHandle(unsigned int newHandle);
 
     // really needed?

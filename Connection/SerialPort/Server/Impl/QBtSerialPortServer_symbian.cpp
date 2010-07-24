@@ -119,7 +119,7 @@ void QBtSerialPortServerPrivate::StartListenerL()
 	QBtService newService;
 	newService.setName(p_ptr->_service->getName());
 	newService.setClass(QBtConstants::SerialPort);
-	newService.setCommPort(aChannel);
+    newService.setPort(aChannel);
 	newService.addProtocol(QBtConstants::L2CAP);
 	newService.addProtocol(QBtConstants::RFCOMM);
 	

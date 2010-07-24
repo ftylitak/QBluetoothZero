@@ -68,7 +68,7 @@ void QBtLocalDevicePrivate::SetLimitedDiscoverableStatus(TBool limited)
     DefineProperty(KPropertyKeyBluetoothGetLimitedDiscoverableStatus, RProperty::EInt);
 
     RProperty::Set( KPropertyUidBluetoothControlCategory,
-            KPropertyKeyBluetoothGetLimitedDiscoverableStatus, limited );
+            KPropertyKeyBluetoothSetLimitedDiscoverableStatus, limited);
 }
 
 QBtDevice::DeviceMajor QBtLocalDevicePrivate::GetDeviceClass()

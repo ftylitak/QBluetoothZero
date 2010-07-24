@@ -92,7 +92,7 @@ void QBtService::setDescription(const QString& newDescription)
 	description = newDescription;
 }
 
-void QBtService::setCommPort(unsigned int newPort)
+void QBtService::setPort(unsigned int newPort)
 {
 	port = newPort;
 }

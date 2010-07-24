@@ -398,7 +398,7 @@ void QBtServiceDiscovererPrivate::VisitAttributeValueL(
 			{
 				// previous call to this method with rfcomm UUID, therefore
 				// this one will be the value, rfcomm service channel (port)
-				currentService->setCommPort(aValue.Uint());
+                currentService->setPort(aValue.Uint());
 			}
 			break;
 		}

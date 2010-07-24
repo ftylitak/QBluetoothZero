@@ -147,7 +147,7 @@ TBool QBtObjectExchangeServerPrivate::InitialiseServerL()
     newService.addProtocol(QBtConstants::RFCOMM);
     newService.addProtocol(QBtConstants::OBEX);
     newService.setName(p_ptr->_service->getName());
-    newService.setCommPort(channel);
+    newService.setPort(channel);
 
     p_ptr->startAdvertisingService(newService);
 
