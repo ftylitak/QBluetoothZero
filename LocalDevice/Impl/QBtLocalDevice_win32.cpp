@@ -49,7 +49,7 @@ bool QBtLocalDevicePrivate::GetLimitedDiscoverableStatus()
 
 void QBtLocalDevicePrivate::SetLimitedDiscoverableStatus(bool isDiscoverabilityLimited)
 {
-    BTUINT16 usMode = BTSDK_LIMITED_DISCOVERABLE * (!isDiscoverabilityLimited)
+    BTUINT16 usMode = BTSDK_GENERAL_DISCOVERABLE * (!isDiscoverabilityLimited)
                         | BTSDK_LIMITED_DISCOVERABLE * isDiscoverabilityLimited
                         | BTSDK_CONNECTABLE
                         | BTSDK_PAIRABLE;
@@ -140,7 +140,7 @@ bool QBtLocalDevicePrivate::GetBluetoothPowerState()
     return Btsdk_IsBluetoothReady();
 }
 
-bool QBtLocalDevice::setBluetoothPowerState (bool value)
+bool QBtLocalDevicePrivate::SetBluetoothPowerState (bool /*value*/)
 {
 	return false;
 }
@@ -160,7 +160,7 @@ bool QBtLocalDevicePrivate::AddNewDevice(const QBtDevice& device)
 
 bool QBtLocalDevicePrivate::DeleteDevice(const QBtDevice& device)
 {
-    return QBtLocalDevicePrivate::deleteDevice(device.getAddress());
+    return QBtLocalDevicePrivate::DeleteDevice(device.getAddress());
 }
 
 bool QBtLocalDevicePrivate::DeleteDevice(const QBtAddress& address)
@@ -183,7 +183,7 @@ bool QBtLocalDevicePrivate::DeleteDevice(const QBtAddress& address)
 
 bool QBtLocalDevicePrivate::UnpairDevice(const QBtDevice& device)
 {
-    return QBtLocalDevicePrivate::unpairDevice(device.getAddress());
+    return QBtLocalDevicePrivate::UnpairDevice(device.getAddress());
 }
 
 bool QBtLocalDevicePrivate::UnpairDevice(const QBtAddress& address)
@@ -204,3 +204,27 @@ bool QBtLocalDevicePrivate::UnpairDevice(const QBtAddress& address)
     return (result == BTSDK_OK);
 }
 
+
+//////////////////////////////////////////////////////////////////////////
+bool QBtLocalDevicePrivate::IsVisible()
+{
+	BTUINT16 pmode;
+	BTINT32 retBool = BTSDK_FALSE;
+
+	retBool = Btsdk_GetDiscoveryMode(&pmode);
+
+	if((pmode & BTSDK_LIMITED_DISCOVERABLE || pmode & BTSDK_DISCOVERABLE) != 0)
+		return true;
+
+	return false;
+}
+
+void QBtLocalDevicePrivate::SetVisible (bool value)
+{
+	BTUINT16 usMode =  BTSDK_CONNECTABLE
+						| BTSDK_PAIRABLE | BTSDK_DISCOVERABLE*((int)value);
+
+	Btsdk_SetDiscoveryMode(usMode);
+
+	return;
+}

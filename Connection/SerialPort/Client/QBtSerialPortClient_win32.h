@@ -22,6 +22,7 @@
 
 #include "./QBtSerialPortClient.h"
 #include "../../WinSerialPort/Tserial_event.h"
+#include <QBtAuxFunctions.h>
 
 class QBtSerialPortClientPrivate
 {

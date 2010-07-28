@@ -21,6 +21,7 @@
 #define QBTOBJECTEXCHANGESERVER_WIN32_H_
 
 #include "QBtObjectExchangeServer.h"
+#include <QBtAuxFunctions.h>
 
 class QBtObjectExchangeServerPrivate
 {

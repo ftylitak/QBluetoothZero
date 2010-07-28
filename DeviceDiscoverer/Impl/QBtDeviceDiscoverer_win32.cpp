@@ -170,7 +170,7 @@ void QBtDeviceDiscovererPrivate::RegisterFoundDevice(BTDEVHDL dev_hdl)
 		}
 	}
 
-	devInfo.SetName(QString::fromUtf8((char*)szDevName));
+	devInfo.setName(QString::fromUtf8((char*)szDevName));
 
 	Btsdk_GetRemoteDeviceAddress(dev_hdl, szBdAddr);
 
@@ -202,4 +202,10 @@ void QBtDeviceDiscovererPrivate::RegisterFoundDevice(BTDEVHDL dev_hdl)
 
 	if(sp_ptr)
 		emit sp_ptr->newDeviceFound(devInfo);
+}
+
+
+bool QBtDeviceDiscovererPrivate::IsBusy () const
+{
+	return isSearching;
 }

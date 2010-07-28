@@ -22,9 +22,13 @@
 
 #include <QBtDevice.h>
 #include <QBtServiceDiscoverer.h>
+#include <QBtAuxFunctions.h>
+#include <QObject>
 
-class QBtServiceDiscovererPrivate
+class QBtServiceDiscovererPrivate : public QObject
 {
+Q_OBJECT
+
 public:
     QBtServiceDiscovererPrivate(QBtServiceDiscoverer* publicClass);
     ~QBtServiceDiscovererPrivate();
@@ -43,8 +47,13 @@ private:
     void ProcessFoundServices(BTSVCHDL* foundServices, int numOfServices);
     void RetrieveSPPAttributes(QBtService* currService, BTSVCHDL servHandle);
 
+private slots:
+	void SetBusy();
+	void SetNotBusy();
+
 private:
     QBtServiceDiscoverer *p_ptr;  //Pointer to public interface
+	bool isBusy;
 };
 
 #endif /* QBTSERVICEDISCOVERER_STUB_H_ */

@@ -7,17 +7,14 @@ DEFINES  += BLUETOOTH_LIB
 
 QT += core
 
-# fix for Qt Creator to find the symbian headers
-INCLUDEPATH += $$EPOCROOT\epoc32\include
-
-PUBLIC_HEADERS += DeviceDiscoverer/QBtDeviceDiscoverer.h \
+PUBLIC_HEADERS += QBtGlobal.h \
+    QBtAuxFunctions.h \
+	DeviceDiscoverer/QBtDeviceDiscoverer.h \
     BTTypes/QBtAddress.h \
     BTTypes/QBtDevice.h \
     BTTypes/QBtService.h \
     BTTypes/QBtConstants.h \
     BTTypes/QBtTypes.h \
-    QBtGlobal.h \
-    QBtAuxFunctions.h \
     DeviceDiscoverer/QBtSingleDeviceSelectorUI.h \
     ServiceDiscoverer/QBtServiceDiscoverer.h \
     ServiceAdvertiser/QBtServiceAdvertiser.h \
@@ -48,6 +45,9 @@ FORMS +=
 RESOURCES +=  
 
 symbian { 
+	# fix for Qt Creator to find the symbian headers
+	INCLUDEPATH += $$EPOCROOT\epoc32\include
+
     deploy.path = $$EPOCROOT
     exportheaders.sources = $$PUBLIC_HEADERS
     exportheaders.path = epoc32/include
@@ -108,11 +108,78 @@ symbian {
     TARGET.CAPABILITY = All -TCB -AllFiles -DRM
     
     for(header, exportheaders.sources):BLD_INF_RULES.prj_exports += "$$header $$deploy.path$$exportheaders.path/QBluetooth/$$basename(header)"
-    
+	
+	# add this for Qt Creator to generate a pkg file, it seems to be a bug in the current version (2.0.0)
+	addFiles.sources = QBluetooth_0x2003328D.dll
+	addFiles.path = !:\sys\bin
+	DEPLOYMENT += addFiles    
 }
 
 
-# add this for Qt Creator to generate a pkg file, it seems to be a bug in the current version (2.0.0)
-addFiles.sources = QBluetooth_0x2003328D.dll
-addFiles.path = !:\sys\bin
-DEPLOYMENT += addFiles
+else { 
+    win32 { 
+        LIBS += -lBlueSoleil_SDK_2.0.5/bin/BsSDK
+		
+		//deploy.path = $$EPOCROOT
+		/*INCLUDEPATH += $$deploy.path$$exportheaders.path/QBluetooth/
+		INCLUDEPATH += $$deploy.path$$exportheaders.path*/
+		
+        INCLUDEPATH = ./ \
+			BTTypes	\
+			BlueSoleil_SDK_2.0.5/include \
+            Connection/ObjectExchange/Server \
+            LocalDevice \
+            Connection/ObjectExchange/Client \
+            Connection/SerialPort/Client \
+            Connection/SerialPort/Server \
+            ServiceAdvertiser \
+            ServiceDiscoverer \
+            DeviceDiscoverer \
+            WinSerialPort
+        DESTDIR += $$(QTDIR)\QBluetooth\bin
+        HEADERS += Connection/ObjectExchange/Server/QBtObjectExchangeServer_win32.h \
+            LocalDevice/QBtLocalDevice_win32.h \
+            Connection/ObjectExchange/Client/QBtObjectExchangeClient_win32.h \
+            Connection/SerialPort/Client/QBtSerialPortClient_win32.h \
+            Connection/SerialPort/Server/QBtSerialPortServer_win32.h \
+            ServiceAdvertiser/QBtServiceAdvertiser_win32.h \
+            ServiceDiscoverer/QBtServiceDiscoverer_win32.h \
+            DeviceDiscoverer/QBtDeviceDiscoverer_win32.h \
+            WinSerialPort/Tserial_event.h
+        SOURCES += Connection/ObjectExchange/Server/Impl/QBtObjectExchangeServer_win32.cpp \
+            LocalDevice/Impl/QBtLocalDevice_win32.cpp \
+            Connection/ObjectExchange/Client/Impl/QBtObjectExchangeClient_win32.cpp \
+            Connection/SerialPort/Client/Impl/QBtSerialPortClient_win32.cpp \
+            Connection/SerialPort/Server/Impl/QBtSerialPortServer_win32.cpp \
+            ServiceAdvertiser/Impl/QBtServiceAdvertiser_win32.cpp \
+            ServiceDiscoverer/Impl/QBtServiceDiscoverer_win32.cpp \
+            DeviceDiscoverer/Impl/QBtDeviceDiscoverer_win32.cpp \
+            WinSerialPort/Tserial_event.cpp
+			
+		/*exportheaders.sources = $$PUBLIC_HEADERS
+		
+	
+		for(header, exportheaders.sources){
+			DESTDIR += "$$header $$DESTDIR\include\$$basename(header)"
+		}*/
+    }
+    else { 
+        HEADERS += Connection/ObjectExchange/Server/QBtObjectExchangeServer_stub.h \
+            LocalDevice/QBtLocalDevice_stub.h \
+            Connection/ObjectExchange/Client/QBtObjectExchangeClient_stub.h \
+            Connection/SerialPort/Client/QBtSerialPortClient_stub.h \
+            Connection/SerialPort/Server/QBtSerialPortServer_stub.h \
+            ServiceAdvertiser/QBtServiceAdvertiser_stub.h \
+            ServiceDiscoverer/QBtServiceDiscoverer_stub.h \
+            DeviceDiscoverer/QBtDeviceDiscoverer_stub.h
+        SOURCES += Connection/ObjectExchange/Server/Impl/QBtObjectExchangeServer_stub.cpp \
+            LocalDevice/Impl/QBtLocalDevice_stub.cpp \
+            Connection/ObjectExchange/Client/Impl/QBtObjectExchangeClient_stub.cpp \
+            Connection/SerialPort/Client/Impl/QBtSerialPortClient_stub.cpp \
+            Connection/SerialPort/Server/Impl/QBtSerialPortServer_stub.cpp \
+            ServiceAdvertiser/Impl/QBtServiceAdvertiser_stub.cpp \
+            ServiceDiscoverer/Impl/QBtServiceDiscoverer_stub.cpp \
+            DeviceDiscoverer/Impl/QBtDeviceDiscoverer_stub.cpp
+    }
+}
+

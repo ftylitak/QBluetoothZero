@@ -21,6 +21,7 @@
 #define QBTSERIALPORTSERVER_STUB_H_
 
 #include "QBtSerialPortServer.h"
+#include <QBtAuxFunctions.h>
 
 class QBtSerialPortServerPrivate
 {

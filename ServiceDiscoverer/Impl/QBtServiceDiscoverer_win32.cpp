@@ -21,7 +21,7 @@
 #include "../QBtServiceDiscoverer_win32.h"
 
 QBtServiceDiscovererPrivate::QBtServiceDiscovererPrivate(QBtServiceDiscoverer* publicClass):
-	p_ptr(publicClass)
+	QObject(NULL), p_ptr(publicClass), isBusy(false)
 {
 	Construct();
 }
@@ -29,6 +29,11 @@ QBtServiceDiscovererPrivate::QBtServiceDiscovererPrivate(QBtServiceDiscoverer* p
 void QBtServiceDiscovererPrivate::Construct()
 {
 	InitBthSdk();
+
+	connect(p_ptr, SIGNAL(discoveryStarted()), 
+			this, SLOT(SetBusy()));
+	connect(p_ptr, SIGNAL(discoveryStopped()),
+			this, SLOT(SetNotBusy()));
 }
 
 QBtServiceDiscovererPrivate::~QBtServiceDiscovererPrivate()
@@ -150,8 +155,8 @@ void QBtServiceDiscovererPrivate::ProcessFoundServices(BTSVCHDL* foundServices, 
 		if(serviceInfo.service_class == BTSDK_CLS_SERIAL_PORT)
 			RetrieveSPPAttributes(&newService, foundServices[i]);
 			
-		p_ptr->_remoteDevice->addNewService(newService);
-		emit p_ptr->newServiceFound(*(p_ptr->_remoteDevice), newService);
+		p_ptr->_remoteDevice.addNewService(newService);
+		emit p_ptr->newServiceFound(p_ptr->_remoteDevice, newService);
 	}
 }
 
@@ -167,11 +172,20 @@ void QBtServiceDiscovererPrivate::RetrieveSPPAttributes(QBtService* currService,
 	if(result != BTSDK_OK)
 		return;
 	
-	currService->setCommPort((unsigned int)infoStructure.server_channel);
+	currService->setPort((unsigned int)infoStructure.server_channel);
 }
 
+void QBtServiceDiscovererPrivate::SetBusy()
+{
+	isBusy = true;
+}
+
+void QBtServiceDiscovererPrivate::SetNotBusy()
+{
+	isBusy = false;
+}
 
 bool QBtServiceDiscovererPrivate::IsBusy() const
 {
-	Q_ASSERT_X(false, "QBtServiceDiscovererPrivate::IsBusy()", "not implemented");
+	return isBusy;
 }

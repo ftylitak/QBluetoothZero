@@ -21,6 +21,7 @@
 #define QBTLOCALDEVICE_WIN32_H_
 
 #include <QBtTypes.h>
+#include <QBtAuxFunctions.h>
 
 class QBtLocalDevicePrivate
 {
@@ -36,6 +37,9 @@ public:
     static void SetDeviceClass(QBtDevice::DeviceMajor classId);
     static void SetLocalDeviceName(const QString & devName);
     static QString GetLocalDeviceName();
+
+	static bool IsVisible();
+	static void SetVisible (bool value);
 
 
     ///////////////////////////////

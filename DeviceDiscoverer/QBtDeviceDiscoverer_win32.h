@@ -22,6 +22,7 @@
 
 #include <QBtTypes.h>
 #include <QBtDeviceDiscoverer.h>
+#include <QBtAuxFunctions.h>
 
 class QBtDeviceDiscovererPrivate
 {
@@ -33,6 +34,7 @@ public:
     void DiscoverDevices();
     void StopDiscovery();
     QBtDevice::List GetInquiredDevices();
+	bool IsBusy () const;
 
 protected:
     void Construct();

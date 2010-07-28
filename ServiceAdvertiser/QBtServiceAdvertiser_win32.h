@@ -21,6 +21,7 @@
 #define QBTSERVICEADVERTISER_STUB_H_
 
 #include <QBtServiceAdvertiser.h>
+#include <QBtAuxFunctions.h>
 
 class QBtServiceAdvertiserPrivate
 {

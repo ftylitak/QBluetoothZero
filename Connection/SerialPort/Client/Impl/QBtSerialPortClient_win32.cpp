@@ -99,8 +99,15 @@ void QBtSerialPortClientPrivate::Disconnect()
 
 void QBtSerialPortClientPrivate::SendData(const QByteArray& data)
 {
-	// not implemented
-	Q_ASSERT_X (false, "[windows] QBtSerialPortClientPrivate::SendData(const QByteArray& data)", "not implemented");
+	if(!IsConnected() || com == NULL)
+	{
+		emit p_ptr->error(QBtSerialPortClient::ErrorUnavailable);
+		return;
+	}
+
+	DWORD size = data.size();
+
+	com->sendData((char*)data.data(),size);
 }
 
 void QBtSerialPortClientPrivate::SendData(const QString& data)
