@@ -120,10 +120,6 @@ else {
     win32 { 
         LIBS += -lBlueSoleil_SDK_2.0.5/bin/BsSDK
 		
-		//deploy.path = $$EPOCROOT
-		/*INCLUDEPATH += $$deploy.path$$exportheaders.path/QBluetooth/
-		INCLUDEPATH += $$deploy.path$$exportheaders.path*/
-		
         INCLUDEPATH = ./ \
 			BTTypes	\
 			BlueSoleil_SDK_2.0.5/include \
@@ -155,13 +151,6 @@ else {
             ServiceDiscoverer/Impl/QBtServiceDiscoverer_win32.cpp \
             DeviceDiscoverer/Impl/QBtDeviceDiscoverer_win32.cpp \
             WinSerialPort/Tserial_event.cpp
-			
-		/*exportheaders.sources = $$PUBLIC_HEADERS
-		
-	
-		for(header, exportheaders.sources){
-			DESTDIR += "$$header $$DESTDIR\include\$$basename(header)"
-		}*/
     }
     else { 
         HEADERS += Connection/ObjectExchange/Server/QBtObjectExchangeServer_stub.h \

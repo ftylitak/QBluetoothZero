@@ -26,7 +26,7 @@
 class QBtObjectExchangeServerPrivate
 {
 public:
-	QBtObjectExchangeServerPrivate(QBtObjectExchangeServer publicClass);
+	QBtObjectExchangeServerPrivate(QBtObjectExchangeServer* publicClass);
 	~QBtObjectExchangeServerPrivate();
 	
 	bool StartServer();

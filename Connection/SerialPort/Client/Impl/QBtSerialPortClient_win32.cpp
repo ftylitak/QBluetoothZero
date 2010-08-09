@@ -18,6 +18,8 @@
 
 #include "../QBtSerialPortClient_win32.h"
 
+#include <stdio.h>
+
 QBtSerialPortClientPrivate::QBtSerialPortClientPrivate(QBtSerialPortClient* publicClass) : 
 	p_ptr(publicClass), com(NULL), connectionHandle(BTSDK_INVALID_HANDLE), server(NULL),
 	connectingService(NULL), OSComPort(0), serialHandle(INVALID_HANDLE_VALUE), incomingDataBuffer("")

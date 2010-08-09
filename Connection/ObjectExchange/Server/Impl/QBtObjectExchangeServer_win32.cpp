@@ -20,7 +20,7 @@
 #include "../QBtObjectExchangeServer_win32.h"
 
 QBtObjectExchangeServerPrivate::QBtObjectExchangeServerPrivate(
-		QBtObjectExchangeServer publicClass) : p_ptr(publicClass)
+		QBtObjectExchangeServer* publicClass) : p_ptr(publicClass)
 {
 }
 
