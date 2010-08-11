@@ -134,24 +134,27 @@ TBool QBtObjectExchangeServerPrivate::InitialiseServerL()
     // Set the Socket's security with parameters,
     // Authentication, Encryption, Authorisation and Denied
     // Method also return the channel available to listen to.
-    TInt channel ( SetSecurityWithChannelL( EFalse, EFalse, ETrue, EFalse ) );
+    TInt channel (SetSecurityWithChannelL (EFalse, EFalse, ETrue, EFalse ) );
+
 
     // start the OBEX server
     TObexBluetoothProtocolInfo obexProtocolInfo;
-    obexProtocolInfo.iTransport.Copy( KObexRfcommProtocol );
-    obexProtocolInfo.iAddr.SetPort( channel );
+    obexProtocolInfo.iTransport.Copy (KObexRfcommProtocol);
+    obexProtocolInfo.iAddr.SetPort (channel);
 
     QBtService newService;
-    newService.setClass(QBtConstants::OBEXObjectPush); // or FTP
-    newService.addProtocol(QBtConstants::L2CAP);
-    newService.addProtocol(QBtConstants::RFCOMM);
-    newService.addProtocol(QBtConstants::OBEX);
-    newService.setName(p_ptr->_service->getName());
-    newService.setPort(channel);
 
-    p_ptr->startAdvertisingService(newService);
+    newService.addProtocol (QBtUuid (QBtConstants::L2CAP) );
+    newService.addProtocol (QBtUuid (QBtConstants::RFCOMM) );
+    newService.addProtocol (QBtUuid (QBtConstants::OBEX) );
+    newService.setName (p_ptr->_service->getName());
+    newService.setClass (p_ptr->_service->getClass() );
 
-    iObexServer = CObexServer::NewL( obexProtocolInfo );
+    newService.setPort (channel);
+
+    p_ptr->startAdvertisingService (newService);
+
+    iObexServer = CObexServer::NewL (obexProtocolInfo);
     iObexServer->Start( this );
 
     return true;

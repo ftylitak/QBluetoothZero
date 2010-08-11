@@ -50,7 +50,7 @@ void QBtServiceAdvertiserPrivate::ConstructL()
 // constructor
 // ----------------------------------------------------------------------------
 QBtServiceAdvertiserPrivate::QBtServiceAdvertiserPrivate(QBtServiceAdvertiser* publicClass)
-	: localService(NULL), p_ptr(publicClass)
+      : /*localService(NULL),*/ p_ptr(publicClass)
 {
 }
 
@@ -64,7 +64,7 @@ QBtServiceAdvertiserPrivate::~QBtServiceAdvertiserPrivate()
 {
     TRAPD(err, StopAdvertiser());
 
-    SafeDelete(localService);
+    //SafeDelete(localService);
 }
 
 
@@ -75,63 +75,80 @@ QBtServiceAdvertiserPrivate::~QBtServiceAdvertiserPrivate()
 // start service advertiser on given channel.  an entry to service discovery
 // database will be entered describing our advertised service.
 // ----------------------------------------------------------------------------
-void QBtServiceAdvertiserPrivate::StartAdvertiser(const QBtService& service)
+void QBtServiceAdvertiserPrivate::StartAdvertiser (const QBtService& service)
 {
-    localService = new QBtService(service);
+   //localService = new QBtService(service);
 
-    // open sdp session
-    User::LeaveIfError(iSdp.Connect());
-    // open sdp database session
-    User::LeaveIfError(iSdpDB.Open(iSdp));
-    // create a record of the correct service class
-    TUUID serviceUUID(localService->getClass());
-    iSdpDB.CreateServiceRecordL(serviceUUID, iRecord);
+   // open sdp session
+   User::LeaveIfError(iSdp.Connect());
 
-    // add a protocol to the record
-    CSdpAttrValueDES* protocolDescriptorList = CSdpAttrValueDES::NewDESL(NULL);
-    CleanupStack::PushL(protocolDescriptorList);
+   // open sdp database session
+   User::LeaveIfError(iSdpDB.Open(iSdp));
 
-    TBuf8<1> channel;
-    channel.Append((TChar)localService->getPort());
+   // create a record of the correct service class
+   //QBtUuid uuid = service.getClass();
+
+   TUUID uuid = QBtUuidToSymbianUuid (service.getClass() );
+   iSdpDB.CreateServiceRecordL (uuid, iRecord);
 
 
+   // add a protocol to the record
+   CSdpAttrValueDES* protocolDescriptorList = CSdpAttrValueDES::NewDESL(NULL);
+   CleanupStack::PushL(protocolDescriptorList);
 
-    // create protocol list for our service
-    protocolDescriptorList->StartListL()->BuildDESL();
+   TBuf8<1> channel;
+   channel.Append((TChar)service.getPort());
 
-    QBtService::ProtocolList protocolList = service.getProtocols();
-    for(int i=0; i<protocolList.size(); i++)
-    {
-        protocolDescriptorList->StartListL();
-            protocolDescriptorList->BuildUUIDL(protocolList[i]);
-            if(protocolList[i] == QBtConstants::RFCOMM)
-                protocolDescriptorList->BuildUintL(channel);
-        protocolDescriptorList->EndListL();
-    }
-    protocolDescriptorList->EndListL();
+   // create protocol list for our service
+   MSdpElementBuilder* e = protocolDescriptorList->StartListL();
 
-    // set protocol list to the record
-    iSdpDB.UpdateAttributeL(iRecord, KSdpAttrIdProtocolDescriptorList,
-            *protocolDescriptorList);
-    CleanupStack::PopAndDestroy(protocolDescriptorList);
+      QBtService::ProtocolList protocolList = service.getProtocols();
+      for (int i=0; i < protocolList.size(); i++)
+      {
+         e = e->BuildDESL();
+         e = e->StartListL();
 
-    TPtrC16 servName(localService->getName().utf16());
+            TUUID u = QBtUuidToSymbianUuid (protocolList[i]);
+            e = e->BuildUUIDL (u);
 
-    // add a name to the record
-    iSdpDB.UpdateAttributeL(iRecord,
-            KSdpAttrIdBasePrimaryLanguage +
-            KSdpAttrIdOffsetServiceName,
-            servName);
+            if (u == TUUID (KRFCOMM) )
+               e = e->BuildUintL(channel);
 
-    TPtrC16 servDescr(localService->getDescription().utf16());
-    // add a description to the record
-    iSdpDB.UpdateAttributeL(iRecord,
-            KSdpAttrIdBasePrimaryLanguage +
-            KSdpAttrIdOffsetServiceDescription,
-            servDescr);
+         e = e->EndListL();
+       }
 
-    // set service available
-    UpdateAvailability(ETrue);
+   e->EndListL();
+
+   // set protocol list to the record
+   iSdpDB.UpdateAttributeL(iRecord, KSdpAttrIdProtocolDescriptorList,
+         *protocolDescriptorList);
+   CleanupStack::PopAndDestroy(protocolDescriptorList);
+
+
+   // add a name to the record
+   TPtrC16 servName(service.getName().utf16());
+
+   iSdpDB.UpdateAttributeL(iRecord,
+         KSdpAttrIdBasePrimaryLanguage +
+         KSdpAttrIdOffsetServiceName,
+         servName);
+
+
+   // add a description to the record
+   TPtrC16 servDescr(service.getDescription().utf16());
+
+   iSdpDB.UpdateAttributeL(iRecord,
+         KSdpAttrIdBasePrimaryLanguage +
+         KSdpAttrIdOffsetServiceDescription,
+         servDescr);
+
+   // set service available
+   UpdateAvailability(ETrue);
+
+   // notify
+   QT_TRYCATCH_LEAVING (emit p_ptr->advertisingStarted(service) );
+
+
 }
 
 
@@ -147,11 +164,18 @@ void QBtServiceAdvertiserPrivate::StopAdvertiser()
     {
         // delete out record from service discovery database
         iSdpDB.DeleteRecordL(iRecord);
+
         // close sdp and sdp db sessions
         iSdpDB.Close();
         iSdp.Close();
         iRecord=0;
+
+        //
+        QT_TRYCATCH_LEAVING (emit p_ptr->advertisingStopped() );
     }
+
+
+
 }
 
 

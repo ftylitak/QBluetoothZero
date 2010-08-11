@@ -169,6 +169,12 @@ void QBtDeviceDiscovererPrivate::RunL()
 		case 0x06:
 			qtDeviceMajorClass = QBtDevice::Imaging;
 			break;   
+        case 0x07:
+            qtDeviceMajorClass = QBtDevice::Wearable;
+            break;
+        case 0x08:
+            qtDeviceMajorClass = QBtDevice::Toy;
+            break;
 		default:
 			qtDeviceMajorClass = QBtDevice::Uncategorized;
 			break;

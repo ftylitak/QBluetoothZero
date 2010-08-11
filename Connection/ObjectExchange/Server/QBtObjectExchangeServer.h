@@ -28,6 +28,14 @@
 //Forward declaration
 class QBtObjectExchangeServerPrivate;
 
+
+// suggestion: (LV)
+//
+// use smart pointers for the service advertiser and reset it when
+// 'startServer' is called
+
+
+
 /**
  * This class is used to create an OBEX server.
  * After instantiation user can call startServer(const QString&)
@@ -62,13 +70,11 @@ public:
     ~QBtObjectExchangeServer();
 
     /**
-     * isConnected()
-     * @return true if the server is connected.
+     * Returns true if the server is connected.
      */
     bool isConnected();
 
     /**
-     * getTransmittingServiceInfo()
      * If startServer() function is already called then using this function
      * the user can acquire the information of the transmitting service that
      * represents this server to the outside world.
@@ -78,40 +84,34 @@ public:
 protected:
     void setTransmittingService(const QBtService& service);
 
-    /**
-     * startAdvertisingService()
-     *
+    /**     
      * Initializes a new advertiser and starts the transmitting of the
      * service passed as argument.
      */
     void startAdvertisingService(const QBtService& service);
 
     /**
-     * stopAdvertisingService()
-     *
      * Stops the transmittion of the service (if any)
      */
     void stopAdvertisingService();
 
 public slots:
     /**
-     * startServer()
      *
      * Starts OBEX server by initializing the components needed
      * and by advertising the service by which the server will
      * be identified by other devices.
      */
-    void startServer(const QString& serviceName = "MyOBEX");
+    void startServer (const QBtUuid & serviceId, const QString& serviceName = "My OBEX Service");
 
     /**
-     * stopServer()
-     *
      * Stops the server, terminates the service transmittion and disconnects
      * from any device connected
      */
     void stopServer();
 
 signals:
+
     /**
      * Emitted when server is successfully started and ready to use.
      */

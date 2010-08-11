@@ -66,8 +66,6 @@ public:
     ~QBtServiceAdvertiser();
 
     /**
-     * startAdvertising(const QBtService& service)
-     *
      * Starts the service advertiser.
      *
      * @param service the service class that contains all the necessery
@@ -76,15 +74,11 @@ public:
     void startAdvertising(const QBtService& service);
 
     /**
-     * stopAdvertising()
-     *
      * Stops the transmittion of the service running (if any)
      */
     void stopAdvertising();
 
     /**
-     * updateAvailability()
-     *
      * Change the availability of the service.
      * @param aAvailable If true, the service is transmitted.
      */
@@ -92,25 +86,21 @@ public:
 
 signals:
     /**
-     * advertisingStarted(const QBtService& service)
-     *
      * The signal is emitted if the transmittion of the service is started
      * @param service A reference to an object containing all the info of the service being transmitted.
      */
     void advertisingStarted(const QBtService& service);
 
     /**
-     * advertisingStopped()
      * The signal is emitted when the transmittion of the service ends.
      */
     void advertisingStopped();
 
     /**
-     * error(ErrorCodes code);
      *
-     * Emitted in case of error.
+     * Emitted in case of error (not implemented).
      */
-    void error(ErrorCodes code);
+    void error (QBtServiceAdvertiser::ErrorCodes code);
 
 private:
     // The service to advertise

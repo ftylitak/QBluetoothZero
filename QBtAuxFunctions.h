@@ -42,15 +42,25 @@ inline void _DEBUG_MSG (const QString & m, const QString & file, const QString& 
 	qDebug() << "file: " << file << " line: " << line << " " << m;
 }
 
-inline void _Assert_Msg (const QString msg, const QString & file, const QString & line)
+
+inline void _Assert_Msg (const QString & msg, const QString & file, const QString & line)
 {
 	// strip directory info
 	int index = file.lastIndexOf("/");
 	QString f = file.mid (index+1);
 	QString m = QString ("file: %1 line: %2\n%3").arg (f, line, msg);
 
+    // print debug
+    _DEBUG_MSG(msg, file, line);
+
+    // show msg
 	QMessageBox::information(0, "assert failed", m);		
 	Q_ASSERT (false);
+}
+
+inline void _Assert_Msg2 (const QString & msg1, const QString & msg2, const QString & file, const QString & line)
+{
+   _Assert_Msg (QString("%1 : %2").arg(msg1).arg(msg2), file, line);
 }
 
 inline void _Break_Here (const QString & file, const QString & line)
@@ -66,17 +76,19 @@ inline void _Break_Here (const QString & file, const QString & line)
 
 
 #ifdef QT_DEBUG
-	#define DEBUG_MSG(msg) { _DEBUG_MSG((msg),__FILE__,QString::number(__LINE__)); }
-	#define BREAK_HERE() { _Break_Here(__FILE__, QString::number(__LINE__)); }
-	#define ASSERT_MSG(test, msg) { if (!(test)) _Assert_Msg ((msg), __FILE__, QString::number(__LINE__) ); }
-	
+    #define BT_DEBUG_MSG(msg) { _DEBUG_MSG((msg),__FILE__,QString::number(__LINE__)); }
+    #define BT_BREAK_HERE() { _Break_Here(__FILE__, QString::number(__LINE__)); }
+    #define BT_ASSERT_MSG(test, msg) { if (!(test)) _Assert_Msg ((msg), __FILE__, QString::number(__LINE__) ); }
+    #define BT_ASSERT_MSG2(test, msg1, msg2) { if (!(test)) _Assert_Msg2 ((msg1), (msg2), __FILE__, QString::number(__LINE__) ); }
+
 	//#define ASSERT_MSG_X(test, where, msg) { if (!(test)) Assert_Msg ((msg), __FILE__, QString::number(__LINE__) ); }
 #else
 
-	#define DEBUG_MSG(msg) 0
-	#define ASSERT_MSG_X(test, where, msg) 0
-	#define ASSERT_MSG(test, msg) 0
-	#define BREAK_HERE() 0
+    #define BT_DEBUG_MSG(msg) 0
+    #define BT_ASSERT_MSG_X(test, where, msg) 0
+    #define BT_ASSERT_MSG(test, msg) 0
+    #define BT_ASSERT_MSG2(test, msg1, msg2) 0
+    #define BT_BREAK_HERE() 0
 
 #endif
 	

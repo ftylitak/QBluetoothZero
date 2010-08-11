@@ -171,19 +171,26 @@ private: // data
 
 	// listening socket
 	RSocket iListenSock;
+
 	// accepted socket
 	RSocket iSock;
-	// length of received data
+
+    // length of received data
 	TSockXfrLength iLen;
-	// buffer holding received data
+
+    // buffer holding received data
 	TBuf8<128> iBuffer;
-	// socket server handle
+
+    // socket server handle
 	RSocketServ iSocketServ;
-	// listener connection status
+
+    // listener connection status
 	TBool iIsConnected;
-	// the state of the listener
+
+    // the state of the listener
 	TInt queueSize;
-	enum TState
+
+    enum TState
 	{
 		ENone = 1,
 		EConnecting,

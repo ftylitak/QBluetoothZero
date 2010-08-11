@@ -23,8 +23,14 @@
  */
 class DLL_EXPORT QBtConstants
 {
+
 public:
-    enum ServiceClass{
+
+    /**
+     * Short UUIDs for standard services, as unsigned integers.
+     */
+    enum ServiceClass
+    {
             UndefinedClass = 0x0000,
             SerialPort = 0x1101,
             LANAccessUsingPPP,
@@ -80,10 +86,17 @@ public:
             UPNP_IP_Service,
             ESDP_UPNP_IP_PAN,
             ESDP_UPNP_IP_LAP,
-            ESDP_UPNP_L2CAP
+            ESDP_UPNP_L2CAP,
+
+            MY_CUSTOM = 0x10ff
         };
 
-    enum ServiceProtocol{
+
+    /**
+     * Short UUIDs for standard protocols.
+     */
+    enum ServiceProtocol
+    {
             UndefinedProtocol 	= 0x0000,
             SDP,
             UDP,

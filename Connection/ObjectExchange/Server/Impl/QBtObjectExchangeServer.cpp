@@ -57,11 +57,13 @@ QBtObjectExchangeServer::~QBtObjectExchangeServer()
     SafeDelete(_implPtr);
 }
 
-void QBtObjectExchangeServer::startServer(const QString& serviceName)
+void QBtObjectExchangeServer::startServer (const QBtUuid & serviceId, const QString& serviceName)
 {
-    QBtService tmpService;
-    tmpService.setName(serviceName);
-    setTransmittingService(tmpService);
+    QBtService service;
+    service.setName (serviceName);
+    service.setClass (serviceId);
+
+    setTransmittingService (service);
 
     _implPtr->StartServer();
 }

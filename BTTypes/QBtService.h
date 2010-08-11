@@ -20,6 +20,7 @@
 #include <QList>
 #include <QBtGlobal.h>
 #include <QBtConstants.h>
+#include <QBtUuid.h>
 
 /**
  * Class containing all the necessary information about a bluetooth service
@@ -27,61 +28,101 @@
  */
 class DLL_EXPORT QBtService
 {
-public:
-    typedef QList<QBtService> List;
+   public:
+      typedef QList<QBtService> List;
 
-    /*
-     * This list will be populates either by the Service Discovery or
-     * by the user.
-     *
-     * The index of every protocol contained corresponds to the level of
-     * hierarchy that it belongs.
-     *
-     * example: to create a service using RFCOMM then the list will be:
-     * [0]: L2CAP
-     * [1]: RFCOMM
-     *
-     * So ProtocolList::last() returns the highest protocol.
-     */
-    typedef QList<QBtConstants::ServiceProtocol> ProtocolList;
+      /**
+       * This list will be populates either by the Service Discovery or
+       * by the user.
+       *
+       * The index of every protocol contained corresponds to the level of
+       * hierarchy that it belongs.
+       *
+       * example: to create a service using RFCOMM then the list will be:
+       * [0]: L2CAP
+       * [1]: RFCOMM
+       *
+       * So ProtocolList::last() returns the highest protocol.
+       */
+      typedef QList<QBtUuid> ProtocolList;
 
-    QBtService();
+
+      /**
+       * Constructs an empty instance.
+       */
+      QBtService();
     
-    // really needed?
-    //QBtService(const QBtService& service);
 
-    ProtocolList getProtocols() const;
-    QBtConstants::ServiceClass getClass() const;
-    QString getName() const;
-    QString getDescription() const;
-    unsigned int getPort() const;
-    unsigned int getHandle() const;
 
-    void addProtocol(QBtConstants::ServiceProtocol uuid);
-    bool removeProtocol(QBtConstants::ServiceProtocol uuid);
+      /**
+       * Gets the protocol list used by this service.
+       */
+      ProtocolList getProtocols() const;
 
-    void setProtocols(const ProtocolList & newUUIDs);
-    void setClass(QBtConstants::ServiceClass newClass);
-    void setName(const QString& newName);
-    void setDescription(const QString& newDescription);
-    void setPort(unsigned int newPort);
-    void setHandle(unsigned int newHandle);
 
-    // really needed?
-    //QBtService& operator= (const QBtService& service);
+      /**
+       * Gets the service id of this service.
+       */
+      QBtUuid getClass () const;
 
-private:
-    // protocol list is mainly used on symbian
-    // on windows tha connections are done using classUUID
-    QBtConstants::ServiceClass classUUID;
-    ProtocolList protocolUUID;
-    QString name;
-    QString description;
-    unsigned int handle;
 
-    // used on RFCOMM service as channel number to be used for connection
-    // to remote device
-    unsigned int port;
+      /**
+       * Gets the service name.
+       */
+      QString getName() const;
+
+
+      /**
+       * Gets the service description.
+       */
+      QString getDescription() const;
+
+      /**
+       * Gets the service port.
+       */
+      uint getPort() const;
+
+      /**
+       * Gets the native (?) service handle.
+       */
+      uint getHandle() const;
+
+      /**
+       * Adds a protocol to the service protocol list.
+       */
+
+      void addProtocol(const QBtUuid & uuid);
+
+      bool removeProtocol (const QBtUuid & uuid);
+
+      void setProtocols(const ProtocolList & newUUIDs);
+
+      void setClass(const QBtUuid & newClass);
+
+      void setName(const QString& newName);
+
+      void setDescription(const QString& newDescription);
+
+      void setPort(uint newPort);
+
+      void setHandle (uint newHandle);
+
+
+
+   private:
+
+      // protocol list is mainly used on symbian
+      // on windows tha connections are done using classUUID
+      QBtUuid       _serviceUuid;
+      ProtocolList  _protocolList;
+      QString       _name;
+      QString       _description;
+      uint          _handle;
+
+      // used on RFCOMM service as channel number to be used for connection
+      // to remote device
+      uint          _port;
+
 };
 
 #endif // QBTSERVICE_H

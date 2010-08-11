@@ -103,7 +103,7 @@ void QBtSerialPortClientPrivate::DoCancel()
 TBool QBtSerialPortClientPrivate::ConnectL (const QBtDevice& remoteDevice, const QBtService& remoteService)
 {		
     if (iState != ENone)        
-    { DEBUG_MSG("warning: trying to connect and state != ENone"); return false; }
+    { BT_DEBUG_MSG("warning: trying to connect and state != ENone"); return false; }
 
     device =  remoteDevice;
     service = remoteService;
@@ -154,7 +154,7 @@ TBool QBtSerialPortClientPrivate::ConnectL (const QBtDevice& remoteDevice, const
     
     if (status != KErrNone)
     {
-    	DEBUG_MSG (QString ("[connect] error detected: %1").arg (status.Int()) );
+        BT_DEBUG_MSG (QString ("[connect] error detected: %1").arg (status.Int()) );
     	
     	iState = ENone;
     	
@@ -198,18 +198,18 @@ TBool QBtSerialPortClientPrivate::ConnectL (const QBtDevice& remoteDevice, const
 
 TInt QBtSerialPortClientPrivate::ConnectTimerCallBack (TAny* aPtr)
 {
-	DEBUG_MSG ("[timer] entering");
+    BT_DEBUG_MSG ("[timer] entering");
 	
 	QBtSerialPortClientPrivate* p = (QBtSerialPortClientPrivate*) aPtr;
 		
 	// ignore if connection was successful
 	if (p->iState != EConnecting)
 	{
-		DEBUG_MSG ("[timer] got connection, ignoring timeout event");
+        BT_DEBUG_MSG ("[timer] got connection, ignoring timeout event");
 		return EFalse;
 	}	
 	
-	DEBUG_MSG ("[timer] canceling ActiveObject");
+    BT_DEBUG_MSG ("[timer] canceling ActiveObject");
 	
 	
 	if (p->IsActive())
@@ -218,12 +218,12 @@ TInt QBtSerialPortClientPrivate::ConnectTimerCallBack (TAny* aPtr)
 	// change state
 	p->iState = ENone;
 	
-	DEBUG_MSG ("[timer] emit error signal");
+    BT_DEBUG_MSG ("[timer] emit error signal");
 	
 	// emit error
 	QT_TRYCATCH_LEAVING (emit p->p_ptr->error (QBtSerialPortClient::ErrorConnectionTimeout));
 	
-	DEBUG_MSG ("[timer] end");
+    BT_DEBUG_MSG ("[timer] end");
 	
 	return EFalse;	
 }
@@ -362,7 +362,7 @@ void QBtSerialPortClientPrivate:: SendData (const QByteArray& data)
 // ----------------------------------------------------------------------------
 void QBtSerialPortClientPrivate::RunL()
 {
-	DEBUG_MSG (QString ("[RunL status: %1 state: %2]").arg (iStatus.Int()).arg (iState) );
+    BT_DEBUG_MSG (QString ("[RunL status: %1 state: %2]").arg (iStatus.Int()).arg (iState) );
 	
 	// cancel possible timers
 	CancelConnectionTimer();
@@ -405,7 +405,7 @@ void QBtSerialPortClientPrivate::RunL()
     	
     	
     	
-    	DEBUG_MSG (QString ("[RunL error: %1]").arg (iStatus.Int()));    	
+        BT_DEBUG_MSG (QString ("[RunL error: %1]").arg (iStatus.Int()));
     	    	
     	// get the error
     	switch (iState)

@@ -113,7 +113,7 @@ private:
     TInt iRecordState;
 
     // local service to advertise
-    QBtService* localService;
+    //QBtService* localService;
 
     //pointer to parent object (from constructor). Not owned by this class
     QBtServiceAdvertiser *p_ptr;

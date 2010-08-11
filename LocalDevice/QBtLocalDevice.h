@@ -56,16 +56,12 @@ public:
     static void setDeviceClass(QBtDevice::DeviceMajor classId);
 
     /**
-     * setLocalDeviceName()
-     *
      * Sets the name of the device throught which it will be identified by other
      * devices during SDP discovery.
      */
     static void setLocalDeviceName (const QString & deviceName);
 
     /**
-     * GetDeviceName()
-     *
      * Get local device name.
      * @return device name
      */
@@ -95,9 +91,7 @@ public:
      */
     static bool getBluetoothPowerState();
 
-    /**
-     * addNewDevice()
-     *
+    /**     
      * Add a new device in the bluetooth registry.
      * @param device the device to be added
      * @return true upon success, else false
@@ -105,8 +99,6 @@ public:
     static bool addNewDevice(const QBtDevice& device);
 
     /**
-     * deleteDevice()
-     *
      * Delete a device from the bluetooth registry.
      * @param device the device to be deleted
      * @return true upon success, else false. If device doesn't exists in the registry the also false
@@ -114,8 +106,6 @@ public:
     static bool deleteDevice(const QBtDevice& device);
 
     /**
-     * deleteDevice()
-     *
      * Delete a device from the bluetooth registry using the bluetooth address.
      * @param address the device address of the device to be delete
      * @return true upon success, else false. If device doesn't exists in the registry the also false

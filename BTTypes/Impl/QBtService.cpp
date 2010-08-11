@@ -19,125 +19,126 @@
 
 #include "../QBtService.h"
 
+//____________________________________________________________________________
+
 QBtService::QBtService()
-	: classUUID(QBtConstants::UndefinedClass),
-	  name("Undefined"),
-	  description("Undefined"),
-	  handle(0),
-	  port(0) 
+   : _name ("Undefined"),
+     _description ("Undefined"),
+     _handle(0),
+     _port(0)
 {	
-	protocolUUID.clear();
+    _protocolList.clear();
 }
 
-/*
-QBtService::QBtService(const QBtService& service) :
-	name(service.getName()), classUUID(service.getClass()), 
-	port(service.getPort()), handle(service.getHandle()), 
-	description(service.getDescription())
-{
-	protocolUUID = service.getProtocols();
-}
-*/
 
-//////////////////////////////////////////////
-//					Accessors				//
-//////////////////////////////////////////////
+//____________________________________________________________________________
+
 QBtService::ProtocolList QBtService::getProtocols() const
 {
-	return protocolUUID;
+    return _protocolList;
 }
 
-QBtConstants::ServiceClass QBtService::getClass() const
+//____________________________________________________________________________
+
+QBtUuid QBtService::getClass() const
 {
-	return classUUID;
+    return _serviceUuid;
 }
+
+//____________________________________________________________________________
 
 QString QBtService::getName() const
 {
-	return name;
+    return _name;
 }
+
+
+//____________________________________________________________________________
 
 QString QBtService::getDescription() const
 {
-	return description;
+    return _description;
 }
 
-unsigned int QBtService::getPort() const
+
+//____________________________________________________________________________
+
+uint QBtService::getPort() const
 {
-	return port;
+    return _port;
 }
 
-unsigned int QBtService::getHandle() const
+
+//____________________________________________________________________________
+
+uint QBtService::getHandle() const
 {
-	return handle;
+    return _handle;
 }
 
 
-//////////////////////////////////////////////
-//				Mutators					//
-//////////////////////////////////////////////
+//____________________________________________________________________________
 
-void QBtService::setClass(QBtConstants::ServiceClass newClass)
+void QBtService::setClass (const QBtUuid & newClass)
 {
-	classUUID = newClass;
+    _serviceUuid = newClass;
 }
+
+
+//____________________________________________________________________________
 
 void QBtService::setName(const QString& newName)
 {
-	name = newName;
+    _name = newName;
 }
+
+
+//____________________________________________________________________________
 
 void QBtService::setDescription(const QString& newDescription)
 {
-	description = newDescription;
+    _description = newDescription;
 }
 
-void QBtService::setPort(unsigned int newPort)
+
+//____________________________________________________________________________
+
+void QBtService::setPort (uint newPort)
 {
-	port = newPort;
+    _port = newPort;
 }
 
-void QBtService::setHandle(unsigned int newHandle)
+
+//____________________________________________________________________________
+
+void QBtService::setHandle(uint newHandle)
 {
-	handle = newHandle;
+    _handle = newHandle;
 }
 
-void QBtService::setProtocols(const QBtService::ProtocolList & newUUIDs)
+//____________________________________________________________________________
+
+void QBtService::setProtocols(const QBtService::ProtocolList & newUuids)
 {
-	protocolUUID = newUUIDs;
+    _protocolList = newUuids;
 }
 
-void QBtService::addProtocol(QBtConstants::ServiceProtocol uuid)
+
+//____________________________________________________________________________
+
+void QBtService::addProtocol(const QBtUuid & uuid)
 {
-	if(protocolUUID.indexOf(uuid) == -1) // if not on list
-		protocolUUID.append(uuid);
+    if (_protocolList.indexOf (uuid) == -1) // if not on list
+        _protocolList.append (uuid);
 }
 
-/**
- * Returns false if uuid not found in the protocol list
- */
-bool QBtService::removeProtocol(QBtConstants::ServiceProtocol uuid)
+
+//____________________________________________________________________________
+//
+// Returns false if uuid not found in the protocol list
+
+bool QBtService::removeProtocol (const QBtUuid & uuid)
 {
-	return protocolUUID.removeOne(uuid);
+    return _protocolList.removeOne(uuid);
 }
 
-//////////////////////////////////////////
-//				Operators				//	
-//////////////////////////////////////////
-/*
-QBtService& QBtService::operator= (const QBtService& service)
-{
-	if ( this == &service )  
-			return *this;
-	
-	name 			= service.getName();
-	port 			= service.getPort();
-	classUUID 		= service.getClass();
-	protocolUUID 	= service.getProtocols();
-	handle 			= service.getHandle();
-	description 	= service.getDescription();
-	
-	
-	return *this;
-}
-*/

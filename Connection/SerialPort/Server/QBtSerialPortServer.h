@@ -22,6 +22,8 @@
 #include <QObject>
 #include <QByteArray>
 
+#include <QBtUuid.h>
+
 //forward declaration
 class QBtSerialPortServerPrivate;
 
@@ -85,10 +87,10 @@ public:
      * the user can acquire the information of the transmitting service that
      * represents this server to the outside world.
      */
-    QBtService getTransmittingServiceInfo();
+    QBtService getTransmittingServiceInfo() const;
 
 protected:
-    void setTransmittingService(const QBtService& service);
+    void setTransmittingService (const QBtService& service);
 
     /**
      * Set the flag inside this object which represents the connection status.
@@ -119,7 +121,7 @@ public slots:
      * getTransmittingServiceInfo(). If needed, the user can set the name
      * of the transmitting service when calling this function.
      */
-    void startServer (const QString& serviceName = "MyRFCOMM");
+    void startServer (const QBtUuid & serviceId, const QString& serviceName = "My RFCOMM service");
 
     /**
      * stopServer()
@@ -170,23 +172,23 @@ signals:
     /**
      * Emitted when data are received successfully from the remote client.
      */
-    void dataReceived(const QString & data);
+    void dataReceived (const QString & data);
 
     /**
      * Emitted in case of error.
      */
-    void error(QBtSerialPortServer::ErrorCode code);
+    void error (QBtSerialPortServer::ErrorCode code);
 
 private:
     // Service Advertiser
     QBtServiceAdvertiser* _advertiser;
     
     //transmitting service
-    QBtService* _service;
-            
+    QBtService _service;
+
     //pointer to implementation
     QBtSerialPortServerPrivate *_implPtr;
-    
+
     // status
     bool _isConnected;
     

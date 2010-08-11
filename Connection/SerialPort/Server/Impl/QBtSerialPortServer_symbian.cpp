@@ -116,12 +116,13 @@ void QBtSerialPortServerPrivate::StartListenerL()
 	iListenSock.Listen (queueSize);
 	
 	// advertise service
-	QBtService newService;
-	newService.setName(p_ptr->_service->getName());
-	newService.setClass(QBtConstants::SerialPort);
-    newService.setPort(aChannel);
-	newService.addProtocol(QBtConstants::L2CAP);
-	newService.addProtocol(QBtConstants::RFCOMM);
+	QBtService newService;    
+
+    newService.setName (p_ptr->_service.getName());
+    newService.setClass (p_ptr->_service.getClass() );
+    newService.setPort (aChannel);
+    newService.addProtocol (QBtUuid (QBtConstants::L2CAP) );
+    newService.addProtocol (QBtUuid (QBtConstants::RFCOMM) );
 	
 	p_ptr->startAdvertisingService(newService);
 

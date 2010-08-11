@@ -27,203 +27,305 @@
 #include <btdevice.h>
 #include <bt_sock.h>
 #include <btsdp.h>
-#include <QMap>
 
+#include <QMap>
+#include <QSet>
 #include <QBtDevice.h>
 #include <QBtServiceDiscoverer.h>
 
-class QBtServiceDiscovererPrivate : public CBase,
-public MSdpAgentNotifier,
-public MSdpAttributeValueVisitor
+
+//____________________________________________________________________________
+//
+// Auxiliary classes for getting attribute values
+
+class AttrVisitor : public MSdpAttributeValueVisitor
 {
-public:
+   public:
 
-    /*!
-     * NewL()
-     *
-     *   Create new QBtServiceDiscovererPrivate object
-     * return a pointer to the created instance of QBtServiceDiscovererPrivate
-     */
-    static QBtServiceDiscovererPrivate* NewL(QBtServiceDiscoverer* publicClass);
+      AttrVisitor()
+      { reset(); }
 
-    /*!
-     * NewLC()
-     *
-     */
-    static QBtServiceDiscovererPrivate* NewLC(QBtServiceDiscoverer* publicClass);
+      virtual ~AttrVisitor()
+      {}
 
-    /*!
-     * ~QBtServiceDiscovererPrivate()
-     *
-     *   Destroy the object and release all memory objects
-     */
-    ~QBtServiceDiscovererPrivate();
+      virtual void clear()
+      {}
 
-    /*!
-     * DiscoverServiceOnDeviceL()
-     *
-     *   Discovers services on a given device.  service discovery
-     * agent will be started to do the service discovery.  search pattern
-     * will be used to limit the discovery for our services (matching service
-     * id).
-     *
-     * param aDevData device data record
-     */
-    void DiscoverServicesOnDevice(QBtDevice* targetDevice);
+      void reset ()
+      { clear(); }
 
-    /*
-     * DiscoverSpecificProtocol(QBtDevice* targetDevice, QBtConstants::ServiceProtocol uuid)
-     *
-     *	Start service discovery for specific protocol
-     */
-    void DiscoverSpecificProtocol(QBtDevice* targetDevice, QBtConstants::ServiceProtocol uuid);
 
-    /*
-     * DiscoverSpecificProtocol(QBtDevice* targetDevice, QBtConstants::ServiceClass uuid)
-     *
-     *	Start service discovery for specific service
-     */
-    void DiscoverSpecificClass(QBtDevice* targetDevice, QBtConstants::ServiceClass uuid);
+   public:
 
-    /*!
-     * FinishDiscovery()
-     *
-     *   Stops the service discovery, stops the discovery agent.
-     *
-     * param aDevData device data record
-     */
-    void StopDiscovery();
+      void VisitAttributeValueL(CSdpAttrValue& aValue, TSdpElementType aType)
+      {}
+
+      void StartListL(CSdpAttrValueList &aList)
+      {}
+
+      void EndListL()
+      {}
+
+};
+
+
+//____________________________________________________________________________
+//
+//
+
+class ProtocolListVisitor : public AttrVisitor
+{
+   public:
+
+
+      void VisitAttributeValueL(CSdpAttrValue& aValue, TSdpElementType aType);
+
+      void clear()
+      { _protocols.clear(); _port = 0; }
+
+
+      uint getPort () const
+      { return _port; }
+
+
+      QList<QBtUuid> getProtocols() const
+      { return _protocols; }
+
+      void print();
+
+   private:
+
+      QList<QBtUuid> _protocols;
+      uint _port;
+
+
+};
+
+
+//____________________________________________________________________________
+//
+//
+
+class StringVisitor : public AttrVisitor
+{
+   public:
+
+      void VisitAttributeValueL(CSdpAttrValue& aValue, TSdpElementType aType);
+
+      void clear()
+      { _str.clear(); }
+
+      QString get () const
+       { return _str; }
+
+      void print();
+
+   private:
+      QString _str;
+};
+
+
+//____________________________________________________________________________
+//
+// TODO: Some services return more than one UUID, how to handle these in QBtService?
+//
+
+class ServiceUuidVisitor : public AttrVisitor
+{
+   public:
+
+
+      void VisitAttributeValueL(CSdpAttrValue& aValue, TSdpElementType aType);
+
+      void clear()
+      { _uuid.clear(); }
+
+
+      // TODO
+      QBtUuid get() const
+      {
+         if (_uuid.empty())
+            return QBtUuid();
+         else
+            return _uuid [0];
+      }
+
+    void print();
+
+
+   private:
+      QList<QBtUuid> _uuid;
+
+};
+
+
+//____________________________________________________________________________
+//
+// Simple class to keep service record data we are interested in requesting.
+
+class ServiceRecord
+{
+   public:
+      ServiceRecord()
+      {
+         attributesToProcess.append (KSdpAttrIdBasePrimaryLanguage + KSdpAttrIdOffsetServiceName);
+         attributesToProcess.append (KSdpAttrIdServiceClassIDList);
+         attributesToProcess.append (KSdpAttrIdProtocolDescriptorList);
+      }
+
+
+   public:
+
+      QString getName() const
+      { return name.get(); }
+
+      QBtUuid getUuid() const
+      { return uuid.get(); }
+
+      QList<QBtUuid> getProtocols() const
+      { return protocols.getProtocols(); }
+
+      uint getPort() const
+      { return protocols.getPort(); }
+
+
+      void print()
+      {
+         name.print();
+         uuid.print();
+         protocols.print();
+      }
+
+
+   public:
+
+      QList <TSdpAttributeID> attributesToProcess;
+      StringVisitor           name;
+      ServiceUuidVisitor      uuid;
+      ProtocolListVisitor     protocols;
+};
+
+
+
+//____________________________________________________________________________
+//
+//
+
+class QBtServiceDiscovererPrivate : public CBase, public MSdpAgentNotifier
+{
+   public:
+
+
+       //
+       static QBtServiceDiscovererPrivate* NewL(QBtServiceDiscoverer* publicClass);
+
+       //
+       static QBtServiceDiscovererPrivate* NewLC(QBtServiceDiscoverer* publicClass);
+
+       //
+       ~QBtServiceDiscovererPrivate();
+
+
+   public:
+
+      // discover obex and rfcomm services
+      void DiscoverServices (QBtDevice* targetDevice);
+
+      // as is
+      void DiscoverObexServices (QBtDevice* targetDevice);
+
+
+      // as is
+      void DiscoverRfcommServices (QBtDevice* targetDevice);
+
+      //  discover a service belongin to the uuid, can be a service or protocol
+      void DiscoverSpecificClass (QBtDevice* targetDevice, const QBtUuid & uuid);
+
+      // discover services based on uuid list
+      void DiscoverSpecificClasses (QBtDevice* targetDevice, const QList<QBtUuid> & uuids);
+
+
+
+      // stops everything
+      void StopDiscovery();
 
     
-    /**
-     * 
-     */
-    bool IsBusy() const;
+      // true if in discovery
+      bool IsBusy() const;
 
-private:
+   private:
 
-    /*!
-     * QBtServiceDiscovererPrivate()
-     *
-     *   Perform the first phase of two phase construction
-     */
-    QBtServiceDiscovererPrivate(QBtServiceDiscoverer* publicClass);
+      //
+      QBtServiceDiscovererPrivate(QBtServiceDiscoverer* publicClass);
 
-    /*!
-     * ConstructL()
-     *
-     */
-    void ConstructL();
-
-    /*!
-     * HandleServiceDiscoveryCompleteL()
-     *
-     *   Handles the service discovery completed event.  the handling
-     * request will be passed onto handling observer.
-     */
-    void HandleServiceDiscoveryCompleteL();
-
-    /*
-     * NextRecordRequestComplete()
-     *
-     *   called when an service record
-     *            (CSdpAgent::NextRecordRequestL()) operation completes.
-     * param aError KErrNone, or an SDP error
-     * param aHandle service record for which the query was made
-     * param aTotalRecordsCount total number of matching records
-     */
-    void NextRecordRequestComplete(
-            TInt aError,
-            TSdpServRecordHandle aHandle,
-            TInt aTotalRecordsCount);
-
-    /*
-     * AttributeRequestResult()
-     *
-     *   Called by the attribute request
-     *            (CSdpAgent::AttributeRequestL()) to pass the results of
-     *            a successful attribute request.
-     *
-     * param aHandle service record for which the query was made
-     * param aAttrID ID of the attribute obtained
-     * param aAttrValue attribute value obtained
-     */
-    void AttributeRequestResult(
-            TSdpServRecordHandle aHandle,
-            TSdpAttributeID aAttrID,
-            CSdpAttrValue* aAttrValue);
-
-    /*!
-     * AttributeRequestComplete()
-     *
-     *   Called when the attribute request
-     *            (CSdpAgent::AttributeRequestL()) completes.
-     *
-     * param aHandle service record for which the query was made
-     * param aError KErrNone, or an SDP error
-     */
-    void AttributeRequestComplete(
-            TSdpServRecordHandle aHandle,
-            TInt aError);
-
-    /*!
-     * VisitAttributeValueL()
-     *
-     *   Called to pass the attribute request values
-     *
-     * param aValue attribute value
-     * param aType attribute type
-     */
-    void VisitAttributeValueL(CSdpAttrValue& aValue, TSdpElementType aType);
-    // not needed -> not implemented
-    void StartListL(CSdpAttrValueList &aList);
-    // not needed -> not implemented
-    void EndListL();
+      //
+      void ConstructL();
 
 
-    inline void SearchNextUUIDorReportCompletion();
-    
-    
-    void _StopDiscovery();
-
-private:    // data
-
-    // service discovery agent
-    CSdpAgent* iAgent;
-    // service discovery search pattern
-    CSdpSearchPattern* iSpat;
-    // last discovered uuid in the service attributes
-    TUUID iLastUUID;
-    // port (comm channel) found in the service attributes
-    TUint iPort;
-    // device data record reference
-    QBtDevice* device;
-
-    // used when multiple search is on
-    QList<QBtConstants::ServiceClass> uuidList;
-    // used to get multiple information on one service
-    QList<TSdpAttributeID> attrList;
-    // index of the service UUID currently searching for
-    TInt uuidIndex;
-    // index of the attribute currently searching for
-    TInt attrIndex;
+      // perfoms discovery for a particular uuid
+      void _DiscoverSpecificClass (const QBtUuid & uuid);
 
 
-    TSdpServRecordHandle currentServiceProcessing;
+
+      // inherited
+      // called when an service record (CSdpAgent::NextRecordRequestL()) operation completes.
+      void NextRecordRequestComplete (TInt aError, TSdpServRecordHandle aHandle, TInt aTotalRecordsCount);
 
 
-    //aux variables
-    QMap<TSdpServRecordHandle, QBtService*> handleMap;
+      // inherited
+      // Called by the attribute request (CSdpAgent::AttributeRequestL()) to pass the results of successful attribute request.
+      //
+      void AttributeRequestResult (TSdpServRecordHandle aHandle, TSdpAttributeID aAttrID, CSdpAttrValue* aAttrValue);
 
-    //pointer to parent object (from constructor). Not owned by this class
-    QBtServiceDiscoverer *p_ptr;
-    
-    // if the process has been started
-    bool discoveryInProgress;
-    
-    // indicates if DiscoverServicesOnDeviceL is called (true if it is)
-    // Searches device for services matching to one of the uuidList UUIDs
-    TBool multipleSearching;    
+
+      // inhrited
+      // Called when the attribute request (CSdpAgent::AttributeRequestL()) completes.
+      void AttributeRequestComplete (TSdpServRecordHandle aHandle, TInt aError);
+
+
+      // declare discovery as finished
+      void FinishDiscovery();
+
+      // misc preparation to start discovery
+      void PrepareSearch (QBtDevice* targetDevice);
+
+      // process next uuid in the list
+      void ProcessNextService();
+
+
+   private:
+
+      // service discovery agent
+      CSdpAgent* _agent;
+
+      // service discovery search pattern
+      CSdpSearchPattern* _searchPattern;
+
+
+      // list of uuids to search
+      QList <QBtUuid> _uuidList;
+
+      // list of found services
+      QBtService::List _serviceList;
+
+      // set of found uuids, used to avoid duplicates in the results
+      QSet<QString> _serviceUuidsFound;
+
+      // device to query
+      QBtDevice* _targetDevice;
+
+      // pointer to parent object (from constructor). Not owned by this class
+      QBtServiceDiscoverer *_parent_ptr;
+
+
+      // service record data
+      QMap <TSdpServRecordHandle, ServiceRecord> _serviceRecords;
+
+
+
+      // if the process has been started
+      bool _discoveryInProgress;
+
 };
 
 #endif /* QBTSERVICEDISCOVERER_SYMBIAN_H_ */

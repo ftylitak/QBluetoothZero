@@ -34,7 +34,7 @@
 // Defaul constructor							//
 //////////////////////////////////////////////////
 QBtSerialPortServer::QBtSerialPortServer(QObject *parent) :
-    QObject(parent), _advertiser(NULL), _service(NULL), _isConnected(false) 
+    QObject(parent), _advertiser(0), _isConnected(false)
 {
 #ifdef Q_OS_SYMBIAN
     QT_TRAP_THROWING(_implPtr = QBtSerialPortServerPrivate::NewL(this));
@@ -46,13 +46,13 @@ QBtSerialPortServer::QBtSerialPortServer(QObject *parent) :
 QBtSerialPortServer::~QBtSerialPortServer()
 {
     SafeDelete(_implPtr);
-    SafeDelete(_service);
 }
 
-void QBtSerialPortServer::startServer(const QString& serviceName)
+void QBtSerialPortServer::startServer (const QBtUuid & serviceId, const QString& serviceName)
 {
     QBtService tmpService;
-    tmpService.setName(serviceName);
+    tmpService.setName (serviceName);
+    tmpService.setClass (serviceId);
     setTransmittingService(tmpService);
 
 	#ifdef Q_OS_SYMBIAN
@@ -84,18 +84,14 @@ bool QBtSerialPortServer::isConnected()
     return _isConnected;
 }
 
-QBtService QBtSerialPortServer::getTransmittingServiceInfo()
+QBtService QBtSerialPortServer::getTransmittingServiceInfo() const
 {
-    if(_service)
-        return *_service;
-    else
-        return QBtService();
+   return _service;
 }
 
-void QBtSerialPortServer::setTransmittingService(const QBtService& service)
+void QBtSerialPortServer::setTransmittingService (const QBtService& service)
 {
-    SafeDelete(_service);
-    _service = new QBtService(service);
+    _service = service;
 }
 
 void QBtSerialPortServer::setConnectionStatus(bool connected)
@@ -106,8 +102,9 @@ void QBtSerialPortServer::setConnectionStatus(bool connected)
 void QBtSerialPortServer::startAdvertisingService(const QBtService& service)
 {
     setTransmittingService(service);
+
     _advertiser = new QBtServiceAdvertiser(this);
-    _advertiser->startAdvertising(service);
+    _advertiser->startAdvertising (service);
 }
 
 void QBtSerialPortServer::stopAdvertisingService()
