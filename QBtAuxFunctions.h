@@ -37,31 +37,48 @@ template <class T> inline void SafeDelete(T* &ptr)
 #include <QDir>
 #include <QDebug.h>
 
-inline void _DEBUG_MSG (const QString & m, const QString & file, const QString& line)
+inline void _Debug_Msg (const QString & m, const QString & file, int line)
 {
-	qDebug() << "file: " << file << " line: " << line << " " << m;
+    qDebug() << "file: " << file << " line: " << line << " " << m;
 }
 
-
-inline void _Assert_Msg (const QString & msg, const QString & file, const QString & line)
+inline void _Assert_Msg (const QString msg, const QString & file, int line)
 {
-	// strip directory info
-	int index = file.lastIndexOf("/");
-	QString f = file.mid (index+1);
-	QString m = QString ("file: %1 line: %2\n%3").arg (f, line, msg);
+    // strip directory info
+    int index = file.lastIndexOf("/");
+    QString f = file.mid (index+1);
+    QString m = QString ("file: %1 line: %2\n%3").arg (f).arg(line).arg(msg);
 
-    // print debug
-    _DEBUG_MSG(msg, file, line);
+    //
+    _Debug_Msg (m, file, line);
 
-    // show msg
-	QMessageBox::information(0, "assert failed", m);		
-	Q_ASSERT (false);
+    //
+    QMessageBox::information(0, "assert failed", m);
+    Q_ASSERT (false);
 }
 
-inline void _Assert_Msg2 (const QString & msg1, const QString & msg2, const QString & file, const QString & line)
+inline void _Assert_Msg2 (const QString & msg1, const QString & msg2, const QString & file, int line)
 {
    _Assert_Msg (QString("%1 : %2").arg(msg1).arg(msg2), file, line);
 }
+
+
+inline void _Break_Here (const QString & file, int line)
+{
+    // strip directory info
+    int index = file.lastIndexOf("/");
+    QString f = file.mid (index+1);
+    QString m = QString ("file: %1 line: %2").arg (f, line);
+
+    //
+    _Debug_Msg (m, file, line);
+
+    //
+    QMessageBox::information(0, "code break", m);
+    Q_ASSERT (false);
+}
+
+
 
 inline void _Break_Here (const QString & file, const QString & line)
 {
@@ -76,19 +93,19 @@ inline void _Break_Here (const QString & file, const QString & line)
 
 
 #ifdef QT_DEBUG
-    #define BT_DEBUG_MSG(msg) { _DEBUG_MSG((msg),__FILE__,QString::number(__LINE__)); }
-    #define BT_BREAK_HERE() { _Break_Here(__FILE__, QString::number(__LINE__)); }
-    #define BT_ASSERT_MSG(test, msg) { if (!(test)) _Assert_Msg ((msg), __FILE__, QString::number(__LINE__) ); }
-    #define BT_ASSERT_MSG2(test, msg1, msg2) { if (!(test)) _Assert_Msg2 ((msg1), (msg2), __FILE__, QString::number(__LINE__) ); }
+    #define BT_DEBUG_MSG(msg) (_Debug_Msg((msg),__FILE__,__LINE__) )
+    #define BT_BREAK_HERE() (_Break_Here(__FILE__, QString::number(__LINE__)) )
+    #define BT_ASSERT_MSG(test, msg) ((!(test)) ? _Assert_Msg((msg), __FILE__, __LINE__) : qt_noop() )
+    #define BT_ASSERT_MSG2(test, msg1, msg2) ((!(test)) ? _Assert_Msg2((msg1), (msg2), __FILE__, __LINE__) : qt_noop() )
 
-	//#define ASSERT_MSG_X(test, where, msg) { if (!(test)) Assert_Msg ((msg), __FILE__, QString::number(__LINE__) ); }
+
 #else
 
-    #define BT_DEBUG_MSG(msg) 0
-    #define BT_ASSERT_MSG_X(test, where, msg) 0
-    #define BT_ASSERT_MSG(test, msg) 0
-    #define BT_ASSERT_MSG2(test, msg1, msg2) 0
-    #define BT_BREAK_HERE() 0
+    #define BT_DEBUG_MSG(msg) {}
+    #define BT_ASSERT_MSG_X(test, where, msg) {}
+    #define BT_ASSERT_MSG(test, msg) {}
+    #define BT_ASSERT_MSG2(test, msg1, msg2) {}
+    #define BT_BREAK_HERE() {}
 
 #endif
 	

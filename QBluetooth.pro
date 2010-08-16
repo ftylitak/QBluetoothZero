@@ -71,7 +71,9 @@ symbian {
         Connection/SerialPort/Server/QBtSerialPortServer_symbian.h \
         ServiceAdvertiser/QBtServiceAdvertiser_symbian.h \
         ServiceDiscoverer/QBtServiceDiscoverer_symbian.h \
-        DeviceDiscoverer/QBtDeviceDiscoverer_symbian.h
+        DeviceDiscoverer/QBtDeviceDiscoverer_symbian.h \
+        DeviceDiscoverer/QBtSingleDeviceSelectorUI_symbian.h \
+        DeviceDiscoverer/BtDeviceFinderDlg_symbian.h
 
     SOURCES += Connection/ObjectExchange/Server/Impl/QBtObjectExchangeServer_symbian.cpp \
         LocalDevice/Impl/QBtLocalDevice_symbian.cpp \
@@ -80,7 +82,9 @@ symbian {
         Connection/SerialPort/Server/Impl/QBtSerialPortServer_symbian.cpp \
         ServiceAdvertiser/Impl/QBtServiceAdvertiser_symbian.cpp \
         ServiceDiscoverer/Impl/QBtServiceDiscoverer_symbian.cpp \
-        DeviceDiscoverer/Impl/QBtDeviceDiscoverer_symbian.cpp
+        DeviceDiscoverer/Impl/QBtDeviceDiscoverer_symbian.cpp \
+        DeviceDiscoverer/Impl/QBtSingleDeviceSelectorUI_symbian.cpp \
+        DeviceDiscoverer/Impl/BtDeviceFinderDlg_symbian.cpp
     
     # more libs based on s60 version
     contains (S60_VERSION, 3.1):BT_PLUGIN_LIB = -lbteng
@@ -88,6 +92,7 @@ symbian {
     
     #
     LIBS += -lbluetooth \
+         -lbtextnotifiers \
         -lsdpdatabase \
         -lsdpagent \
         -lirobex \

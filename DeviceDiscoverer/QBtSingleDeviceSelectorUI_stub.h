@@ -1,5 +1,5 @@
 /*
- * QBtSingleDeviceSelectorUI.h
+ * QBtSingleDeviceSelectorUIPrivate.h
  *
  *
  *      Author: ftylitak
@@ -17,15 +17,21 @@
  * limitations under the License.
  */
 
-#ifndef QBTSINGLEDEVICESELECTORUI_H_
-#define QBTSINGLEDEVICESELECTORUI_H_
+#ifndef QBTSINGLEDEVICESELECTORUI_PRIVATE_STUB_H_
+#define QBTSINGLEDEVICESELECTORUI_PRIVATE_STUB_H_
 
-#include <QObject>
-#include <QWidget>
 #include <QBtGlobal.h>
-#include <QBtDevice.h>
+#include <QBtTypes.h>
+#include <QBtDeviceDiscoverer.h>
+#include <QtGui/QListWidget>
+#include <QtGui/QLabel>
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QMenuBar>
+#include <QAction>
+#include <QModelIndex>
+#include <QDialog>
 
-class QBtSingleDeviceSelectorUIPrivate;
+class QBtSingleDeviceSelectorUI;
 
 /**
  * This class provides UI for searching remote bluetooth
@@ -42,25 +48,22 @@ class QBtSingleDeviceSelectorUIPrivate;
  * To get the selected remote device, the discoveryCompleted()
  * signal must be handled.
  */
-class DLL_EXPORT QBtSingleDeviceSelectorUI : public QObject
-{
-    Q_OBJECT
+class QBtSingleDeviceSelectorUIPrivate : public QDialog
+{    
+   Q_OBJECT
 
 public:
     /**
-     * If parent == 0, the list will be showed as an independent
+     * if parent == NULL, the list will be showed as indepented
      * widget on the screen, thus it's not necessary for the client application
      * to have a GUI interface.
-     *
-     * For Symbian, it uses the native bluetooth search dialog. In this case, the "parent"
-     * parameter has no effect.
      */
-    QBtSingleDeviceSelectorUI (QWidget* parent = 0);
+    QBtSingleDeviceSelectorUIPrivate(QWidget* parent, QBtSingleDeviceSelectorUI* publicClass);
 
     /**
      * Destructor.
      */
-    ~QBtSingleDeviceSelectorUI();
+    ~QBtSingleDeviceSelectorUIPrivate();
 
 
 public slots:
@@ -71,29 +74,30 @@ public slots:
     void show();
 
 
-signals:
-    /**
-     * Emitted after device discovery stops and user selects the desired device.     
-     */
-    void discoveryCompleted (const QBtDevice & selectedDevice);
+protected slots:
 
-
-    /**
-     * Emitted after calling show() if and only if the device discovery starts successfully
-     */
-    void discoveryStarted();
-
-    
-    /**
-     * Emitted when the user closes the UI without choosing any device.
-     */
-    void userCanceled ();    
+    void populateDeviceList(const QBtDevice& device);
+    void devSelected(QListWidgetItem* devName);
+    void selectPressed();
+    void exitPressed();
 
 
 private:
-    QBtSingleDeviceSelectorUIPrivate* _impl;
-    friend class QBtSingleDeviceSelectorUIPrivate;
+    QWidget * _parent;
+    QBtDevice* _selectedDevice;    
+    QBtDeviceDiscoverer* _discoverer;
+    QListWidget* _devList;
+    QLabel* _label;
+    QVBoxLayout *_verticalLayout;
+    QList<QBtDevice> _devicesFound;
+
+    QMenuBar* _menu;
+    QAction* _select;
+    QAction* _exit;
+
+    QBtSingleDeviceSelectorUI* _publicClass;
+
 
 };
 
-#endif /* QBTSINGLEDEVICESELECTORUI_H_ */
+#endif
