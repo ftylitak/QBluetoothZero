@@ -145,9 +145,10 @@ signals:
 
 
    /**
-    * Signal emitted when service discovery error occurs.
+    * Signal emitted when service discovery error occurs when searching for services in the
+    * specified device.
     */
-   void serviceDiscoveyError (QBtServiceDiscoverer::ServiceDiscoveryError error);
+   void serviceDiscoveyError (const QBtDevice & device, QBtServiceDiscoverer::ServiceDiscoveryError error);
 
    /**
     * Signal emitted when device discovery error occurs.

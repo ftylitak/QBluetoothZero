@@ -246,13 +246,15 @@ void QBtServiceDiscovererForAll::sd_serviceDiscoveryEnded ()
 void QBtServiceDiscovererForAll::sd_error (QBtServiceDiscoverer::ServiceDiscoveryError error)
 {
     BT_DEBUG_MSG (QString("<service discovery error: %1>").arg(error) );
-    emit serviceDiscoveyError(error);
+    emit serviceDiscoveyError (_serviceDiscoverer.getTargetDevice(), error);
+
+
 
 }
 
 //____________________________________________________________________________
 
-void QBtServiceDiscovererForAll::dd_error(QBtDeviceDiscoverer::DeviceDiscoveryErrors error )
+void QBtServiceDiscovererForAll::dd_error(QBtDeviceDiscoverer::DeviceDiscoveryErrors error)
 {
    BT_DEBUG_MSG (QString("<device discovery error: %1>").arg(error) );
    emit deviceDiscoveryError (error);
