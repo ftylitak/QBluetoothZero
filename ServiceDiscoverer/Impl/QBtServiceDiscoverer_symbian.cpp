@@ -237,6 +237,8 @@ void QBtServiceDiscovererPrivate::NextRecordRequestComplete (TInt aError,  TSdpS
    // an error ocurred?
    if (aError != KErrNone)
    {
+      BT_DEBUG_MSG(QString("[ERROR: %1").arg(aError));
+
       //discovering new service on target device
       QT_TRYCATCH_LEAVING (emit _parent_ptr->error(QBtServiceDiscoverer::ServiceDiscoveryNotAbleToComplete) );
 

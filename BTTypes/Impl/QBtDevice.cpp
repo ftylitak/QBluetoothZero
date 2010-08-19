@@ -117,7 +117,7 @@ QString QBtDevice::getTypeAsString() const
 	}
 }
 
-QBtService::List QBtDevice::getSupportedServices() const
+const QBtService::List & QBtDevice::getSupportedServices() const
 {
 	return _supportedServices;
 }

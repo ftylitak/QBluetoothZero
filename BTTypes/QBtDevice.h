@@ -78,7 +78,7 @@ public:
     QBtAddress getAddress() const;
     DeviceMajor getType() const;
     QString getTypeAsString() const;
-    QBtService::List getSupportedServices() const;
+    const QBtService::List & getSupportedServices() const;
 
     
     // really needed? does not require special processing to copy the members

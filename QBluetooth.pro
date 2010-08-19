@@ -18,6 +18,7 @@ PUBLIC_HEADERS += QBtGlobal.h \
     BTTypes/QBtUuid.h \
     DeviceDiscoverer/QBtSingleDeviceSelectorUI.h \
     ServiceDiscoverer/QBtServiceDiscoverer.h \
+    ServiceDiscoverer/QBtServiceDiscovererForAll.h \
     ServiceAdvertiser/QBtServiceAdvertiser.h \
     Connection/SerialPort/Server/QBtSerialPortServer.h \
     Connection/SerialPort/Client/QBtSerialPortClient.h \
@@ -37,6 +38,7 @@ SOURCES += Connection/ObjectExchange/Server/Impl/QBtObjectExchangeServer.cpp \
     ServiceAdvertiser/Impl/QBtServiceAdvertiser.cpp \
     BTTypes/Impl/QBtService.cpp \
     ServiceDiscoverer/Impl/QBtServiceDiscoverer.cpp \
+    ServiceDiscoverer/Impl/QBtServiceDiscovererForAll.cpp \
     DeviceDiscoverer/Impl/QBtSingleDeviceSelectorUI.cpp \
     DeviceDiscoverer/Impl/QBtDeviceDiscoverer.cpp \
     BTTypes/Impl/QBtAddress.cpp \

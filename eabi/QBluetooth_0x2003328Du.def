@@ -305,4 +305,40 @@ EXPORTS
 	_ZTV30QBtObjectExchangeClientPrivate @ 304 NONAME
 	_ZTV30QBtObjectExchangeServerPrivate @ 305 NONAME
 	_ZTV32QBtSingleDeviceSelectorUIPrivate @ 306 NONAME
+	_ZN26QBtServiceDiscovererForAll11qt_metacallEN11QMetaObject4CallEiPPv @ 307 NONAME
+	_ZN26QBtServiceDiscovererForAll11qt_metacastEPKc @ 308 NONAME
+	_ZN26QBtServiceDiscovererForAll13stopDiscoveryEv @ 309 NONAME
+	_ZN26QBtServiceDiscovererForAll14discoveryEndedEv @ 310 NONAME
+	_ZN26QBtServiceDiscovererForAll14newDeviceFoundERK9QBtDevice @ 311 NONAME
+	_ZN26QBtServiceDiscovererForAll14startDiscoveryERK5QListI7QBtUuidE @ 312 NONAME
+	_ZN26QBtServiceDiscovererForAll14startDiscoveryERK7QBtUuid @ 313 NONAME
+	_ZN26QBtServiceDiscovererForAll14startDiscoveryEv @ 314 NONAME
+	_ZN26QBtServiceDiscovererForAll15_startDiscoveryEv @ 315 NONAME
+	_ZN26QBtServiceDiscovererForAll16discoveryStartedEv @ 316 NONAME
+	_ZN26QBtServiceDiscovererForAll16staticMetaObjectE @ 317 NONAME DATA 16
+	_ZN26QBtServiceDiscovererForAll17dd_discoveryEndedEv @ 318 NONAME
+	_ZN26QBtServiceDiscovererForAll17dd_newDeviceFoundERK9QBtDevice @ 319 NONAME
+	_ZN26QBtServiceDiscovererForAll18sd_newServiceFoundERK9QBtDeviceRK10QBtService @ 320 NONAME
+	_ZN26QBtServiceDiscovererForAll18startObexDiscoveryEv @ 321 NONAME
+	_ZN26QBtServiceDiscovererForAll19dd_discoveryStartedEv @ 322 NONAME
+	_ZN26QBtServiceDiscovererForAll19getStaticMetaObjectEv @ 323 NONAME
+	_ZN26QBtServiceDiscovererForAll20deviceDiscoveryErrorEN19QBtDeviceDiscoverer21DeviceDiscoveryErrorsE @ 324 NONAME
+	_ZN26QBtServiceDiscovererForAll20serviceDiscoveyErrorEN20QBtServiceDiscoverer21ServiceDiscoveryErrorE @ 325 NONAME
+	_ZN26QBtServiceDiscovererForAll20startRfcommDiscoveryEv @ 326 NONAME
+	_ZN26QBtServiceDiscovererForAll24sd_serviceDiscoveryEndedEv @ 327 NONAME
+	_ZN26QBtServiceDiscovererForAll26sd_serviceDiscoveryStartedEv @ 328 NONAME
+	_ZN26QBtServiceDiscovererForAll8dd_errorEN19QBtDeviceDiscoverer21DeviceDiscoveryErrorsE @ 329 NONAME
+	_ZN26QBtServiceDiscovererForAll8sd_errorEN20QBtServiceDiscoverer21ServiceDiscoveryErrorE @ 330 NONAME
+	_ZN26QBtServiceDiscovererForAllC1EP7QObject @ 331 NONAME
+	_ZN26QBtServiceDiscovererForAllC2EP7QObject @ 332 NONAME
+	_ZN26QBtServiceDiscovererForAllD0Ev @ 333 NONAME
+	_ZN26QBtServiceDiscovererForAllD1Ev @ 334 NONAME
+	_ZN26QBtServiceDiscovererForAllD2Ev @ 335 NONAME
+	_ZNK26QBtServiceDiscovererForAll10metaObjectEv @ 336 NONAME
+	_ZNK26QBtServiceDiscovererForAll12foundDevicesEv @ 337 NONAME
+	_ZNK26QBtServiceDiscovererForAll13getDeviceListEv @ 338 NONAME
+	_ZNK26QBtServiceDiscovererForAll23getNumberOfFoundDevicesEv @ 339 NONAME
+	_ZNK26QBtServiceDiscovererForAll6isBusyEv @ 340 NONAME
+	_ZTI26QBtServiceDiscovererForAll @ 341 NONAME
+	_ZTV26QBtServiceDiscovererForAll @ 342 NONAME
 

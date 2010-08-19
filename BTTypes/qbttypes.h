@@ -24,6 +24,7 @@
 #include <QBtService.h>
 #include <QBtDevice.h>
 #include <QBtConstants.h>
+#include <QBtUuid.h>
 
 
 #endif /* QBTTYPES_H_ */

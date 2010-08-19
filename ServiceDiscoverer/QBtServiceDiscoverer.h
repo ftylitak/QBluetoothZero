@@ -41,7 +41,7 @@ class QBtServiceDiscovererPrivate;
  * can be called, according to the information the user already has
  * about the inquired service.
  * After the successfull call of these functions, discoveryStarted()
- * signal si emitted.
+ * signal is emitted.
  *
  * At any of the above cases, a found service is reported through
  * newServiceFound (const QBtDevice &, const QBtService &) signal.

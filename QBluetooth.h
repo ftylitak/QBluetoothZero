@@ -26,5 +26,6 @@
 #include <QBtObjectExchangeClient.h>
 #include <QBtObjectExchangeServer.h>
 #include <QBtLocalDevice.h>
+#include <QBtTypes.h>
 
 #endif // QBLUETOOTH_H
