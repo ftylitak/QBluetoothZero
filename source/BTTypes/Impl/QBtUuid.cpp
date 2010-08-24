@@ -160,10 +160,7 @@ QBtUuid::QBtUuid (const QString & uuid)
 
 void QBtUuid::set (uint uuid)
 {
-   _uuid = UintToString(uuid);
-
-   // checks
-   BT_ASSERT_MSG2(IsValidUuid(_uuid), "invalid uuid", _uuid);
+   set (UintToString(uuid) );
 }
 
 //____________________________________________________________________________
@@ -173,15 +170,18 @@ void QBtUuid::set (uint uuid)
 
 void QBtUuid::set (const QString & value)
 {
+  // upper
+  QString up = value.toUpper();
+
   // split
-   QStringList list = value.split("-");
+  QStringList list = up.split("-");
 
-   // join all
-   _uuid = list.join("");
+  // join all
+  _uuid = list.join("");
 
 
-   // checks   
-   BT_ASSERT_MSG2(IsValidUuid(_uuid), "invalid uuid", _uuid);   
+  // checks
+  BT_ASSERT_MSG2(IsValidUuid(_uuid), "invalid uuid", _uuid);
 }
 
 
@@ -272,7 +272,7 @@ void QBtUuid::clear()
 //____________________________________________________________________________
 
 bool QBtUuid::operator == (const QBtUuid & obj) const
-{
+{ 
    return _uuid == obj._uuid;
 
 }

@@ -68,7 +68,7 @@ inline void _Break_Here (const QString & file, int line)
     // strip directory info
     int index = file.lastIndexOf("/");
     QString f = file.mid (index+1);
-    QString m = QString ("file: %1 line: %2").arg (f, line);
+    QString m = QString ("file: %1 line: %2").arg (f).arg (line);
 
     //
     _Debug_Msg (m, file, line);
