@@ -81,6 +81,12 @@ public:
 	 */
 	void SendData(const QString & data);
 
+
+    /*!
+     * Sends a byte array.
+     */
+    void SendData (const QByteArray& data);
+
 	/*!
 	 * IsConnected()
 	 *
@@ -204,6 +210,8 @@ private: // data
 	// to accept the next
 	TBool restartAtDisconnect;
 	
+
+    HBufC8* iMessage;
 
 	QBtSerialPortServer* p_ptr;
 };

@@ -84,7 +84,7 @@ bool QBtSerialPortServer::isConnected()
     return _isConnected;
 }
 
-QBtService QBtSerialPortServer::getTransmittingServiceInfo() const
+const QBtService & QBtSerialPortServer::getTransmittingServiceInfo() const
 {
    return _service;
 }

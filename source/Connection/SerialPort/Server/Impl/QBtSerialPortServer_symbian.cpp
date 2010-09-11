@@ -17,7 +17,11 @@
  * limitations under the License.
  */
 
+ // TODO: use asserts in methods to check that the class is connected
+
 #include "../QBtSerialPortServer_symbian.h"
+
+#include <QBtAuxFunctions.h>
 
 QBtSerialPortServerPrivate* QBtSerialPortServerPrivate::NewL(QBtSerialPortServer* publicClass)
 {
@@ -54,6 +58,7 @@ QBtSerialPortServerPrivate::QBtSerialPortServerPrivate(QBtSerialPortServer* publ
 	queueSize(4),
 	iState(ENone),		
 	restartAtDisconnect(false),
+    iMessage (0),
 	p_ptr(publicClass)
 {
 	CActiveScheduler::Add(this);
@@ -73,6 +78,9 @@ QBtSerialPortServerPrivate::~QBtSerialPortServerPrivate()
 	// cancel active object
 	if(IsActive())
 		Cancel();
+
+   if (iMessage)
+      delete iMessage;
 }
 
 
@@ -171,6 +179,7 @@ void QBtSerialPortServerPrivate::StopListenerL()
 //
 // send data to remote device, write data to socket.
 // ----------------------------------------------------------------------------
+/*
 void QBtSerialPortServerPrivate::SendData(const QString & data)
 {
 	if ( iState!=EWaiting )
@@ -197,6 +206,45 @@ void QBtSerialPortServerPrivate::SendData(const QString & data)
 	// - start waiting async req response (iState) from active scheduler
 	SetActive();
 }
+*/
+
+void QBtSerialPortServerPrivate::SendData (const QString& data)
+{    
+    QByteArray array = data.toUtf8();
+    SendData (array);
+}
+
+// ----------------------------------------------------------------------------
+// QBtSerialPortClientPrivate::SendData(const QByteArray& data)
+//
+// send given data to remote device, write to connected socket
+// ----------------------------------------------------------------------------
+void QBtSerialPortServerPrivate:: SendData (const QByteArray& data)
+{
+    TPtrC8 desc8 (reinterpret_cast<const TText8*> (data.constData()), data.size());
+
+    // delete previous data
+    if (iMessage)
+        delete iMessage;
+
+    iMessage = HBufC8::NewL(desc8.Length());
+    iMessage->Des().Copy(desc8);
+
+
+    // cancel any read requests on socket
+    iSock.CancelRead();
+
+    if (IsActive())
+        Cancel();
+
+    // send message
+    iState = ESending;
+
+    iSock.Write (*iMessage, iStatus);
+    SetActive();
+}
+
+
 
 // ----------------------------------------------------------------------------
 // QBtSerialPortServerPrivate::ReceiveData()
@@ -205,6 +253,15 @@ void QBtSerialPortServerPrivate::SendData(const QString & data)
 // ----------------------------------------------------------------------------
 void QBtSerialPortServerPrivate::ReceiveData()
 {
+    // cancel pending operations
+    iSock.CancelRead();
+
+    if (IsActive())
+      Cancel();
+
+
+
+
 	// set state to waiting - for RunL()
 	iState = EWaiting;
 	
@@ -219,7 +276,8 @@ void QBtSerialPortServerPrivate::ReceiveData()
 
 void QBtSerialPortServerPrivate::RunL()
 {
-	if ( iStatus!=KErrNone )
+    // error ?
+    if (iStatus != KErrNone)
 	{
 		StopListenerL();
 		HandleListenerDisconnectedL();
@@ -230,35 +288,50 @@ void QBtSerialPortServerPrivate::RunL()
 		return;
 	}
 
-	switch (iState)
+    //
+    switch (iState)
 	{
 		case EConnecting:
 		{
-			// connected listening socket!
-			HandleListenerConnectedL();
+            // connected listening socket!
+            iIsConnected = ETrue;
+
+            // prepare for receiving data
 			ReceiveData();
+
+            // notify
+            TBTSockAddr sockAddr;
+            iSock.RemoteName (sockAddr);
+            TBTDevAddr devAddr (sockAddr.BTAddr().Des());
+            QBtAddress clientAddress (devAddr);
+
+            QT_TRYCATCH_LEAVING (emit p_ptr->clientConnected (clientAddress) );
+
 			break;
 		}
+
 		case EWaiting:
 		{
-			// returned from receiving data
-			//HBufC8* text = HBufC8::NewLC(iBuffer.Length());
-			//text->Des().Copy(iBuffer);
-			// observer will handle data
-			QString receivedString = QString::fromUtf8((char*)iBuffer.Ptr(), iBuffer.Size());
-			HandleListenerDataReceivedL(receivedString);
-			//CleanupStack::PopAndDestroy(text);
-			// start expecting next data to be read
-			ReceiveData();
-			break;
+            // we got incoming data!
+            QString receivedString = QString::fromUtf8((char*)iBuffer.Ptr(), iBuffer.Size());
+
+            // start expecting new incoming data
+            ReceiveData();
+
+            // notify
+            QT_TRYCATCH_LEAVING (emit p_ptr->dataReceived (receivedString) );
+            break;
 		}
+
 		case ESending:
 		{
-			// returned from sending the date, check the state
-			// start expecting next data to be read
-			HandleListenerDataSendL();
-			ReceiveData();
-			break;
+            // start expecting new incoming data
+            ReceiveData();
+
+            // notify
+            QT_TRYCATCH_LEAVING  (emit p_ptr->dataSent() );
+            break;
+
 		}
 		default:
 			break;

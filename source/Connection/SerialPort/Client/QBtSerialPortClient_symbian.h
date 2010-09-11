@@ -107,8 +107,6 @@ protected:
 	 */
 	void DoCancel();
 
-	TInt RunError(TInt aError);
-
 private:
 
 	/*!
@@ -125,38 +123,6 @@ private:
 	 *
 	 */
 	void ConstructL();
-
-	/*!
-	 * HandleConnectedDataReceived()
-	 *
-	 *  Handles the data received from a slave.  the handling request
-	 * will be passed onto handling observer.
-	 *
-	 * param aName the name of the slave that sent the data.
-	 * param aData the data received.
-	 */
-	void HandleConnectorDataReceivedL(const QString & aData);
-
-	/*!
-	 * HandleConnectorConnectedL()
-	 *
-	 *  Handles the event of server connection
-	 */
-	void HandleConnectorConnectedL();
-
-	/*!
-	 * HandleConnectorDisconnectedL()
-	 *
-	 *  Handles the event of server disconnection
-	 */
-	void HandleConnectorDisconnectedL();
-	
-	/*!
-	 * HandleConnectorDataSentL()
-	 * 
-	 * Data successfully sent to server
-	 */
-	void HandleConnectorDataSentL();
 
 	/*!
 	 * ReceiveData()

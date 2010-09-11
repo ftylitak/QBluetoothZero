@@ -83,8 +83,8 @@ QBtSerialPortClientPrivate::~QBtSerialPortClientPrivate()
        Cancel();
     
     
-    //
-    delete iMessage;    
+    if (iMessage)
+     delete iMessage;
 }
 
 
@@ -362,7 +362,7 @@ void QBtSerialPortClientPrivate:: SendData (const QByteArray& data)
 // ----------------------------------------------------------------------------
 void QBtSerialPortClientPrivate::RunL()
 {
-    BT_DEBUG_MSG (QString ("[RunL status: %1 state: %2]").arg (iStatus.Int()).arg (iState) );
+    //BT_DEBUG_MSG (QString ("[RunL status: %1 state: %2]").arg (iStatus.Int()).arg (iState) );
 	
 	// cancel possible timers
 	CancelConnectionTimer();
@@ -481,50 +481,3 @@ void QBtSerialPortClientPrivate::RunL()
         	break;
     }
 }
-
-TInt QBtSerialPortClientPrivate::RunError(TInt /*aError*/)
-{
-    // Add error handling here, not implemented in this example
-    return KErrNone;
-}
-
-// ----------------------------------------------------------------------------
-// QBtSerialPortClientPrivate::HandleConnectorDataReceivedL(TDesC& aData)
-//
-// connector has received data signal
-// ----------------------------------------------------------------------------
-void QBtSerialPortClientPrivate::HandleConnectorDataReceivedL(const QString & aData)
-{
-	
-}
-
-/*!
- * HandleListenerConnected()
- *
- * Handles the event of server connection
- */
-void QBtSerialPortClientPrivate::HandleConnectorConnectedL()
-{
-	
-}
-
-/*!
- * HandleListenerDisconnected()
- *
- * Handles the event of server disconnection
- */
-void QBtSerialPortClientPrivate::HandleConnectorDisconnectedL()
-{
-	
-}
-
-/*!
- * HandleConnectorDataSentL()
- *
- * Data successfully sent to server
- */
-void QBtSerialPortClientPrivate::HandleConnectorDataSentL()
-{
-	
-}
-

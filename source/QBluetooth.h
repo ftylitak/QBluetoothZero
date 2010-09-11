@@ -20,6 +20,7 @@
 #include <QBtDeviceDiscoverer.h>
 #include <QBtSingleDeviceSelectorUI.h>
 #include <QBtServiceDiscoverer.h>
+#include <QBtServiceDiscovererForAll.h>
 #include <QBtServiceAdvertiser.h>
 #include <QBtSerialPortServer.h>
 #include <QBtSerialPortClient.h>
@@ -27,5 +28,7 @@
 #include <QBtObjectExchangeServer.h>
 #include <QBtLocalDevice.h>
 #include <QBtTypes.h>
+
+#include <QBtAuxFunctions.h>
 
 #endif // QBLUETOOTH_H

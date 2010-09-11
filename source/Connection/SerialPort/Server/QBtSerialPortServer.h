@@ -81,13 +81,12 @@ public:
      */
     bool isConnected();
 
-    /**
-     * getTransmittingServiceInfo()
+    /**     
      * If startServer() function is already called then using this function
      * the user can acquire the information of the transmitting service that
      * represents this server to the outside world.
      */
-    QBtService getTransmittingServiceInfo() const;
+    const QBtService & getTransmittingServiceInfo() const;
 
 protected:
     void setTransmittingService (const QBtService& service);
