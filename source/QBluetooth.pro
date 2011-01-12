@@ -1,11 +1,10 @@
 uid3 = 0x2003328D
 
+QT += core
 
 TEMPLATE = lib
 TARGET   = QBluetooth_0x2003328D
 DEFINES  += BLUETOOTH_LIB
-
-QT += core
 
 PUBLIC_HEADERS += QBtGlobal.h \
     QBtAuxFunctions.h \
@@ -45,13 +44,9 @@ SOURCES += Connection/ObjectExchange/Server/Impl/QBtObjectExchangeServer.cpp \
     BTTypes/Impl/QBtDevice.cpp \
     BTTypes/Impl/QBtUuid.cpp
 
-FORMS += 
-
-RESOURCES +=  
-
 symbian { 
 	# fix for Qt Creator to find the symbian headers
-	INCLUDEPATH += $$EPOCROOT\epoc32\include
+	INCLUDEPATH += $$EPOCROOT/epoc32/include
 
     deploy.path = $$EPOCROOT
     exportheaders.sources = $$PUBLIC_HEADERS
@@ -107,10 +102,6 @@ symbian {
         -lbtdevice \
         -lbtmanclient \
         -lesock \    	
-    	-lapmime \
-    	-lcommonui \
-    	-lplatformenv \
-    	-lcharconv
     	
     	
     LIBS += $$BT_PLUGIN_LIB
@@ -121,7 +112,7 @@ symbian {
 	
 	# add this for Qt Creator to generate a pkg file, it seems to be a bug in the current version (2.0.0)
 	addFiles.sources = QBluetooth_0x2003328D.dll
-	addFiles.path = !:\sys\bin
+	addFiles.path = /sys/bin
 	DEPLOYMENT += addFiles    
 }
 
