@@ -27,9 +27,9 @@
 #include <QtGui/QLabel>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QMenuBar>
-#include <QAction>
+#include <QtGui/QAction>
 #include <QModelIndex>
-#include <QDialog>
+#include <QtGui/QDialog>
 
 class QBtSingleDeviceSelectorUI;
 
