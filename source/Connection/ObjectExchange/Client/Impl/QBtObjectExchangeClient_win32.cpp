@@ -51,7 +51,7 @@ void QBtObjectExchangeClientPrivate::ConnectToServer(const QBtDevice& remoteDevi
 		emit p_ptr->error(QBtObjectExchangeClient::OBEXClientNoSelectedDevice);
 		return;
 	}
-	if( remoteService.getClass()  == QBtConstants::UndefinedClass &&
+	if( remoteService.getClass()  == QBtUuid (QBtConstants::UndefinedClass) &&
 		remoteService.getHandle() == 0)
 	{
 		emit p_ptr->error(QBtObjectExchangeClient::OBEXClientNoSelectedService);
@@ -68,7 +68,7 @@ void QBtObjectExchangeClientPrivate::ConnectToServer(const QBtDevice& remoteDevi
 	if(connectionHandle != BTSDK_INVALID_HANDLE)
 		result = Btsdk_Connect(connectingService->getHandle(), 0, &connectionHandle);
 	else
-		result = Btsdk_ConnectEx(devHandle, connectingService->getClass(), 0, &connectionHandle);
+		result = Btsdk_ConnectEx(devHandle, connectingService->getClass().get(), 0, &connectionHandle);
 
 	if(result != BTSDK_OK)
 		emit p_ptr->error(QBtObjectExchangeClient::OBEXClientConnectionError);

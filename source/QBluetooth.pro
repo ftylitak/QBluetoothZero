@@ -121,11 +121,7 @@ else {
     win32 { 
         LIBS += -lBlueSoleil_SDK_2.0.5/bin/BsSDK
 		
-		//deploy.path = $$EPOCROOT
-		/*INCLUDEPATH += $$deploy.path$$exportheaders.path/QBluetooth/
-		INCLUDEPATH += $$deploy.path$$exportheaders.path*/
-		
-        INCLUDEPATH = ./ \
+		INCLUDEPATH = ./ \
 			BTTypes	\
 			BlueSoleil_SDK_2.0.5/include \
             Connection/ObjectExchange/Server \
@@ -146,6 +142,7 @@ else {
             ServiceAdvertiser/QBtServiceAdvertiser_win32.h \
             ServiceDiscoverer/QBtServiceDiscoverer_win32.h \
             DeviceDiscoverer/QBtDeviceDiscoverer_win32.h \
+			DeviceDiscoverer/QBtSingleDeviceSelectorUI_stub.h \
             WinSerialPort/Tserial_event.h
         SOURCES += Connection/ObjectExchange/Server/Impl/QBtObjectExchangeServer_win32.cpp \
             LocalDevice/Impl/QBtLocalDevice_win32.cpp \
@@ -154,15 +151,16 @@ else {
             Connection/SerialPort/Server/Impl/QBtSerialPortServer_win32.cpp \
             ServiceAdvertiser/Impl/QBtServiceAdvertiser_win32.cpp \
             ServiceDiscoverer/Impl/QBtServiceDiscoverer_win32.cpp \
+			DeviceDiscoverer/Impl/QBtSingleDeviceSelectorUI_stub.cpp \
             DeviceDiscoverer/Impl/QBtDeviceDiscoverer_win32.cpp \
             WinSerialPort/Tserial_event.cpp
 			
-		/*exportheaders.sources = $$PUBLIC_HEADERS
+		exportheaders.sources = $$PUBLIC_HEADERS
 		
 	
 		for(header, exportheaders.sources){
 			DESTDIR += "$$header $$DESTDIR\include\$$basename(header)"
-		}*/
+		}
     }
     else { 
         HEADERS += Connection/ObjectExchange/Server/QBtObjectExchangeServer_stub.h \

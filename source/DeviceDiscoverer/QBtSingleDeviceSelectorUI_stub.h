@@ -20,6 +20,7 @@
 #ifndef QBTSINGLEDEVICESELECTORUI_PRIVATE_STUB_H_
 #define QBTSINGLEDEVICESELECTORUI_PRIVATE_STUB_H_
 
+#include "DeviceDiscoverer/QBtSingleDeviceSelectorUI.h"
 #include <QBtGlobal.h>
 #include <QBtTypes.h>
 #include <QBtDeviceDiscoverer.h>
@@ -30,8 +31,6 @@
 #include <QtGui/QAction>
 #include <QModelIndex>
 #include <QtGui/QDialog>
-
-class QBtSingleDeviceSelectorUI;
 
 /**
  * This class provides UI for searching remote bluetooth
@@ -54,7 +53,7 @@ class QBtSingleDeviceSelectorUIPrivate : public QDialog
 
 public:
     /**
-     * if parent == NULL, the list will be showed as indepented
+     * if parent == NULL, the list will be showed as indepentant
      * widget on the screen, thus it's not necessary for the client application
      * to have a GUI interface.
      */
@@ -96,8 +95,6 @@ private:
     QAction* _exit;
 
     QBtSingleDeviceSelectorUI* _publicClass;
-
-
 };
 
 #endif

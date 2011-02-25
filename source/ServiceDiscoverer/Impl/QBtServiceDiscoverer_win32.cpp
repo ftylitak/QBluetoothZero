@@ -71,25 +71,41 @@ void QBtServiceDiscovererPrivate::DiscoverServicesOnDevice(QBtDevice* targetDevi
 	}
 	
 	// process results
-	ProcessFoundServices(remoteServiceHandleArray, remoteServiceNumber);
+	ProcessFoundServices(remoteServiceHandleArray, remoteServiceNumber, QBtConstants::UndefinedClass);
 	
 	emit p_ptr->discoveryStopped();
 
 	return;
 }
 
+
+
 void QBtServiceDiscovererPrivate::DiscoverSpecificClass(
 			QBtDevice* targetDevice, QBtConstants::ServiceClass uuid)
+{
+	
+
+	BTSVCHDL servicesFound[128] = {0};
+	BTUINT32 servicesNumFound = 128;
+	
+	DiscoverServiceHandles(targetDevice, (BTSVCHDL**)&servicesFound, &servicesNumFound, uuid);
+
+	// process results
+	ProcessFoundServices(servicesFound, servicesNumFound, uuid);
+	
+	emit p_ptr->discoveryStopped();
+	
+	return;
+}
+
+void QBtServiceDiscovererPrivate::DiscoverServiceHandles(QBtDevice* targetDevice, BTSVCHDL** servicesFound, BTUINT32* servicesNumFound, QBtConstants::ServiceClass uuid)
 {
 	BtSdkSDPSearchPatternStru sdpStru;
 	sdpStru.mask = BTSDK_SSPM_UUID16;
 	sdpStru.uuid.Data1 = uuid;
 
-	BTSVCHDL servicesFound[128] = {0};
-	BTUINT32 servicesNumFound = 128;
-	
 	BTDEVHDL devHandle = GetDeviceHandle(targetDevice->getAddress());
-	
+
 	if(devHandle == BTSDK_INVALID_HANDLE)
 	{
 		emit p_ptr->error(QBtServiceDiscoverer::UnknownError);
@@ -97,28 +113,38 @@ void QBtServiceDiscovererPrivate::DiscoverSpecificClass(
 	}
 
 	emit p_ptr->discoveryStarted();
-	
+
 	//start searching on a specific device and service
 	int tmpCnt = 0;
 	BTINT32 result = BTSDK_FALSE;
 	do
 	{
-		result = Btsdk_BrowseRemoteServicesEx(devHandle, &sdpStru, 1, servicesFound, &servicesNumFound);
+		result = Btsdk_BrowseRemoteServicesEx(devHandle, &sdpStru, 1, *servicesFound, servicesNumFound);
 		tmpCnt++;
 	}while(tmpCnt < 5 && result != BTSDK_OK);
-	
+
 	if(tmpCnt == 5 && result != BTSDK_OK)
 	{
 		emit p_ptr->error(QBtServiceDiscoverer::ServiceDiscoveryNotAbleToComplete);
 		return;
 	}
+}
 
-	// process results
-	ProcessFoundServices(servicesFound, servicesNumFound);
-	
-	emit p_ptr->discoveryStopped();
-	
-	return;
+void QBtServiceDiscovererPrivate::DiscoverSpecificClasses(QBtDevice* targetDevice, const QList<QBtUuid> &uuids)
+{
+	for(int i=0; i<uuids.size(); i++)
+		DiscoverSpecificClass(targetDevice, (QBtConstants::ServiceClass)uuids.at(i).get());
+}
+
+void QBtServiceDiscovererPrivate::DiscoverRfcommServices(QBtDevice* targetDevice)
+{
+	DiscoverSpecificClass(targetDevice, QBtConstants::SerialPort);
+}
+
+void QBtServiceDiscovererPrivate::DiscoverObexServices(QBtDevice* targetDevice)
+{
+	DiscoverSpecificClass(targetDevice, QBtConstants::OBEXFileTransfer);
+	DiscoverSpecificClass(targetDevice, QBtConstants::OBEXObjectPush);
 }
 
 void QBtServiceDiscovererPrivate::DiscoverSpecificProtocol(
@@ -135,7 +161,7 @@ void QBtServiceDiscovererPrivate::StopDiscovery()
 
 // private methods
 
-void QBtServiceDiscovererPrivate::ProcessFoundServices(BTSVCHDL* foundServices, int numOfServices)
+void QBtServiceDiscovererPrivate::ProcessFoundServices(BTSVCHDL* foundServices, int numOfServices, QBtConstants::ServiceClass wantedClass)
 {
 	BTUINT32 result = BTSDK_FALSE;
 	BtSdkRemoteServiceAttrStru serviceInfo;
@@ -147,10 +173,24 @@ void QBtServiceDiscovererPrivate::ProcessFoundServices(BTSVCHDL* foundServices, 
 		if(result != BTSDK_OK)
 			return;
 
+		if(wantedClass == QBtConstants::OBEXObjectPush || 
+			wantedClass == QBtConstants::OBEXFileTransfer)
+		{
+			if((QBtConstants::ServiceClass)serviceInfo.service_class != QBtConstants::OBEXObjectPush ||
+				(QBtConstants::ServiceClass)serviceInfo.service_class != QBtConstants::OBEXFileTransfer)
+				continue;
+		}
+		else if(wantedClass == QBtConstants::SerialPort)
+		{
+			if((QBtConstants::ServiceClass)serviceInfo.service_class != QBtConstants::SerialPort)
+				continue;
+		}
+			
+
 		QBtService newService;
 		newService.setHandle(foundServices[i]);
 		newService.setName(QString::fromUtf8((const char*)serviceInfo.svc_name));
-		newService.setClass((QBtConstants::ServiceClass)serviceInfo.service_class);
+		newService.setClass(QBtUuid ((QBtConstants::ServiceClass)serviceInfo.service_class));
 		
 		if(serviceInfo.service_class == BTSDK_CLS_SERIAL_PORT)
 			RetrieveSPPAttributes(&newService, foundServices[i]);

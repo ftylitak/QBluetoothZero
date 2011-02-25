@@ -50,7 +50,7 @@ void QBtSerialPortClientPrivate::Connect(
 		return;
 	}
 		
-	if(remoteService.getClass() == QBtConstants::UndefinedClass &&
+	if(remoteService.getClass() == QBtUuid (QBtConstants::UndefinedClass) &&
 		remoteService.getHandle() == 0)
 	{
 		emit p_ptr->error(QBtSerialPortClient::ErrorNoServiceSelected);
@@ -179,7 +179,7 @@ bool QBtSerialPortClientPrivate::ConnectBtSerialPortProfile_ServClass()
 	int connCnt = 0;
 	do
 	{
-		ulRet = Btsdk_ConnectEx(devHandle, connectingService->getClass(), (BTUINT32)&sppStru, &connectionHandle ); 
+		ulRet = Btsdk_ConnectEx(devHandle, connectingService->getClass().get(), (BTUINT32)&sppStru, &connectionHandle ); 
 		connCnt++;
 	}while(ulRet != BTSDK_OK && connCnt < 5);
 

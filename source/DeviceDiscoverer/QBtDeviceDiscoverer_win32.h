@@ -33,7 +33,7 @@ public:
 public:
     void DiscoverDevices();
     void StopDiscovery();
-    QBtDevice::List GetInquiredDevices();
+    QBtDevice::List& GetInquiredDevices();
 	bool IsBusy () const;
 
 protected:
@@ -43,8 +43,10 @@ private:
     static void ReportInquiryResult(BTDEVHDL dev_hdl);
     static void InquiryCompleteResult(void);
     static void RegisterFoundDevice(BTDEVHDL dev_hdl);
+	static void UnregisterBtCallbacks();
 
 private:
+	//these are static because of the callbacks...
     static QBtDevice::List deviceList;
     // handle of the win event used to indicate that discovery finished
     static HANDLE browseDevEventHandler;

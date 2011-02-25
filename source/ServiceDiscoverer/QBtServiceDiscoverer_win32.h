@@ -20,6 +20,7 @@
 #ifndef QBTSERVICEDISCOVERER_STUB_H_
 #define QBTSERVICEDISCOVERER_STUB_H_
 
+#include <QBtUuid.h>
 #include <QBtDevice.h>
 #include <QBtServiceDiscoverer.h>
 #include <QBtAuxFunctions.h>
@@ -37,15 +38,18 @@ public:
     void DiscoverSpecificClass(QBtDevice* targetDevice, QBtConstants::ServiceClass uuid);
     void DiscoverSpecificProtocol(QBtDevice* targetDevice, QBtConstants::ServiceProtocol uuid);
     void StopDiscovery();
-    
+	void DiscoverSpecificClasses(QBtDevice* targetDevice, const QList<QBtUuid> &uuids);    
+	void DiscoverRfcommServices(QBtDevice* targetDevice);
+	void DiscoverObexServices(QBtDevice* targetDevice);
     bool IsBusy() const;
 
 protected:
     void Construct();
 
 private:
-    void ProcessFoundServices(BTSVCHDL* foundServices, int numOfServices);
+    void ProcessFoundServices(BTSVCHDL* foundServices, int numOfServices, QBtConstants::ServiceClass wantedClass);
     void RetrieveSPPAttributes(QBtService* currService, BTSVCHDL servHandle);
+	void DiscoverServiceHandles(QBtDevice* targetDevice, BTSVCHDL** servicesFound, BTUINT32* numOfServicesFound, QBtConstants::ServiceClass uuid);
 
 private slots:
 	void SetBusy();

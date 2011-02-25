@@ -15,7 +15,7 @@ QBtSingleDeviceSelectorUI::QBtSingleDeviceSelectorUI (QWidget* parent)
 #ifdef Q_OS_SYMBIAN
     QT_TRAP_THROWING (_impl = QBtSingleDeviceSelectorUIPrivate::NewL(this));
 #else
-    _implPtr = new QBtSingleDeviceSelectorUIPrivate (parent, this);
+    _impl = new QBtSingleDeviceSelectorUIPrivate (parent, this);
 #endif
 
 }

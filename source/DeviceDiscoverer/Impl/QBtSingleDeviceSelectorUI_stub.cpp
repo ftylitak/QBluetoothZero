@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-#include <QBtSingleDeviceSelectorUIPrivate.h>
+#include <QBtSingleDeviceSelectorUI_stub.h>
 #include <QList>
 #include <QBtAuxFunctions.h>
 #include <QDesktopWidget>

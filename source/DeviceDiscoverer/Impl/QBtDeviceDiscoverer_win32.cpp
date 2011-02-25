@@ -90,19 +90,15 @@ QBtDeviceDiscovererPrivate::~QBtDeviceDiscovererPrivate()
 //
 void QBtDeviceDiscovererPrivate::DiscoverDevices()
 {
-	/*if(isSearching)
+	if(isSearching)
 	{
 		emit p_ptr->error(QBtDeviceDiscoverer::BluetoothInUse);
 		return;
-	}*/
-	if( isSearching )
-		StopDiscovery();
+	}
 
 	deviceList.clear();
 
 	sp_ptr = p_ptr;
-
-//	browseDevEventHandler = CreateEvent(NULL, FALSE, FALSE, L"completeBrowseDevice");
 
 	// the first zero means that all device classes are searched
 	// and the second that the discovery can find unlimited number
@@ -111,7 +107,6 @@ void QBtDeviceDiscovererPrivate::DiscoverDevices()
 	{
 		isSearching = true;
 		emit p_ptr->discoveryStarted();
-//		WaitForSingleObject(browseDevEventHandler, INFINITE);
 	}
 	else
 		emit p_ptr->error(QBtDeviceDiscoverer::UnknownError);
@@ -127,9 +122,10 @@ void QBtDeviceDiscovererPrivate::StopDiscovery()
 	Btsdk_StopDeviceDiscovery();
 }
 
-QBtDevice::List QBtDeviceDiscovererPrivate::GetInquiredDevices()
+QBtDevice::List& QBtDeviceDiscovererPrivate::GetInquiredDevices()
 {
-	return deviceList;
+	QBtDevice::List* btList = new QBtDevice::List(deviceList);
+	return *btList;
 }
 
 
@@ -140,13 +136,10 @@ void QBtDeviceDiscovererPrivate::ReportInquiryResult(BTDEVHDL dev_hdl)
 
 void QBtDeviceDiscovererPrivate::InquiryCompleteResult(void)
 {
-//	browseDevEventHandler = OpenEvent(EVENT_ALL_ACCESS, FALSE, L"completeBrowseDevice");
-//	SetEvent(browseDevEventHandler);
+	isSearching = false;
 
 	if(sp_ptr)
 		emit sp_ptr->discoveryStopped();
-
-	isSearching = false;
 }
 
 void QBtDeviceDiscovererPrivate::RegisterFoundDevice(BTDEVHDL dev_hdl)

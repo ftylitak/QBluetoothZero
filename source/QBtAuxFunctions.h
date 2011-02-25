@@ -31,8 +31,8 @@ template <class T> inline void SafeDelete(T* &ptr)
 }
 
 
-#ifdef Q_OS_SYMBIAN
-
+//#ifdef Q_OS_SYMBIAN
+#include <QString>
 #include <QMessageBox>
 #include <QDir>
 #include <QDebug.h>
@@ -107,7 +107,7 @@ inline void _Break_Here (const QString & file, const QString & line)
     #define BT_ASSERT_MSG2(test, msg1, msg2) {}
     #define BT_BREAK_HERE() {}
 
-#endif
+//#endif
 	
 	
 #endif
@@ -118,6 +118,7 @@ inline void _Break_Here (const QString & file, const QString & line)
 
 #include <windows.h>
 #include <conio.h>
+#include "BTTypes/QBtAddress.h"
 
 extern "C"{
 #include "./BlueSoleil_SDK_2.0.5/include/Btsdk_ui.h"
