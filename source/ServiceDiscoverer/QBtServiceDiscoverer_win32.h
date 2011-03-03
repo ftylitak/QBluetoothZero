@@ -34,7 +34,7 @@ public:
     QBtServiceDiscovererPrivate(QBtServiceDiscoverer* publicClass);
     ~QBtServiceDiscovererPrivate();
 
-    void DiscoverServicesOnDevice(QBtDevice* targetDevice);
+    void DiscoverServices(QBtDevice* targetDevice);
     void DiscoverSpecificClass(QBtDevice* targetDevice, QBtConstants::ServiceClass uuid);
     void DiscoverSpecificProtocol(QBtDevice* targetDevice, QBtConstants::ServiceProtocol uuid);
     void StopDiscovery();

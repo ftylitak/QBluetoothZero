@@ -53,7 +53,7 @@ QBtServiceDiscoverer::~QBtServiceDiscoverer()
 void QBtServiceDiscoverer::startDiscovery (const QBtDevice& targetDevice)
 {
     _remoteDevice = targetDevice;
-    _implPtr->DiscoverServicesOnDevice (& _remoteDevice);
+    _implPtr->DiscoverServices (& _remoteDevice);
 }
 
 
@@ -79,7 +79,7 @@ void QBtServiceDiscoverer::startRfcommDiscovery (const QBtDevice& targetDevice)
 void QBtServiceDiscoverer::startDiscovery (const QBtDevice& targetDevice, const QBtUuid & uuid)
 {
     _remoteDevice = targetDevice;
-    _implPtr->DiscoverSpecificClass (& _remoteDevice, (QBtConstants::ServiceClass)uuid.get());
+    _implPtr->DiscoverSpecificClass (& _remoteDevice, uuid);//(QBtConstants::ServiceClass)uuid.get());
 }
 
 

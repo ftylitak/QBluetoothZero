@@ -41,7 +41,7 @@ QBtServiceDiscovererPrivate::~QBtServiceDiscovererPrivate()
 	DeinitBthSdk();
 }
 
-void QBtServiceDiscovererPrivate::DiscoverServicesOnDevice(QBtDevice* targetDevice)
+void QBtServiceDiscovererPrivate::DiscoverServices(QBtDevice* targetDevice)
 {
 	BTSVCHDL remoteServiceHandleArray[128] = {0};
 	BTUINT32 remoteServiceNumber = 128;
