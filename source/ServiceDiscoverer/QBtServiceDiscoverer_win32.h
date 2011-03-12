@@ -35,7 +35,7 @@ public:
     ~QBtServiceDiscovererPrivate();
 
     void DiscoverServices(QBtDevice* targetDevice);
-    void DiscoverSpecificClass(QBtDevice* targetDevice, QBtConstants::ServiceClass uuid);
+    void DiscoverSpecificClass(QBtDevice* targetDevice, QBtUuid uuid);
     void DiscoverSpecificProtocol(QBtDevice* targetDevice, QBtConstants::ServiceProtocol uuid);
     void StopDiscovery();
 	void DiscoverSpecificClasses(QBtDevice* targetDevice, const QList<QBtUuid> &uuids);    

@@ -81,17 +81,19 @@ void QBtServiceDiscovererPrivate::DiscoverServices(QBtDevice* targetDevice)
 
 
 void QBtServiceDiscovererPrivate::DiscoverSpecificClass(
-			QBtDevice* targetDevice, QBtConstants::ServiceClass uuid)
+			QBtDevice* targetDevice, QBtUuid uuid)
 {
 	
 
 	BTSVCHDL servicesFound[128] = {0};
 	BTUINT32 servicesNumFound = 128;
+
+	QBtConstants::ServiceClass serviceUUID = (QBtConstants::ServiceClass)(uuid.get());
 	
-	DiscoverServiceHandles(targetDevice, (BTSVCHDL**)&servicesFound, &servicesNumFound, uuid);
+	DiscoverServiceHandles(targetDevice, (BTSVCHDL**)&servicesFound, &servicesNumFound, serviceUUID);
 
 	// process results
-	ProcessFoundServices(servicesFound, servicesNumFound, uuid);
+	ProcessFoundServices(servicesFound, servicesNumFound, serviceUUID);
 	
 	emit p_ptr->discoveryStopped();
 	
@@ -133,18 +135,18 @@ void QBtServiceDiscovererPrivate::DiscoverServiceHandles(QBtDevice* targetDevice
 void QBtServiceDiscovererPrivate::DiscoverSpecificClasses(QBtDevice* targetDevice, const QList<QBtUuid> &uuids)
 {
 	for(int i=0; i<uuids.size(); i++)
-		DiscoverSpecificClass(targetDevice, (QBtConstants::ServiceClass)uuids.at(i).get());
+		DiscoverSpecificClass(targetDevice, uuids.at(i));
 }
 
 void QBtServiceDiscovererPrivate::DiscoverRfcommServices(QBtDevice* targetDevice)
 {
-	DiscoverSpecificClass(targetDevice, QBtConstants::SerialPort);
+	DiscoverSpecificClass(targetDevice, QBtUuid(QBtConstants::SerialPort));
 }
 
 void QBtServiceDiscovererPrivate::DiscoverObexServices(QBtDevice* targetDevice)
 {
-	DiscoverSpecificClass(targetDevice, QBtConstants::OBEXFileTransfer);
-	DiscoverSpecificClass(targetDevice, QBtConstants::OBEXObjectPush);
+	DiscoverSpecificClass(targetDevice, QBtUuid(QBtConstants::OBEXFileTransfer));
+	DiscoverSpecificClass(targetDevice, QBtUuid(QBtConstants::OBEXObjectPush));
 }
 
 void QBtServiceDiscovererPrivate::DiscoverSpecificProtocol(
