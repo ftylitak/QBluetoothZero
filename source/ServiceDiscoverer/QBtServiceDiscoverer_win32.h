@@ -24,7 +24,9 @@
 #include <QBtDevice.h>
 #include <QBtServiceDiscoverer.h>
 #include <QBtAuxFunctions.h>
-#include <QObject>
+#include <QtCore/QObject>
+
+QBT_NAMESPACE_BEGIN
 
 class QBtServiceDiscovererPrivate : public QObject
 {
@@ -59,5 +61,7 @@ private:
     QBtServiceDiscoverer *p_ptr;  //Pointer to public interface
 	bool isBusy;
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTSERVICEDISCOVERER_STUB_H_ */

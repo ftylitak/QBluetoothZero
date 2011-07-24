@@ -21,9 +21,11 @@
 #define QBTSERVICEDISCOVERER_H_
 
 #include <QBtGlobal.h>
-#include <QObject>
+#include <QtCore/QObject>
 #include <QBtTypes.h>
-#include <QList>
+#include <QtCore/QList>
+
+QBT_NAMESPACE_BEGIN
 
 //forward declaration
 class QBtServiceDiscovererPrivate;
@@ -40,7 +42,7 @@ class QBtServiceDiscovererPrivate;
  * startDiscovery (const QBtDevice &, QBtConstants::ServiceProtocol)
  * can be called, according to the information the user already has
  * about the inquired service.
- * After the successfull call of these functions, discoveryStarted()
+ * After the successful call of these functions, discoveryStarted()
  * signal is emitted.
  *
  * At any of the above cases, a found service is reported through
@@ -100,7 +102,7 @@ public slots:
    /**
     * Starts service discovery for OBEX and RFCOMM services.
     * New services found are reported through signal "newServiceFound" or can
-    * be aquired through "getInquiredServices" function
+    * be acquired through "getInquiredServices" function
     *
     */
    void startDiscovery (const QBtDevice & targetDevice);
@@ -117,7 +119,7 @@ public slots:
    /**
     * Starts service discovery for RFCOMM services only.
     * New services found are reported through signal "newServiceFound" or can
-    * be aquired through "getInquiredServices" function.
+    * be acquired through "getInquiredServices" function.
     *
     */
    void startRfcommDiscovery (const QBtDevice & targetDevice);
@@ -128,7 +130,7 @@ public slots:
     * Starts service discovery for the service (or protocol) identified by
     * the uuid parameter.
     * New services found are reported through signal "newServiceFound" or can
-    * be aquired through "getInquiredServices" function.
+    * be acquired through "getInquiredServices" function.
     *
     */
    void startDiscovery (const QBtDevice & targetDevice, const QBtUuid & uuid);
@@ -138,7 +140,7 @@ public slots:
     *
     * Starts service discovery for UUIDs provided in the list.
     * New services found are reported through signal "newServiceFound" or can
-    * be aquired through "getInquiredServices" function.
+    * be acquired through "getInquiredServices" function.
     *
     */
    void startDiscovery (const QBtDevice& targetDevice, const QList <QBtUuid> & uuids);
@@ -185,5 +187,7 @@ private:
     
     friend class QBtServiceDiscovererPrivate;
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTSERVICEDISCOVERER_H_ */

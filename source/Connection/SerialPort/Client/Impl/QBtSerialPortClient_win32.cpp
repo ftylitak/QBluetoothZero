@@ -20,6 +20,8 @@
 
 #include <stdio.h>
 
+QBT_NAMESPACE_BEGIN
+
 QBtSerialPortClientPrivate::QBtSerialPortClientPrivate(QBtSerialPortClient* publicClass) : 
 	p_ptr(publicClass), com(NULL), connectionHandle(BTSDK_INVALID_HANDLE), server(NULL),
 	connectingService(NULL), OSComPort(0), serialHandle(INVALID_HANDLE_VALUE), incomingDataBuffer("")
@@ -335,3 +337,4 @@ void QBtSerialPortClientPrivate::SerialCallback(Tserial_event *com_source, uint3
 /************************************************************************/
 
 
+QBT_NAMESPACE_END

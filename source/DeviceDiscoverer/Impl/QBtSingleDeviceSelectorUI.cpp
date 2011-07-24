@@ -6,6 +6,7 @@
 #include "../QBtSingleDeviceSelectorUI_stub.h"
 #endif
 
+QBT_NAMESPACE_BEGIN
 
 //____________________________________________________________________________
 
@@ -39,4 +40,4 @@ void QBtSingleDeviceSelectorUI::show()
 #endif
 }
 
-
+QBT_NAMESPACE_END

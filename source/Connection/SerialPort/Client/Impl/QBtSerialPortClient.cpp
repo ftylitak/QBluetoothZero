@@ -28,10 +28,11 @@
 #include "../QBtSerialPortClient_stub.h"
 #endif
 
+QBT_NAMESPACE_BEGIN
 
 //////////////////////////////////////////////////
 // QBtSerialPortClient::QBtSerialPortClient()	//
-// Defaul constructor							//
+// Default constructor							//
 //////////////////////////////////////////////////
 QBtSerialPortClient::QBtSerialPortClient(QObject *parent) : QObject(parent)
 {
@@ -78,3 +79,5 @@ void QBtSerialPortClient::sendData (const QByteArray & data)
 {
 	_implPtr->SendData(data);
 }
+
+QBT_NAMESPACE_END

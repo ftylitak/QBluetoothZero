@@ -1,9 +1,9 @@
-uid3 = 0x2003328D
+uid3 = 0xA003328D
 
 QT += core
 
 TEMPLATE = lib
-TARGET   = QBluetooth_0x2003328D
+TARGET   = QBluetooth
 DEFINES  += BLUETOOTH_LIB
 
 PUBLIC_HEADERS += QBtGlobal.h \
@@ -42,7 +42,7 @@ SOURCES += Connection/ObjectExchange/Server/Impl/QBtObjectExchangeServer.cpp \
     DeviceDiscoverer/Impl/QBtDeviceDiscoverer.cpp \
     BTTypes/Impl/QBtAddress.cpp \
     BTTypes/Impl/QBtDevice.cpp \
-    BTTypes/Impl/QBtUuid.cpp
+    BTTypes/Impl/QBtUuid.cpp 
 
 symbian { 
 	# fix for Qt Creator to find the symbian headers
@@ -57,7 +57,7 @@ symbian {
     INCLUDEPATH += $$deploy.path$$exportheaders.path
 
 
-    TARGET.UID3 = 0x2003328D
+    TARGET.UID3 = 0xA003328D
 
     TARGET.EPOCALLOWDLLDATA = 1
 
@@ -106,12 +106,18 @@ symbian {
     	
     LIBS += $$BT_PLUGIN_LIB
     
-    TARGET.CAPABILITY = All -TCB -AllFiles -DRM
+    #TARGET.CAPABILITY = All -TCB -AllFiles -DRM
+    TARGET.CAPABILITY += Location \
+        LocalServices \
+        NetworkServices \
+        ReadUserData \
+        UserEnvironment \
+        WriteUserData
     
     for(header, exportheaders.sources):BLD_INF_RULES.prj_exports += "$$header $$deploy.path$$exportheaders.path/QBluetooth/$$basename(header)"
 	
 	# add this for Qt Creator to generate a pkg file, it seems to be a bug in the current version (2.0.0)
-	addFiles.sources = QBluetooth_0x2003328D.dll
+        addFiles.sources = QBluetooth.dll
 	addFiles.path = /sys/bin
 	DEPLOYMENT += addFiles    
 }
@@ -119,11 +125,11 @@ symbian {
 
 else { 
     win32 { 
-        LIBS += -lBlueSoleil_SDK_2.0.5/bin/BsSDK
+        LIBS += -lBlueSoleil_SDK_2.0.5/Bin/BsSDK
 		
-		INCLUDEPATH = ./ \
-			BTTypes	\
-			BlueSoleil_SDK_2.0.5/include \
+        INCLUDEPATH = ./ \
+            BTTypes	\
+            BlueSoleil_SDK_2.0.5/SDKheaders/include \
             Connection/ObjectExchange/Server \
             LocalDevice \
             Connection/ObjectExchange/Client \
@@ -133,7 +139,8 @@ else {
             ServiceDiscoverer \
             DeviceDiscoverer \
             WinSerialPort
-        DESTDIR += $$(QTDIR)\QBluetooth\bin
+        DESTDIR += $$(QTDIR)/QBluetooth/bin
+		DESTDIR += ../FromCPPtoQML-build-desktop/debug
         HEADERS += Connection/ObjectExchange/Server/QBtObjectExchangeServer_win32.h \
             LocalDevice/QBtLocalDevice_win32.h \
             Connection/ObjectExchange/Client/QBtObjectExchangeClient_win32.h \
@@ -159,7 +166,7 @@ else {
 		
 	
 		for(header, exportheaders.sources){
-			DESTDIR += "$$header $$DESTDIR\include\$$basename(header)"
+                        DESTDIR += "$$header $$DESTDIR/include/$$basename(header)"
 		}
     }
     else { 

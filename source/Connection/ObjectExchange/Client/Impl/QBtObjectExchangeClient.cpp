@@ -28,6 +28,7 @@
 #include "../QBtObjectExchangeClient_stub.h"
 #endif
 
+QBT_NAMESPACE_BEGIN
 
 //////////////////////////////////////////////////
 // QBtObjectExchangeClient::QBtObjectExchangeClient()	//
@@ -91,14 +92,14 @@ void QBtObjectExchangeClient::setPath(const QString & path)
 }
 
 // accessor commands
-QBtService GetTransmittingService()
+QBtService& GetTransmittingService()
 {
-    return QBtService();
+    return *(new QBtService());
 }
 
-QBtDevice GetServerDevice()
+QBtDevice& GetServerDevice()
 {
-    return QBtDevice();
+    return *(new QBtDevice());
 }
 
 
@@ -112,3 +113,5 @@ bool QBtObjectExchangeClient::isConnected() const
 {
 	return _implPtr->IsConnected();
 }
+
+QBT_NAMESPACE_END

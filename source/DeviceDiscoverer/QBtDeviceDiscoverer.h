@@ -20,8 +20,10 @@
 #define QBTDEVICEDISCOVERER_H_
 
 #include <QBtGlobal.h>
-#include <QObject>
+#include <QtCore/QObject>
 #include <QBtTypes.h>
+
+QBT_NAMESPACE_BEGIN
 
 //Forward declaration
 class QBtDeviceDiscovererPrivate;
@@ -89,7 +91,7 @@ signals:
     void newDeviceFound (const QBtDevice & remoteDevice);
 
     /**
-     * Signal to report that discovery has stopped (either cancelled or no new devices to detect)
+     * Signal to report that discovery has stopped (either canceled or no new devices to detect)
      */
     void discoveryStopped();
 
@@ -111,5 +113,7 @@ private:
     friend class QBtDeviceDiscovererPrivate;
     
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTDEVICEDISCOVERER_H_ */

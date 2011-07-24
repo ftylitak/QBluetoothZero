@@ -29,8 +29,10 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QMenuBar>
 #include <QtGui/QAction>
-#include <QModelIndex>
+#include <QtCore/QModelIndex>
 #include <QtGui/QDialog>
+
+QBT_NAMESPACE_BEGIN
 
 /**
  * This class provides UI for searching remote bluetooth
@@ -96,5 +98,7 @@ private:
 
     QBtSingleDeviceSelectorUI* _publicClass;
 };
+
+QBT_NAMESPACE_END
 
 #endif

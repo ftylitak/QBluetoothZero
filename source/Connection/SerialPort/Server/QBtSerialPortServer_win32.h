@@ -23,6 +23,8 @@
 #include "QBtSerialPortServer.h"
 #include <QBtAuxFunctions.h>
 
+QBT_NAMESPACE_BEGIN
+
 class QBtSerialPortServerPrivate
 {
 public:
@@ -36,5 +38,7 @@ public:
 private:
     QBtSerialPortServer* p_ptr;
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTSERIALPORTSERVER_STUB_H_ */

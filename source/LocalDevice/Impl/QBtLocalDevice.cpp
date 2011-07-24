@@ -28,6 +28,8 @@
 #include "../QBtLocalDevice_stub.h"
 #endif
 
+QBT_NAMESPACE_BEGIN
+
 QBtAddress QBtLocalDevice::getLocalDeviceAddress()
 {
     return QBtLocalDevicePrivate::GetLocalDeviceAddress();
@@ -111,3 +113,5 @@ bool QBtLocalDevice::unpairDevice(const QBtAddress& address)
 {
     return QBtLocalDevicePrivate::UnpairDevice(address);
 }
+
+QBT_NAMESPACE_END

@@ -16,25 +16,30 @@
 #ifndef QBTADDRESS_H
 #define QBTADDRESS_H
 
-#include <QString>
-#include <QByteArray>
+#include <QtCore/QString.h>
+#include <QtCore/QByteArray.h>
 #include <QBtGlobal.h>
 
 #ifdef Q_OS_SYMBIAN
 #include <bttypes.h>
 #endif
 
+QBT_NAMESPACE_BEGIN
+
 /**
  * Class that represents the device's bluetooth _address.
  * It is one of the main fields of QBtDevice.
  */
-class DLL_EXPORT QBtAddress
+class DLL_EXPORT QBtAddress : public QObject
 {
+	Q_OBJECT
+	Q_PROPERTY(QString _address READ toString)// WRITE setName)
+
 public:
 
     /**
      * QBtAddress()
-     * Default constructor.
+     * Default constructor. 
      */
     QBtAddress();
 
@@ -42,8 +47,7 @@ public:
      * QBtAddress()
      * Copy constructor
      */
-    // really needed?
-    //QBtAddress (const QBtAddress& other);
+    QBtAddress (const QBtAddress& other);
 
     QBtAddress (const QByteArray& byteArray);
     QBtAddress (const QString& addr);
@@ -58,7 +62,7 @@ public:
      *
      * @param reversedArray
      */
-    static QBtAddress getAddressFromReversedArray (const QByteArray & reversedArray);
+    static QBtAddress& getAddressFromReversedArray (const QByteArray & reversedArray);
 
     ~QBtAddress ();
 
@@ -85,21 +89,22 @@ public:
      */
     QByteArray toReversedByteArray() const; // windows representation
 
-    
-    // really needed?
-    //QBtAddress& operator= (const QBtAddress & other );
-    
+    QBtAddress& operator= (const QBtAddress & other );
     bool operator!= (const QBtAddress & other );
     bool operator== (const QBtAddress & other );
     bool operator< (const QBtAddress & other );
 
 #ifdef Q_OS_SYMBIAN
-    TBTDevAddr convertToSymbianBtDevAddr();
+    TBTDevAddr convertToSymbianBtDevAddr() const;
 #endif
 
 private:
     QString _address;
     bool _valid;
 };
+
+QBT_NAMESPACE_END
+
+Q_DECLARE_METATYPE(QBT_NAMESPACE_NAME::QBtAddress)
 
 #endif // QBTADDRESS_H

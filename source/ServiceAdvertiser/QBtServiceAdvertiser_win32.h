@@ -23,6 +23,8 @@
 #include <QBtServiceAdvertiser.h>
 #include <QBtAuxFunctions.h>
 
+QBT_NAMESPACE_BEGIN
+
 class QBtServiceAdvertiserPrivate
 {
 public:
@@ -62,5 +64,7 @@ public:
 private:
     QBtServiceAdvertiser* p_ptr;
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTSERVICEADVERTISER_STUB_H_ */

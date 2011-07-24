@@ -28,6 +28,7 @@
 #include "../QBtSerialPortServer_stub.h"
 #endif
 
+QBT_NAMESPACE_BEGIN
 
 //////////////////////////////////////////////////
 // QBtSerialPortServer::QBtSerialPortServer()	//
@@ -116,3 +117,5 @@ void QBtSerialPortServer::stopAdvertisingService()
         _advertiser = NULL;
     }
 }
+
+QBT_NAMESPACE_END

@@ -14,27 +14,29 @@
  */
 
 #include "../QBtAddress.h"
+#include <QRegExp>
+
+QBT_NAMESPACE_BEGIN
 
 #define BT_INVALID_ADDRESS "00:00:00:00:00:00"
 
-#include <QRegExp>
 
-QBtAddress::QBtAddress()
-: _address(BT_INVALID_ADDRESS),
+QBtAddress::QBtAddress() 
+: QObject(),
+  _address(BT_INVALID_ADDRESS),
   _valid(false)
 {
 }
 
-/*
 QBtAddress::QBtAddress (const QBtAddress& other)
 {
 	_valid = other.isValid();
 	_address = other.toString();
 }
-*/
 
 QBtAddress::QBtAddress (const QString& addr)
- : _address(BT_INVALID_ADDRESS),
+ : QObject(),
+   _address(BT_INVALID_ADDRESS),
    _valid(false) 
 {
 	QRegExp rx("^[0-9a-fA-F]{2,2}:[0-9a-fA-F]{2,2}:[0-9a-fA-F]{2,2}:[0-9a-fA-F]{2,2}:[0-9a-fA-F]{2,2}:[0-9a-fA-F]{2,2}$");
@@ -44,7 +46,8 @@ QBtAddress::QBtAddress (const QString& addr)
 }
 
 QBtAddress::QBtAddress (const QByteArray& byteArray)
-: _address(BT_INVALID_ADDRESS),
+: QObject(),
+  _address(BT_INVALID_ADDRESS),
   _valid(false)
 {
 	if (byteArray.size() != 6)
@@ -74,21 +77,21 @@ QBtAddress::QBtAddress (const TBTDevAddr& addr)
 }
 #endif
 
-QBtAddress QBtAddress::getAddressFromReversedArray (const QByteArray & reversedArray)
+QBtAddress& QBtAddress::getAddressFromReversedArray (const QByteArray & reversedArray)
 {
 	unsigned char tmpByte;
 	int size = reversedArray.size();
 	
-	QByteArray array (reversedArray);
+	QByteArray bArray (reversedArray);
 	
 	for(int i=0; i<size/2; i++)
 	{
-		tmpByte = array [i];
-		array [i] = array [size-i-1];
-		array [size-i-1] = tmpByte;
+		tmpByte = bArray [i];
+		bArray [i] = bArray [size-i-1];
+		bArray [size-i-1] = tmpByte;
 	}
 	
-	return QBtAddress (array);
+	return *(new QBtAddress(bArray));
 }
 
 QBtAddress::~QBtAddress ()
@@ -156,8 +159,8 @@ bool QBtAddress::operator!= (const QBtAddress & other )
   return ((result == 0) ? false : true);
 }
 
-/*
-QBtAddress& QBtAddress::operator= ( QBtAddress & other )
+
+QBtAddress& QBtAddress::operator= ( const QBtAddress & other )
 {
 	if(this != &other)
 	{
@@ -166,7 +169,6 @@ QBtAddress& QBtAddress::operator= ( QBtAddress & other )
 	}
 	return *this;
 }
-*/
 
 bool QBtAddress::operator== (const QBtAddress & other )
 {
@@ -179,7 +181,7 @@ bool QBtAddress::operator< (const QBtAddress & other )
 }
 
 #ifdef Q_OS_SYMBIAN
-TBTDevAddr QBtAddress::convertToSymbianBtDevAddr()
+TBTDevAddr QBtAddress::convertToSymbianBtDevAddr() const
 {
 	const TUint8* memPtr = (const TUint8*)toByteArray().constData();
 		
@@ -191,3 +193,5 @@ TBTDevAddr QBtAddress::convertToSymbianBtDevAddr()
 	return devAddress;
 }
 #endif
+
+QBT_NAMESPACE_END

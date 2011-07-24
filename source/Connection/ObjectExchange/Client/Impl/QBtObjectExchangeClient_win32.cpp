@@ -19,6 +19,8 @@
 
 #include "../QBtObjectExchangeClient_win32.h"
 
+QBT_NAMESPACE_BEGIN
+
 bool QBtObjectExchangeClientPrivate::isBusy = false;
 
 QBtObjectExchangeClientPrivate::QBtObjectExchangeClientPrivate(QBtObjectExchangeClient* publicClass) :
@@ -333,3 +335,5 @@ void QBtObjectExchangeClientPrivate::FTPStatusCallback(UCHAR ucFirst,
 		isBusy = false;
 	}
 }
+
+QBT_NAMESPACE_END

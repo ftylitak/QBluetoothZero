@@ -19,7 +19,7 @@
 #include "../QBtServiceDiscovererForAll.h"
 #include <QBtAuxFunctions.h>
 
-
+QBT_NAMESPACE_BEGIN
 
 //____________________________________________________________________________
 
@@ -178,7 +178,7 @@ void QBtServiceDiscovererForAll::dd_discoveryStarted()
 
 //____________________________________________________________________________
 
-void QBtServiceDiscovererForAll::sd_newServiceFound (const QBtDevice &targetDevice, const QBtService & newService)
+void QBtServiceDiscovererForAll::sd_newServiceFound (const QBtDevice &/*targetDevice*/, const QBtService & /*newService*/)
 {
 }
 
@@ -264,7 +264,7 @@ void QBtServiceDiscovererForAll::dd_error(QBtDeviceDiscoverer::DeviceDiscoveryEr
 
 //____________________________________________________________________________
 
-void QBtServiceDiscovererForAll::dd_newDeviceFound (const QBtDevice & remoteDevice)
+void QBtServiceDiscovererForAll::dd_newDeviceFound (const QBtDevice& /*remoteDevice*/)
 {}
 
 
@@ -301,4 +301,4 @@ bool QBtServiceDiscovererForAll::isBusy () const
     return (_deviceDiscoverer.isBusy() || _serviceDiscoverer.isBusy() );
 }
 
-
+QBT_NAMESPACE_END

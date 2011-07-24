@@ -19,6 +19,8 @@
 
 #include "../QBtObjectExchangeServer_win32.h"
 
+QBT_NAMESPACE_BEGIN
+
 QBtObjectExchangeServerPrivate::QBtObjectExchangeServerPrivate(
 		QBtObjectExchangeServer* publicClass) : p_ptr(publicClass)
 {
@@ -41,3 +43,5 @@ bool QBtObjectExchangeServerPrivate::IsConnected()
 {
 	return false;
 }
+
+QBT_NAMESPACE_END

@@ -19,6 +19,8 @@
 
 #include "../QBtServiceAdvertiser_win32.h"
 
+QBT_NAMESPACE_BEGIN
+
 QBtServiceAdvertiserPrivate::QBtServiceAdvertiserPrivate(QBtServiceAdvertiser* publicClass) 
 	: p_ptr(publicClass)
 {
@@ -45,3 +47,5 @@ void QBtServiceAdvertiserPrivate::UpdateAvailability(bool /*aAvailable*/)
 	emit p_ptr->error(QBtServiceAdvertiser::FeatureNotSupported);
 	return;
 }
+
+QBT_NAMESPACE_END

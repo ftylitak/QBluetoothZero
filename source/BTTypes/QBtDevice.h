@@ -16,15 +16,19 @@
 #ifndef QBTDEVICE_H
 #define QBTDEVICE_H
 
-#include <QList>
-#include <QString>
+#include <QtCore/QList>
+#include <QtCore/QString>
 #include <QBtGlobal.h>
 #include <QBtService.h>
 #include <QBtAddress.h>
 
+//#include <QtDeclarative/QtDeclarative.h>
+
+QBT_NAMESPACE_BEGIN
+
 /**
  * The class that contains all the information needed about any bluetooth device.
- * Its main feilds are 4.
+ * Its main fields are 4.
  *
  * a) QBtAddress address: It is the device's bluetooth address.
  *                  Any communication between remote devices is made using this feild
@@ -35,14 +39,20 @@
  *                  The actual name is retrieved from the device discovery
  *                  and is set by the remote device as an identification string ID.
  *
- * c) DeviceMajor type: an enumeration feild characterizing the device type.
+ * c) DeviceMajor type: an enumeration field characterizing the device type.
  *
  * d) QBtService::List supportedServices: this field is updated after calling
  *                  QBtServiceDiscoverer::startDiscovery(QBtDevice*)
  *                  (if any services are found through SDP)
  */
-class DLL_EXPORT QBtDevice
+class DLL_EXPORT QBtDevice : public QObject
 {
+	Q_OBJECT
+	Q_ENUMS(DeviceMajor)
+	Q_PROPERTY(QString name READ getName WRITE setName)
+	Q_PROPERTY(QBtAddress address READ getAddress WRITE setAddress)
+	Q_PROPERTY(DeviceMajor type READ getType WRITE setType)
+
 public:
     typedef QList<QBtDevice> List;
     
@@ -61,13 +71,18 @@ public:
     };
 
 public:
-    QBtDevice();
-    QBtDevice(const QBtDevice& dev);
-    QBtDevice (const QString & devName, const QBtAddress & devAddress, DeviceMajor devType);
+    QBtDevice(QObject* parent=0);
+
+	/**
+	 *  Copy constructor is needed by the QMetaType to register this custom class
+	 */
+    QBtDevice(const QBtDevice& dev, QObject* parent=0);
+    QBtDevice (const QString & devName, const QBtAddress & devAddress, DeviceMajor devType, QObject* parent=0);
     ~QBtDevice();
 
     void addNewService (const QBtService& newService);
-    void setName (const QString & newName);
+    //void setName (const QString & newName);
+	void setName (const QString & newName);
     void setAddress (const QBtAddress& newAddress);
     void setType(DeviceMajor newType);
     void setSupportedServices (const QBtService::List& newSupportedServices);
@@ -75,14 +90,15 @@ public:
     bool serviceListUpdated() const;
 
     QString getName() const;
-    QBtAddress getAddress() const;
+    const QBtAddress& getAddress() const;
     DeviceMajor getType() const;
     QString getTypeAsString() const;
     const QBtService::List & getSupportedServices() const;
-
     
     // really needed? does not require special processing to copy the members
-    //QBtDevice& operator= (const QBtDevice& dev);
+	//	->	It is required as it turns out when inheriting from QObject. If not implemented
+	//		then i get linker error (at least when compiling for Windows)
+    QBtDevice& operator= (const QBtDevice& dev);
 
 private:
     QString _name;
@@ -93,5 +109,14 @@ private:
     bool _serviceListUpdated;
 };
 
+QBT_NAMESPACE_END
+
+Q_DECLARE_METATYPE(QBT_NAMESPACE_NAME::QBtDevice)
+Q_DECLARE_METATYPE(QBT_NAMESPACE_NAME::QBtDevice::DeviceMajor)
+
+
+
 #endif // QBTDEVICE_H
 
+
+//QML_DECLARE_TYPE(type)

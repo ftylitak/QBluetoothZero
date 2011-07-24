@@ -19,15 +19,28 @@
 
 #include "../QBtService.h"
 
+QBT_NAMESPACE_BEGIN
+
 //____________________________________________________________________________
 
-QBtService::QBtService()
-   : _name ("Undefined"),
+QBtService::QBtService(QObject* parent) 
+   : QObject(parent),
+	 _name ("Undefined"),
      _description ("Undefined"),
      _handle(0),
      _port(0)
 {	
     _protocolList.clear();
+}
+
+QBtService::QBtService(const QBtService& service, QObject* parent) : QObject(parent)
+{
+	_serviceUuid = service.getClass();
+	_protocolList = service.getProtocols();
+	_name = service.getName();
+	_description = service.getDescription();
+	_handle = service.getHandle();
+	_port = service.getHandle();
 }
 
 
@@ -142,3 +155,18 @@ bool QBtService::removeProtocol (const QBtUuid & uuid)
     return _protocolList.removeOne(uuid);
 }
 
+QBtService& QBtService::operator=(const QBtService& service)
+{
+	if(this != &service)
+	{
+		_serviceUuid = service.getClass();
+		_protocolList = service.getProtocols();
+		_name = service.getName();
+		_description = service.getDescription();
+		_handle = service.getHandle();
+		_port = service.getHandle();
+	}
+	return *this;
+}
+
+QBT_NAMESPACE_END

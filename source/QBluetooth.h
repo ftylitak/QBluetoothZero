@@ -16,7 +16,10 @@
 #ifndef QBLUETOOTH_H
 #define QBLUETOOTH_H
 
+#include <QBtAuxFunctions.h>
+#include <QBtGlobal.h>
 
+#include <QBtTypes.h>
 #include <QBtDeviceDiscoverer.h>
 #include <QBtSingleDeviceSelectorUI.h>
 #include <QBtServiceDiscoverer.h>
@@ -27,8 +30,42 @@
 #include <QBtObjectExchangeClient.h>
 #include <QBtObjectExchangeServer.h>
 #include <QBtLocalDevice.h>
-#include <QBtTypes.h>
 
-#include <QBtAuxFunctions.h>
+//using namespace QBluetooth;
+
+//#if QT_VERSION > 0x040603
+#include <QtDeclarative/qdeclarative.h>
+
+QBT_NAMESPACE_BEGIN
+
+class QBt
+{
+    public:
+    static void registerTypes()
+    {
+        qRegisterMetaType<QBtDevice>("QBtDevice");
+        qRegisterMetaType<QBtService>("QBtService");
+    }
+
+    static void registerQMLTypes()
+    {
+        //qmlRegisterType<QBtConstants>("QBtConstants", 1, 0, "QBtConstants");
+        qmlRegisterType<QBtUuid>(QML_LIBRARY_NAME, 1, 0, "QBtUuid");
+        qmlRegisterType<QBtAddress>(QML_LIBRARY_NAME, 1, 0, "QBtAddress");
+        qmlRegisterType<QBtDevice>(QML_LIBRARY_NAME, 1, 0, "QBtDevice");
+        qmlRegisterType<QBtService>(QML_LIBRARY_NAME, 1, 0, "QBtService");
+        qmlRegisterType<QBtDeviceDiscoverer>(QML_LIBRARY_NAME, 1, 0, "QBtDeviceDiscoverer");
+        //qmlRegisterType<QBtServiceDiscoverer>("QBtServiceDiscoverer", 1, 0, "QBtServiceDiscoverer");
+        //qmlRegisterType<QBtServiceAdvertiser>("QBtServiceAdvertiser", 1, 0, "QBtServiceAdvertiser");
+        //qmlRegisterType<QBtLocalDevice>("QBtLocalDevice", 1, 0, "QBtLocalDevice");
+        //qmlRegisterType<QBtSingleDeviceSelectorUI>("QBtSingleDeviceSelectorUI", 1, 0, "QBtSingleDeviceSelectorUI");
+        //qmlRegisterType<QBtSerialPortServer>("QBtSerialPortServer", 1, 0, "QBtSerialPortServer");
+        //qmlRegisterType<QBtSerialPortClient>("QBtSerialPortClient", 1, 0, "QBtSerialPortClient");
+        //qmlRegisterType<QBtObjectExchangeServer>("QBtObjectExchangeServer", 1, 0, "QBtObjectExchangeServer");
+        //qmlRegisterType<QBtObjectExchangeClient>("QBtObjectExchangeClient", 1, 0, "QBtObjectExchangeClient");
+    }
+};
+
+QBT_NAMESPACE_END
 
 #endif // QBLUETOOTH_H

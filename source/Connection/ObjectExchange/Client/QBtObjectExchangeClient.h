@@ -23,7 +23,9 @@
 #include <QBtGlobal.h>
 #include <QBtTypes.h>
 #include <QBtServiceAdvertiser.h>
-#include <QObject>
+#include <QtCore/QObject>
+
+QBT_NAMESPACE_BEGIN
 
 //forward declaration
 class QBtObjectExchangeClientPrivate;
@@ -143,7 +145,7 @@ public:
      * send the server a byte sequence.
      * @param data,  the data of the buffer
      * @param bufferName, the name of the buffer (used for convenience on the data
-     * 		proccessing of the server)
+     * 		processing of the server)
      */
     void putByteBuffer(const QByteArray& data, const QString& bufferName);
 
@@ -168,13 +170,13 @@ public:
      * Get info about the service connected to.
      * @return An object containing the service info
      */
-    QBtService getTransmittingService();
+    QBtService& getTransmittingService();
 
     /**
      * Get info about the server connected to.
      * @return An object containing the remote server device info.
      */
-    QBtDevice getServerDevice();
+    QBtDevice& getServerDevice();
     
     
     /**
@@ -235,5 +237,7 @@ private:
     friend class QBtObjectExchangeClientPrivate;
     QBtObjectExchangeClientPrivate* _implPtr;
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTOBJECTEXCHANGECLIENT_H_ */

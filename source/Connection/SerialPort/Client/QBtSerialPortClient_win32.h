@@ -20,9 +20,17 @@
 #ifndef QBTSERIALPORTCLIENT_WIN32_H_
 #define QBTSERIALPORTCLIENT_WIN32_H_
 
-#include "./QBtSerialPortClient.h"
-#include "../../WinSerialPort/Tserial_event.h"
+//#if defined(Q_CC_MSVC)
+	#include "QBtSerialPortClient.h"
+	#include "Tserial_event.h"
+//#else
+//	#include "./QBtSerialPortClient.h"
+//	#include "../../WinSerialPort/Tserial_event.h"
+//#endif
+
 #include <QBtAuxFunctions.h>
+
+QBT_NAMESPACE_BEGIN
 
 class QBtSerialPortClientPrivate
 {
@@ -88,5 +96,7 @@ private:
 	// Qt parent public class
 	QBtSerialPortClient* p_ptr;
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTSERIALPORTCLIENT_WIN32_H_ */

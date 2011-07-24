@@ -28,6 +28,7 @@
 #include "../QBtObjectExchangeServer_stub.h"
 #endif
 
+QBT_NAMESPACE_BEGIN
 
 //////////////////////////////////////////////////////////
 // QBtObjectExchangeServer::QBtObjectExchangeServer()	//
@@ -78,12 +79,12 @@ bool QBtObjectExchangeServer::isConnected()
     return _implPtr->IsConnected();
 }
 
-QBtService QBtObjectExchangeServer::getTransmittingServiceInfo()
+QBtService& QBtObjectExchangeServer::getTransmittingServiceInfo()
 {
     if(_service)
         return *_service;
     else
-        return QBtService();
+        return *(new QBtService());
 }
 
 void QBtObjectExchangeServer::setTransmittingService(const QBtService& service)
@@ -109,3 +110,5 @@ void QBtObjectExchangeServer::stopAdvertisingService()
         _advertiser = NULL;
     }
 }
+
+QBT_NAMESPACE_END

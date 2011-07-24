@@ -22,6 +22,7 @@
 
 #include <QStringList>
 
+QBT_NAMESPACE_BEGIN
 
 //____________________________________________________________________________
 //
@@ -121,7 +122,7 @@ inline QString UintToString (uint uuid)
 
 //____________________________________________________________________________
 
-QBtUuid::QBtUuid()
+QBtUuid::QBtUuid() : QObject()
 {
    _uuid.clear();
 }
@@ -132,7 +133,7 @@ QBtUuid::QBtUuid()
 // uuid assumed as hexadecimal
 //
 
-QBtUuid::QBtUuid (uint uuid)
+QBtUuid::QBtUuid (uint uuid) : QObject()
 {
    set (uuid);
 }
@@ -146,12 +147,15 @@ QBtUuid::QBtUuid (uint uuid)
 // XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
 //
 
-QBtUuid::QBtUuid (const QString & uuid)
+QBtUuid::QBtUuid (const QString & uuid) : QObject()
 {
    set (uuid);
 }
 
-
+QBtUuid::QBtUuid(const QBtUuid& uuid) : QObject()
+{
+	set(uuid.get());
+}
 
 //____________________________________________________________________________
 //
@@ -284,3 +288,15 @@ bool QBtUuid::operator != (const QBtUuid & obj) const
 {
    return _uuid != obj._uuid;
 }
+
+
+QBtUuid& QBtUuid::operator=(class QBtUuid const &uuid)
+{
+	if(this != &uuid)
+	{
+		_uuid = uuid.toString();
+	}
+	return *this;
+}
+
+QBT_NAMESPACE_END

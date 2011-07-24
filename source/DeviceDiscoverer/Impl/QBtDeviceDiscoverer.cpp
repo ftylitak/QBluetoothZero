@@ -28,10 +28,11 @@
 #include "../QBtDeviceDiscoverer_stub.h"
 #endif
 
+QBT_NAMESPACE_BEGIN
 
 //////////////////////////////////////////////////
 // QBtDeviceDiscoverer::QBtDeviceDiscoverer()	//
-// Defaul constructor							//
+// Default constructor							//
 //////////////////////////////////////////////////
 QBtDeviceDiscoverer::QBtDeviceDiscoverer(QObject *parent) : QObject(parent)
 {
@@ -84,3 +85,4 @@ bool QBtDeviceDiscoverer::isBusy() const
 	return _implPtr->IsBusy();
 }
 
+QBT_NAMESPACE_END

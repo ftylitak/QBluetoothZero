@@ -27,6 +27,7 @@
 #include "../QBtServiceDiscoverer_stub.h"
 #endif
 
+QBT_NAMESPACE_BEGIN
 
 //____________________________________________________________________________
 
@@ -124,4 +125,4 @@ bool QBtServiceDiscoverer::isBusy () const
 	return _implPtr->IsBusy();
 }
 
-
+QBT_NAMESPACE_END

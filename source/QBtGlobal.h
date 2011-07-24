@@ -16,12 +16,30 @@
 #ifndef QBTGLOBAL_H
 #define QBTGLOBAL_H
 
-#include <qglobal.h>
+#include <QtCore/qglobal.h>
+#include <QtCore/QMetaType>
 
 #ifdef BLUETOOTH_LIB
 #define DLL_EXPORT Q_DECL_EXPORT
 #else
 #define DLL_EXPORT Q_DECL_IMPORT
 #endif
+
+#if QT_VERSION > 0x040603
+#include <QtDeclarative/qdeclarative.h>
+#endif
+
+#ifdef ENABLE_QBLUETOOTH_NAMESPACE
+#define QBT_NAMESPACE_NAME QBluetooth
+#define QBT_NAMESPACE_BEGIN	namespace QBT_NAMESPACE_NAME{
+#define QBT_NAMESPACE_END	}
+using namespace QBluetooth;
+#else
+#define QBT_NAMESPACE_NAME
+#define QBT_NAMESPACE_BEGIN
+#define QBT_NAMESPACE_END
+#endif
+
+#define QML_LIBRARY_NAME "QBluetooth"
 
 #endif // QBTGLOBAL_H

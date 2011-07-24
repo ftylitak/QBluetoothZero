@@ -19,7 +19,9 @@
 #ifndef AUXFUNCTIONS_SYMBIAN_H_
 #define AUXFUNCTIONS_SYMBIAN_H_
 
-#include <QtGlobal>
+#include <QBtGlobal.h>
+
+QBT_NAMESPACE_BEGIN
 
 template <class T> inline void SafeDelete(T* &ptr)
 {
@@ -32,10 +34,10 @@ template <class T> inline void SafeDelete(T* &ptr)
 
 
 //#ifdef Q_OS_SYMBIAN
-#include <QString>
-#include <QMessageBox>
-#include <QDir>
-#include <QDebug.h>
+#include <QtCore/QString>
+#include <QtGui/QMessageBox>
+#include <QtCore/QDir>
+#include <QtCore/QDebug.h>
 
 inline void _Debug_Msg (const QString & m, const QString & file, int line)
 {
@@ -121,7 +123,7 @@ inline void _Break_Here (const QString & file, const QString & line)
 #include "BTTypes/QBtAddress.h"
 
 extern "C"{
-#include "./BlueSoleil_SDK_2.0.5/include/Btsdk_ui.h"
+#include "./BlueSoleil_SDK_2.0.5/SDKheaders/include/Btsdk_ui.h"
 }
 
 using namespace std;
@@ -160,7 +162,7 @@ static void DeinitBthSdk()
 	}
 }
 
-static BTDEVHDL GetDeviceHandle(QBtAddress& address)
+static BTDEVHDL GetDeviceHandle(const QBtAddress& address)
 {
 	//get device handle
 	BTDEVHDL devHandle = BTSDK_INVALID_HANDLE;
@@ -172,4 +174,5 @@ static BTDEVHDL GetDeviceHandle(QBtAddress& address)
 }
 #endif // Q_OS_WIN32
 
+QBT_NAMESPACE_END
 #endif /* AUXFUNCTIONS_SYMBIAN_H_ */

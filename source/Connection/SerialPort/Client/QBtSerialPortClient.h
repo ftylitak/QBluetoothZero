@@ -22,8 +22,10 @@
 
 #include <QBtGlobal.h>
 #include <QBtTypes.h>
-#include <QObject>
-#include <QByteArray>
+#include <QtCore/QObject>
+#include <QtCore/QByteArray>
+
+QBT_NAMESPACE_BEGIN
 
 //forward declaration
 class QBtSerialPortClientPrivate;
@@ -162,5 +164,7 @@ private:
     friend class QBtSerialPortClientPrivate;
     QBtSerialPortClientPrivate* _implPtr;
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTSERIALPORTCLIENT_H_ */

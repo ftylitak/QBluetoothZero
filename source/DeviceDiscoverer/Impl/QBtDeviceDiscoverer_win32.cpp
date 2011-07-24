@@ -20,6 +20,8 @@
 #include "../QBtDeviceDiscoverer_win32.h"
 #include "../QBtDeviceDiscoverer.h"
 
+QBT_NAMESPACE_BEGIN
+
 //////////////////////////
 //	Static variables	//
 //////////////////////////
@@ -202,3 +204,5 @@ bool QBtDeviceDiscovererPrivate::IsBusy () const
 {
 	return isSearching;
 }
+
+QBT_NAMESPACE_END

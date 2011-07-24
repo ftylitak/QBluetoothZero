@@ -19,6 +19,8 @@
 #include <QDesktopWidget>
 #include <QApplication>
 
+QBT_NAMESPACE_BEGIN
+
 // ----------------------------------------------------------------------------
 // QBtSingleDeviceSelectorUIPrivate::::QBtSingleDeviceSelectorUIPrivate(QWidget* parent) :
 //		QFrame(parent), prnt(parent)
@@ -177,3 +179,5 @@ void QBtSingleDeviceSelectorUIPrivate::exitPressed()
     this->hide();
     emit _publicClass->userCanceled();
 }
+
+QBT_NAMESPACE_END

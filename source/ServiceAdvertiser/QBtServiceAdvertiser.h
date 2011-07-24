@@ -21,8 +21,10 @@
 #define QBTSERVICEADVERTISER_H_
 
 #include <QBtGlobal.h>
-#include <QObject>
+#include <QtCore/QObject>
 #include <QBtTypes.h>
+
+QBT_NAMESPACE_BEGIN
 
 //forward declaration
 class QBtServiceAdvertiserPrivate;
@@ -114,5 +116,6 @@ private:
     
 };
 
+QBT_NAMESPACE_END
 
 #endif /* QBTSERVICEADVERTISER_H_ */

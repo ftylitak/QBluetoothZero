@@ -19,14 +19,16 @@
 
 #include "../QBtDevice.h"
 
-QBtDevice::QBtDevice() :
+QBT_NAMESPACE_BEGIN
+
+QBtDevice::QBtDevice(QObject* parent) : QObject(parent),
 	_name("Undefined"), _address(), _type(Uncategorized), _serviceListUpdated (false)
 {
 	_supportedServices.clear();
 }
 
-QBtDevice::QBtDevice(const QBtDevice& dev) 
-	: _name(dev.getName()), _address(dev.getAddress()), _type(dev.getType()), _serviceListUpdated (dev._serviceListUpdated)
+QBtDevice::QBtDevice(const QBtDevice& dev, QObject* parent) : QObject(parent),
+	 _name(dev.getName()), _address(dev.getAddress()), _type(dev.getType()), _serviceListUpdated (dev._serviceListUpdated)
 {	
 	QBtService::List* servList = new QBtService::List();
 	*servList = dev.getSupportedServices();
@@ -35,8 +37,8 @@ QBtDevice::QBtDevice(const QBtDevice& dev)
 	_supportedServices = *servList;
 }
 
-QBtDevice::QBtDevice (const QString & devName, const QBtAddress & devAddress, DeviceMajor devType) 
-	: _name(devName), _address(devAddress), _type(devType)
+QBtDevice::QBtDevice (const QString & devName, const QBtAddress & devAddress, DeviceMajor devType, QObject* parent) 
+: QObject(parent), _name(devName), _address(devAddress), _type(devType)
 {
 	_supportedServices.clear();
 }
@@ -84,7 +86,7 @@ QString QBtDevice::getName() const
 	return _name;
 }
 
-QBtAddress QBtDevice::getAddress() const
+const QBtAddress& QBtDevice::getAddress() const
 {
 	return _address;
 }
@@ -122,7 +124,7 @@ const QBtService::List & QBtDevice::getSupportedServices() const
 	return _supportedServices;
 }
 
-/*
+
 QBtDevice& QBtDevice::operator= (const QBtDevice& dev)
 {
 	if ( this == &dev )  
@@ -140,4 +142,5 @@ QBtDevice& QBtDevice::operator= (const QBtDevice& dev)
 	
 	return *this;
 }
-*/
+
+QBT_NAMESPACE_END

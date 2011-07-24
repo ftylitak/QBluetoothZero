@@ -23,6 +23,8 @@
 #include <QBtTypes.h>
 #include <QBtAuxFunctions.h>
 
+QBT_NAMESPACE_BEGIN
+
 class QBtLocalDevicePrivate
 {
 public:
@@ -60,5 +62,7 @@ public:
     static bool UnpairDevice(const QBtDevice& device);
     static bool UnpairDevice(const QBtAddress& address);
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTLOCALDEVICE_WIN32_H_ */

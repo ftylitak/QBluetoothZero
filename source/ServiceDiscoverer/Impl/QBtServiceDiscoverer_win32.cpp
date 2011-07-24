@@ -20,6 +20,8 @@
 #include <QtGlobal>
 #include "../QBtServiceDiscoverer_win32.h"
 
+QBT_NAMESPACE_BEGIN
+
 QBtServiceDiscovererPrivate::QBtServiceDiscovererPrivate(QBtServiceDiscoverer* publicClass):
 	QObject(NULL), p_ptr(publicClass), isBusy(false)
 {
@@ -231,3 +233,5 @@ bool QBtServiceDiscovererPrivate::IsBusy() const
 {
 	return isBusy;
 }
+
+QBT_NAMESPACE_END

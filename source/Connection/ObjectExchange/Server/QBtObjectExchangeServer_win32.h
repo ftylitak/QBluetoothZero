@@ -23,6 +23,8 @@
 #include "QBtObjectExchangeServer.h"
 #include <QBtAuxFunctions.h>
 
+QBT_NAMESPACE_BEGIN
+
 class QBtObjectExchangeServerPrivate
 {
 public:
@@ -36,5 +38,7 @@ public:
 private:
 	QBtObjectExchangeServer p_ptr;
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTOBJECTEXCHANGESERVER_WIN32_H_ */

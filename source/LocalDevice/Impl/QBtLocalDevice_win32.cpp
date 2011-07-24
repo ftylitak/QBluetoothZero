@@ -20,6 +20,8 @@
 #include "../QBtLocalDevice_win32.h"
 #include <QBtAuxFunctions.h>
 
+QBT_NAMESPACE_BEGIN
+
 QBtAddress QBtLocalDevicePrivate::GetLocalDeviceAddress()
 {
     BTINT32 result = BTSDK_FALSE;
@@ -228,3 +230,5 @@ void QBtLocalDevicePrivate::SetVisible (bool value)
 
 	return;
 }
+
+QBT_NAMESPACE_END

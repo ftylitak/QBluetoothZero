@@ -19,6 +19,8 @@
 
 #include "../QBtSerialPortServer_win32.h"
 
+QBT_NAMESPACE_BEGIN
+
 QBtSerialPortServerPrivate::QBtSerialPortServerPrivate(QBtSerialPortServer* publicClass) : 
 		p_ptr(publicClass)
 {	
@@ -43,3 +45,5 @@ void QBtSerialPortServerPrivate::SendData(const QString /*data*/)
 {
 	emit p_ptr->error(QBtSerialPortServer::ErrorNotSupported);
 }
+
+QBT_NAMESPACE_END

@@ -21,11 +21,12 @@
 #define QBTSERVICEPROBER_H_
 
 #include <QBtGlobal.h>
-#include <QObject>
+#include <QtCore/QObject>
 #include <QBtTypes.h>
 #include <QBtDeviceDiscoverer.h>
 #include <QBtServiceDiscoverer.h>
 
+QBT_NAMESPACE_BEGIN
 
 /**
  * This class provides the mechanism to inquire services available on all devices
@@ -186,5 +187,7 @@ private:
     
 
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTSERVICEDISCOVERER_H_ */

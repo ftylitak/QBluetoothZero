@@ -24,6 +24,8 @@
 #include <QBtDeviceDiscoverer.h>
 #include <QBtAuxFunctions.h>
 
+QBT_NAMESPACE_BEGIN
+
 class QBtDeviceDiscovererPrivate
 {
 public:
@@ -55,5 +57,7 @@ private:
 
     QBtDeviceDiscoverer *p_ptr;  //Pointer to public interface
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTDEVICEDISCOVERER_STUB_H_ */

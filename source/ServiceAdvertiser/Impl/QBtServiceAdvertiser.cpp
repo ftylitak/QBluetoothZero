@@ -28,6 +28,8 @@
 #include "../QBtServiceAdvertiser_stub.h"
 #endif
 
+QBT_NAMESPACE_BEGIN
+
 //////////////////////////////////////////////////
 // QBtServiceAdvertiser::QBtServiceAdvertiser()	//
 // Defaul constructor							//
@@ -74,3 +76,5 @@ void QBtServiceAdvertiser::updateAvailability(bool aAvailable)
 {
     _implPtr->UpdateAvailability(aAvailable);
 }
+
+QBT_NAMESPACE_END
