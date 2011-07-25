@@ -56,6 +56,7 @@ void QBtDevice::addNewService (const QBtService& newService)
 void QBtDevice::setName (const QString & newName)
 {
 	_name = newName;
+	emit nameChanged(_name);
 }
 
 void QBtDevice::setAddress (const QBtAddress& newAddress)
@@ -141,6 +142,13 @@ QBtDevice& QBtDevice::operator= (const QBtDevice& dev)
 	setSupportedServices(*servList);
 	
 	return *this;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+QString QBtDevice::name()
+{
+	return _name;
 }
 
 QBT_NAMESPACE_END

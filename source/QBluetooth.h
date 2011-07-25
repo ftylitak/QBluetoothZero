@@ -34,17 +34,16 @@
 //using namespace QBluetooth;
 
 //#if QT_VERSION > 0x040603
-#include <QtDeclarative/qdeclarative.h>
+#include <qdeclarative.h>
 
-QBT_NAMESPACE_BEGIN
-
-class QBt
+namespace QBluetooth
 {
-    public:
     static void registerTypes()
     {
         qRegisterMetaType<QBtDevice>("QBtDevice");
         qRegisterMetaType<QBtService>("QBtService");
+		qRegisterMetaType<QBtAddress>("QBtAddress");
+		qRegisterMetaType<QBtUuid>("QBtUuid");
     }
 
     static void registerQMLTypes()
@@ -64,8 +63,7 @@ class QBt
         //qmlRegisterType<QBtObjectExchangeServer>("QBtObjectExchangeServer", 1, 0, "QBtObjectExchangeServer");
         //qmlRegisterType<QBtObjectExchangeClient>("QBtObjectExchangeClient", 1, 0, "QBtObjectExchangeClient");
     }
-};
 
-QBT_NAMESPACE_END
+}
 
 #endif // QBLUETOOTH_H

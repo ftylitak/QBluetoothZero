@@ -1,6 +1,7 @@
 uid3 = 0xA003328D
 
 QT += core
+QT += declarative
 
 TEMPLATE = lib
 TARGET   = QBluetooth

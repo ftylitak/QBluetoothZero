@@ -88,7 +88,13 @@ signals:
      * Signaled for every device detected
      * @param remoteDevice The remote device
      */
-    void newDeviceFound (const QBtDevice & remoteDevice);
+	void newDeviceFound (QBtDevice remoteDevice);
+	
+	//changed to the above because @ emit the classes already written, pass as argument
+	// a local variable QBtDevice so i am not sure if the reference will continue to make sence
+	// (may be the variable will be destroyed). Alternative we could return a *(new QBtDevice())
+	//  but that would lead to memory leak.
+	//void newDeviceFound (const QBtDevice & remoteDevice);
 
     /**
      * Signal to report that discovery has stopped (either canceled or no new devices to detect)

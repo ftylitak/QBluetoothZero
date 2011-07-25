@@ -29,17 +29,20 @@
 #include <QtDeclarative/qdeclarative.h>
 #endif
 
+//#define ENABLE_QBLUETOOTH_NAMESPACE
+
+#define QML_LIBRARY_NAME "QBluetooth"
+
 #ifdef ENABLE_QBLUETOOTH_NAMESPACE
 #define QBT_NAMESPACE_NAME QBluetooth
 #define QBT_NAMESPACE_BEGIN	namespace QBT_NAMESPACE_NAME{
 #define QBT_NAMESPACE_END	}
-using namespace QBluetooth;
 #else
 #define QBT_NAMESPACE_NAME
 #define QBT_NAMESPACE_BEGIN
 #define QBT_NAMESPACE_END
 #endif
 
-#define QML_LIBRARY_NAME "QBluetooth"
+
 
 #endif // QBTGLOBAL_H

@@ -31,11 +31,11 @@ QBT_NAMESPACE_BEGIN
  * Its main fields are 4.
  *
  * a) QBtAddress address: It is the device's bluetooth address.
- *                  Any communication between remote devices is made using this feild
+ *                  Any communication between remote devices is made using this field
  *                  so it is an essential information. No communication can be done
  *                  without this.
  *
- * b) QString name: The name of the device. By default this feild is equal to QBtAddress.toString().
+ * b) QString name: The name of the device. By default this field is equal to QBtAddress.toString().
  *                  The actual name is retrieved from the device discovery
  *                  and is set by the remote device as an identification string ID.
  *
@@ -49,7 +49,7 @@ class DLL_EXPORT QBtDevice : public QObject
 {
 	Q_OBJECT
 	Q_ENUMS(DeviceMajor)
-	Q_PROPERTY(QString name READ getName WRITE setName)
+	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
 	Q_PROPERTY(QBtAddress address READ getAddress WRITE setAddress)
 	Q_PROPERTY(DeviceMajor type READ getType WRITE setType)
 
@@ -89,7 +89,8 @@ public:
     
     bool serviceListUpdated() const;
 
-    QString getName() const;
+	QString name();
+    Q_INVOKABLE QString getName() const;
     const QBtAddress& getAddress() const;
     DeviceMajor getType() const;
     QString getTypeAsString() const;
@@ -99,6 +100,9 @@ public:
 	//	->	It is required as it turns out when inheriting from QObject. If not implemented
 	//		then i get linker error (at least when compiling for Windows)
     QBtDevice& operator= (const QBtDevice& dev);
+
+signals:
+	void nameChanged(QString newName);
 
 private:
     QString _name;
@@ -111,8 +115,8 @@ private:
 
 QBT_NAMESPACE_END
 
-Q_DECLARE_METATYPE(QBT_NAMESPACE_NAME::QBtDevice)
-Q_DECLARE_METATYPE(QBT_NAMESPACE_NAME::QBtDevice::DeviceMajor)
+Q_DECLARE_METATYPE(QBtDevice)
+Q_DECLARE_METATYPE(QBtDevice::DeviceMajor)
 
 
 
