@@ -92,7 +92,7 @@ void QBtServiceDiscovererPrivate::DiscoverSpecificClass(
 
 	QBtConstants::ServiceClass serviceUUID = (QBtConstants::ServiceClass)(uuid.get());
 	
-	DiscoverServiceHandles(targetDevice, (BTSVCHDL**)&servicesFound, &servicesNumFound, serviceUUID);
+	DiscoverServiceHandles(targetDevice, servicesFound, &servicesNumFound, serviceUUID);
 
 	// process results
 	ProcessFoundServices(servicesFound, servicesNumFound, serviceUUID);
@@ -102,7 +102,7 @@ void QBtServiceDiscovererPrivate::DiscoverSpecificClass(
 	return;
 }
 
-void QBtServiceDiscovererPrivate::DiscoverServiceHandles(QBtDevice* targetDevice, BTSVCHDL** servicesFound, BTUINT32* servicesNumFound, QBtConstants::ServiceClass uuid)
+void QBtServiceDiscovererPrivate::DiscoverServiceHandles(QBtDevice* targetDevice, BTSVCHDL* servicesFound, BTUINT32* servicesNumFound, QBtConstants::ServiceClass uuid)
 {
 	BtSdkSDPSearchPatternStru sdpStru;
 	sdpStru.mask = BTSDK_SSPM_UUID16;
@@ -123,7 +123,7 @@ void QBtServiceDiscovererPrivate::DiscoverServiceHandles(QBtDevice* targetDevice
 	BTINT32 result = BTSDK_FALSE;
 	do
 	{
-		result = Btsdk_BrowseRemoteServicesEx(devHandle, &sdpStru, 1, *servicesFound, servicesNumFound);
+		result = Btsdk_BrowseRemoteServicesEx(devHandle, &sdpStru, 1, servicesFound, servicesNumFound);
 		tmpCnt++;
 	}while(tmpCnt < 5 && result != BTSDK_OK);
 
@@ -177,19 +177,8 @@ void QBtServiceDiscovererPrivate::ProcessFoundServices(BTSVCHDL* foundServices, 
 		if(result != BTSDK_OK)
 			return;
 
-		if(wantedClass == QBtConstants::OBEXObjectPush || 
-			wantedClass == QBtConstants::OBEXFileTransfer)
-		{
-			if((QBtConstants::ServiceClass)serviceInfo.service_class != QBtConstants::OBEXObjectPush ||
-				(QBtConstants::ServiceClass)serviceInfo.service_class != QBtConstants::OBEXFileTransfer)
-				continue;
-		}
-		else if(wantedClass == QBtConstants::SerialPort)
-		{
-			if((QBtConstants::ServiceClass)serviceInfo.service_class != QBtConstants::SerialPort)
-				continue;
-		}
-			
+		if((QBtConstants::ServiceClass)serviceInfo.service_class != wantedClass )
+			continue;			
 
 		QBtService newService;
 		newService.setHandle(foundServices[i]);

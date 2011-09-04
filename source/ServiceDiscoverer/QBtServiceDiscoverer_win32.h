@@ -51,7 +51,7 @@ protected:
 private:
     void ProcessFoundServices(BTSVCHDL* foundServices, int numOfServices, QBtConstants::ServiceClass wantedClass);
     void RetrieveSPPAttributes(QBtService* currService, BTSVCHDL servHandle);
-	void DiscoverServiceHandles(QBtDevice* targetDevice, BTSVCHDL** servicesFound, BTUINT32* numOfServicesFound, QBtConstants::ServiceClass uuid);
+	void DiscoverServiceHandles(QBtDevice* targetDevice, BTSVCHDL* servicesFound, BTUINT32* numOfServicesFound, QBtConstants::ServiceClass uuid);
 
 private slots:
 	void SetBusy();
