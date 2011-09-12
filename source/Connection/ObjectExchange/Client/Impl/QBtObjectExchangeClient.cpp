@@ -91,7 +91,25 @@ void QBtObjectExchangeClient::setPath(const QString & path)
     _implPtr->SetPath(path);
 }
 
+QList<QBtRemoteFileInfo> QBtObjectExchangeClient::initiateFolderBrowsing(const QString& folderPath)
+{
+#ifdef Q_OS_WIN32
+	return _implPtr->InitiateFolderBrowsing(folderPath);
+#else
+	emit error(QBtObjectExchangeClient::OBEXFeatureNotSupported);
+#endif
+}
+
 // accessor commands
+QString QBtObjectExchangeClient::getWorkingPath()
+{
+#ifdef Q_OS_WIN32
+	return _implPtr->GetRemoteWorkingDirectory();
+#else
+	emit error(QBtObjectExchangeClient::OBEXFeatureNotSupported);
+#endif
+}
+
 QBtService& GetTransmittingService()
 {
     return *(new QBtService());

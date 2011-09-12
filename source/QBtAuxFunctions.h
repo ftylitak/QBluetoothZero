@@ -123,7 +123,7 @@ inline void _Break_Here (const QString & file, const QString & line)
 #include "BTTypes/QBtAddress.h"
 
 extern "C"{
-#include "./BlueSoleil_SDK_2.0.5/SDKheaders/include/Btsdk_ui.h"
+#include "./BlueSoleil_SDK_2.0.5/include/Btsdk_ui.h"
 }
 
 using namespace std;

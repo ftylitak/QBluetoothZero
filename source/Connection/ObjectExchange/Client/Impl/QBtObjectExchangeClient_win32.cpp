@@ -18,16 +18,27 @@
  */
 
 #include "../QBtObjectExchangeClient_win32.h"
+#include <iostream>
+#include <string>
+#include <cstdlib>
 
 QBT_NAMESPACE_BEGIN
 
-bool QBtObjectExchangeClientPrivate::isBusy = false;
+#define MAX_FTP_FOLDER_LIST 128
+#define MAX_FILENAME    256
 
-QBtObjectExchangeClientPrivate::QBtObjectExchangeClientPrivate(QBtObjectExchangeClient* publicClass) :
-	p_ptr(publicClass), connectionHandle(BTSDK_INVALID_HANDLE), server(NULL), connectingService(NULL),
+bool QBtObjectExchangeClientPrivate::isBusy = false;
+QBtObjectExchangeClientPrivate* QBtObjectExchangeClientPrivate::thisPtr = NULL;
+QList<QBtRemoteFileInfo> QBtObjectExchangeClientPrivate::files;
+
+QString QBtObjectExchangeClientPrivate::currentWorkingDirectory;
+
+QBtObjectExchangeClientPrivate::QBtObjectExchangeClientPrivate(QBtObjectExchangeClient* publicClass,QObject* parent) :
+	QObject(parent), p_ptr(publicClass), connectionHandle(BTSDK_INVALID_HANDLE), server(NULL), connectingService(NULL),
 	maxFileNameSize(256)
 {
 	InitBthSdk();
+	thisPtr = this;
 }
 
 QBtObjectExchangeClientPrivate::~QBtObjectExchangeClientPrivate()
@@ -233,17 +244,14 @@ bool QBtObjectExchangeClientPrivate::SetPath (const QString & path)
 	}
 
 	BTINT32 iErrorCode;
-	//BTUINT8 editedFolderName[BTSDK_PATH_MAXLENGTH];
-	//memset(editedFolderName, '\0', BTSDK_PATH_MAXLENGTH);
 
-	/*editedFolderName[0] = '\\';
+	if(path == "..")
+	{
+		iErrorCode = Btsdk_FTPBackDir(connectionHandle);
+		return (iErrorCode == BTSDK_OK);
+	}
 
-	if(path.size() > 0)
-		memcpy(editedFolderName+1, 
-				path.constData(), 
-				(path.size() < BTSDK_PATH_MAXLENGTH) ? 
-						path.size() : 
-						BTSDK_PATH_MAXLENGTH);*/
+
 	QString pathEdited = path;
 	pathEdited.prepend("\\");
 
@@ -292,12 +300,15 @@ bool QBtObjectExchangeClientPrivate::IsBusy()
 QString QBtObjectExchangeClientPrivate::GetRemoteWorkingDirectory()
 {
 	if (connectionHandle == BTSDK_INVALID_HANDLE)
+	{
+		emit p_ptr->error(QBtObjectExchangeClient::OBEXClientConnectionError);
 		return "";
+	}
 
-	BTUINT8* remoteCurrentDir = new BTUINT8(maxFileNameSize);
+	BTUINT8 remoteCurrentDir[MAX_FILENAME];
 	BTINT32 result = BTSDK_FALSE;
 	
-	ZeroMemory(remoteCurrentDir, maxFileNameSize);
+	ZeroMemory(remoteCurrentDir, MAX_FILENAME);
 	
 	result = Btsdk_FTPGetRmtDir(connectionHandle, remoteCurrentDir);
 
@@ -305,6 +316,52 @@ QString QBtObjectExchangeClientPrivate::GetRemoteWorkingDirectory()
 		return QString((char*)remoteCurrentDir);
 	else
 		return "";
+}
+
+QList<QBtRemoteFileInfo>& QBtObjectExchangeClientPrivate::InitiateFolderBrowsing(const QString& folderPath)
+{
+	BTINT32 result = BTSDK_FALSE;
+	QString folderPathStr = QString(folderPath);
+	QString currentdir(GetRemoteWorkingDirectory());
+
+	currentWorkingDirectory = currentdir;
+
+	if (connectionHandle == BTSDK_INVALID_HANDLE)	
+	{
+		emit p_ptr->error(QBtObjectExchangeClient::OBEXClientConnectionError);
+		return QList<QBtRemoteFileInfo>();
+	}
+
+	files.clear();
+
+	if(folderPathStr == currentdir)
+	{
+		int slashPos = folderPathStr.lastIndexOf("\\");
+		if(slashPos == folderPathStr.size()-1)
+		{
+			folderPathStr.resize(folderPathStr.size()-1);
+			slashPos = folderPathStr.lastIndexOf("\\");
+		}
+
+		QString folderName = folderPathStr.right(folderPathStr.size() - slashPos - 1);
+		currentWorkingDirectory = folderPathStr;
+
+		result = Btsdk_FTPBrowseFolder(connectionHandle, (BTUINT8*)folderName.toAscii().data(), &QBtObjectExchangeClientPrivate::FTPBrowsingCallback, FTP_OP_REFRESH);
+	}
+	else
+	{
+		if(currentWorkingDirectory.size() != 1)
+			currentWorkingDirectory += "\\";
+		currentWorkingDirectory += folderPathStr;
+
+		result = Btsdk_FTPBrowseFolder(connectionHandle, (BTUINT8*)folderPathStr.toAscii().data(), &QBtObjectExchangeClientPrivate::FTPBrowsingCallback, FTP_OP_NEXT);
+	}
+
+	//if not empty then it means that there was some error
+	if (!(result == 0X6a4))
+		emit p_ptr->error(QBtObjectExchangeClient::OBEXClientBrowseError);
+
+	return QList<QBtRemoteFileInfo>(files);
 }
 
 /************************************************************************/
@@ -334,6 +391,39 @@ void QBtObjectExchangeClientPrivate::FTPStatusCallback(UCHAR ucFirst,
 		
 		isBusy = false;
 	}
+}
+
+void QBtObjectExchangeClientPrivate::FTPBrowsingCallback(BTUINT8 *pFileInfo)
+{	
+	QBtRemoteFileInfo file;
+
+	WIN32_FIND_DATA *pFindData = NULL;
+
+	if (NULL == pFileInfo) return;
+
+	pFindData = (WIN32_FIND_DATA *)pFileInfo;	
+	file.fileName = QString::fromUtf8((char*)pFindData->cFileName);
+	file.size = pFindData->nFileSizeLow;
+	file.type = pFindData->dwFileAttributes;
+	file.isDir = (pFindData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
+	file.path = currentWorkingDirectory;
+
+	file.creationTime = convertToQDate(pFindData->ftCreationTime);
+	file.lastAccessTime = convertToQDate(pFindData->ftLastAccessTime);
+	file.lastWriteTime = convertToQDate(pFindData->ftLastWriteTime);
+
+	files.append(QBtRemoteFileInfo(file));
+ 
+	Btsdk_FreeMemory(pFileInfo);
+}
+
+QDate QBtObjectExchangeClientPrivate::convertToQDate(FILETIME& time)
+{
+	SYSTEMTIME sysTime;
+	FileTimeToSystemTime( &time, &sysTime);
+
+	QDate qdate(sysTime.wYear, sysTime.wMonth, sysTime.wDay);
+	return qdate;
 }
 
 QBT_NAMESPACE_END

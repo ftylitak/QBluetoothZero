@@ -44,6 +44,7 @@ namespace QBluetooth
         qRegisterMetaType<QBtService>("QBtService");
 		qRegisterMetaType<QBtAddress>("QBtAddress");
 		qRegisterMetaType<QBtUuid>("QBtUuid");
+		qRegisterMetaType<QBtRemoteFileInfo>("QBtRemoteFileInfo");
     }
 
     static void registerQMLTypes()
@@ -54,6 +55,7 @@ namespace QBluetooth
         qmlRegisterType<QBtDevice>(QML_LIBRARY_NAME, 1, 0, "QBtDevice");
         qmlRegisterType<QBtService>(QML_LIBRARY_NAME, 1, 0, "QBtService");
         qmlRegisterType<QBtDeviceDiscoverer>(QML_LIBRARY_NAME, 1, 0, "QBtDeviceDiscoverer");
+		qmlRegisterType<QBtRemoteFileInfo>(QML_LIBRARY_NAME, 1, 0, "QBtRemoteFileInfo");
         //qmlRegisterType<QBtServiceDiscoverer>("QBtServiceDiscoverer", 1, 0, "QBtServiceDiscoverer");
         //qmlRegisterType<QBtServiceAdvertiser>("QBtServiceAdvertiser", 1, 0, "QBtServiceAdvertiser");
         //qmlRegisterType<QBtLocalDevice>("QBtLocalDevice", 1, 0, "QBtLocalDevice");

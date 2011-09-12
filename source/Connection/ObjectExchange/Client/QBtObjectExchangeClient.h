@@ -86,7 +86,9 @@ public:
         OBEXClientInternalError,
         OBEXClientNoSelectedDevice,
         OBEXClientNoSelectedService,
-        OBEXClientUnableToSetPath
+        OBEXClientUnableToSetPath,
+		OBEXFeatureNotSupported,
+		OBEXClientBrowseError
     };
 
 public:
@@ -164,7 +166,10 @@ public:
      */
     void setPath(const QString & path);
 
+	QList<QBtRemoteFileInfo> initiateFolderBrowsing(const QString& folderPath);
+
     // accessor commands
+	QString getWorkingPath();
 
     /**
      * Get info about the service connected to.
@@ -189,9 +194,6 @@ public:
      */
     bool isConnected() const;
     
-    
-    
-
 public slots:
     void disconnect();
 
@@ -232,6 +234,14 @@ signals:
      * Emitted upon successfull set of the remote current working directory.
      */
     void remotePathSet (const QString & pathName);
+
+	/**
+	 *	Emitted after calling initiateFolderBrowsing function for every result
+	 *	found from browsing.
+	 *
+	 *	@param file The file info. See QBtRemoteFileInfo class for the info provided.
+	 */
+	void folderBrowsingResultElement(const QBtRemoteFileInfo& file);
 
 private:
     friend class QBtObjectExchangeClientPrivate;

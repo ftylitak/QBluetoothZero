@@ -25,6 +25,7 @@
 #include <QBtDevice.h>
 #include <QBtConstants.h>
 #include <QBtUuid.h>
+#include <QBtRemoteFileInfo.h>
 
 
 #endif /* QBTTYPES_H_ */

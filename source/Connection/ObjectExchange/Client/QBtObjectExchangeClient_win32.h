@@ -22,14 +22,18 @@
 
 #include <QBtObjectExchangeClient.h>
 #include <QBtAuxFunctions.h>
+#include <QList>
 
 QBT_NAMESPACE_BEGIN
 
-class QBtObjectExchangeClientPrivate
+class QBtObjectExchangeClientPrivate : public QObject
 {
+
+Q_OBJECT
+
 public:
 
-    QBtObjectExchangeClientPrivate(QBtObjectExchangeClient* publicClass);
+    QBtObjectExchangeClientPrivate(QBtObjectExchangeClient* publicClass, QObject* parent=0);
     ~QBtObjectExchangeClientPrivate();
 
     /**
@@ -102,6 +106,14 @@ public:
     */
     void GetByteBuffer(const QString& dataName);
 
+	/**
+	 *	InitiateFolderBrowsing()
+	 *
+	 */
+	QList<QBtRemoteFileInfo>& InitiateFolderBrowsing(const QString& folderPath);
+
+	QString GetRemoteWorkingDirectory();
+
 private:
     // Callback containing file transfer info
     static void FTPStatusCallback(UCHAR ucFirst,
@@ -109,7 +121,12 @@ private:
                             UCHAR* ucFileName,
                             DWORD dwFilesize,
                             DWORD dwCursize);
-    QString GetRemoteWorkingDirectory();
+	static void FTPBrowsingCallback(BTUINT8 *pFileInfo);
+	static QDate convertToQDate(FILETIME& time);
+
+signals:
+	void folderBrowsingResultElement(const QBtRemoteFileInfo& file);
+	void browsingFinished(QString folder, QList<QBtRemoteFileInfo> resutls);
 
 private:
     static bool isBusy;
@@ -119,8 +136,11 @@ private:
     QBtService* connectingService;
 
     QBtObjectExchangeClient* p_ptr;
-};
 
+	static QBtObjectExchangeClientPrivate* thisPtr;
+	static QList<QBtRemoteFileInfo> files;
+	static QString currentWorkingDirectory;
+};
 QBT_NAMESPACE_END
 
 #endif /* QBTOBJECTEXCHANGECLIENT_WIN32_H_ */

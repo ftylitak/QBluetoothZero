@@ -85,8 +85,6 @@ void QBtServiceDiscovererPrivate::DiscoverServices(QBtDevice* targetDevice)
 void QBtServiceDiscovererPrivate::DiscoverSpecificClass(
 			QBtDevice* targetDevice, QBtUuid uuid)
 {
-	
-
 	BTSVCHDL servicesFound[128] = {0};
 	BTUINT32 servicesNumFound = 128;
 
