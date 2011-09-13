@@ -21,6 +21,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <QByteArray>
 
 QBT_NAMESPACE_BEGIN
 
@@ -29,7 +30,7 @@ QBT_NAMESPACE_BEGIN
 
 bool QBtObjectExchangeClientPrivate::isBusy = false;
 QBtObjectExchangeClientPrivate* QBtObjectExchangeClientPrivate::thisPtr = NULL;
-QList<QBtRemoteFileInfo> QBtObjectExchangeClientPrivate::files;
+QList<QBtRemoteFileInfo*>* QBtObjectExchangeClientPrivate::files = NULL;
 
 QString QBtObjectExchangeClientPrivate::currentWorkingDirectory;
 
@@ -186,9 +187,12 @@ void QBtObjectExchangeClientPrivate::GetFile(const QString& localPath, const QSt
 
 	Btsdk_FTPRegisterStatusCallback4ThirdParty(connectionHandle, &QBtObjectExchangeClientPrivate::FTPStatusCallback);	
 
-	// go to route direcotry
-	SetPath("");
-	//bool remote = SetPath(remoteFilePath);
+	// go to directory that contains the file
+	if(remoteFilePath != currentWorkingDirectory)
+	{
+		SetPath("");
+		SetPath(currentWorkingDirectory);
+	}
 	
 	//////////////////////////////////////////////////////////////////////////
 	if(localPathStr.lastIndexOf("\\") != localPathStr.size() -1)
@@ -196,10 +200,16 @@ void QBtObjectExchangeClientPrivate::GetFile(const QString& localPath, const QSt
 
 	localPathStr += remoteFileName;
 	//////////////////////////////////////////////////////////////////////////
+
+	BTUINT8 remoteFile[MAX_FILENAME] = {0};
+	BTUINT8 local[MAX_FILENAME] = {0};
+
+	memcpy((char*)remoteFile, remoteFileName.toUtf8().data(), remoteFileName.size());
+	memcpy((char*)local, localPathStr.toUtf8().data(), localPathStr.size());
 	
 	iErrorCode = Btsdk_FTPGetFile(connectionHandle, 
-								(BTUINT8*)remoteFileNameFull.toUtf8().constData(), 
-								(BTUINT8*)localPathStr.toUtf8().constData());
+								remoteFile, 
+								local);
 
 	Btsdk_FTPRegisterStatusCallback4ThirdParty(connectionHandle, NULL);
 
@@ -318,7 +328,7 @@ QString QBtObjectExchangeClientPrivate::GetRemoteWorkingDirectory()
 		return "";
 }
 
-QList<QBtRemoteFileInfo>& QBtObjectExchangeClientPrivate::InitiateFolderBrowsing(const QString& folderPath)
+QList<QBtRemoteFileInfo*> QBtObjectExchangeClientPrivate::InitiateFolderBrowsing(const QString& folderPath)
 {
 	BTINT32 result = BTSDK_FALSE;
 	QString folderPathStr = QString(folderPath);
@@ -329,10 +339,11 @@ QList<QBtRemoteFileInfo>& QBtObjectExchangeClientPrivate::InitiateFolderBrowsing
 	if (connectionHandle == BTSDK_INVALID_HANDLE)	
 	{
 		emit p_ptr->error(QBtObjectExchangeClient::OBEXClientConnectionError);
-		return QList<QBtRemoteFileInfo>();
+		return QList<QBtRemoteFileInfo*>();
 	}
 
-	files.clear();
+	SafeDelete(files);
+	files = new QList<QBtRemoteFileInfo*>();
 
 	if(folderPathStr == currentdir)
 	{
@@ -359,35 +370,38 @@ QList<QBtRemoteFileInfo>& QBtObjectExchangeClientPrivate::InitiateFolderBrowsing
 
 	//if not empty then it means that there was some error
 	if (!(result == 0X6a4))
+	{
 		emit p_ptr->error(QBtObjectExchangeClient::OBEXClientBrowseError);
+		//return QList<QBtRemoteFileInfo*>();
+	}
 
-	return QList<QBtRemoteFileInfo>(files);
+	return QList<QBtRemoteFileInfo*>(*files);
 }
 
 /************************************************************************/
 /*                     Transfer info callback                           */
 /************************************************************************/
 void QBtObjectExchangeClientPrivate::FTPStatusCallback(UCHAR ucFirst, 
-					UCHAR ucLast, UCHAR* /*ucFileName*/, DWORD /*dwFilesize*/, DWORD /*dwCursize*/)
+					UCHAR ucLast, UCHAR* ucFileName, DWORD dwFilesize, DWORD dwCursize)
 {
 	static BTUINT32 s_TotalFileSize;
 	static BTUINT32 s_CurrentFileSize;
 
 	if (1 == ucFirst)
 	{
-	//	s_TotalFileSize = dwFilesize;
-//		s_CurrentFileSize = 0;
+		s_TotalFileSize = dwFilesize;
+		s_CurrentFileSize = 0;
 		
 		isBusy = true;
 	}
 	
-//	printf("*******It is transfering file %s, and current size = %d****\n",
-//							ucFileName,s_CurrentFileSize += dwCursize);
+	printf("*******It is transfering file %s, and current size = %d****\n",
+							ucFileName,s_CurrentFileSize += dwCursize);
 		    
 	if (1 == ucLast)
 	{
-	//	printf("*******It has finished transfering file %s,and total size = %d ****\n",
-	//		   ucFileName,s_TotalFileSize);
+		printf("*******It has finished transfering file %s,and total size = %d ****\n",
+			   ucFileName,s_TotalFileSize);
 		
 		isBusy = false;
 	}
@@ -412,7 +426,8 @@ void QBtObjectExchangeClientPrivate::FTPBrowsingCallback(BTUINT8 *pFileInfo)
 	file.lastAccessTime = convertToQDate(pFindData->ftLastAccessTime);
 	file.lastWriteTime = convertToQDate(pFindData->ftLastWriteTime);
 
-	files.append(QBtRemoteFileInfo(file));
+	if(files)
+		files->append(new QBtRemoteFileInfo(file));
  
 	Btsdk_FreeMemory(pFileInfo);
 }

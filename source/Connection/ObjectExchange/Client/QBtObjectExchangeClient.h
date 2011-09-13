@@ -122,7 +122,7 @@ public:
      * @param remoteFileNameFull the name of the file to be transfered
      *							containing the full path of its remote location
      */
-    void getFile(const QString& localPath, const QString& remoteFileNameFull);
+    void getFile(const QString& remoteFileAbsolutePath, const QString& destinationFolder);
 
     /**
      * getByteBuffer(const QString& dataName)
@@ -166,7 +166,7 @@ public:
      */
     void setPath(const QString & path);
 
-	QList<QBtRemoteFileInfo> initiateFolderBrowsing(const QString& folderPath);
+	QList<QBtRemoteFileInfo*> initiateFolderBrowsing(const QString& folderPath);
 
     // accessor commands
 	QString getWorkingPath();

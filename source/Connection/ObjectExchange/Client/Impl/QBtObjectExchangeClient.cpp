@@ -61,9 +61,9 @@ void QBtObjectExchangeClient::disconnect()
     _implPtr->Disconnect();
 }
 
-void QBtObjectExchangeClient::getFile(const QString& localPath, const QString& remoteFileNameFull)
+void QBtObjectExchangeClient::getFile(const QString& remoteFileAbsolutePath, const QString& destinationFolder)
 {
-    _implPtr->GetFile(localPath, remoteFileNameFull);
+    _implPtr->GetFile(destinationFolder, remoteFileAbsolutePath);
 }
 
 void QBtObjectExchangeClient::getByteBuffer(const QString& dataName)
@@ -91,12 +91,13 @@ void QBtObjectExchangeClient::setPath(const QString & path)
     _implPtr->SetPath(path);
 }
 
-QList<QBtRemoteFileInfo> QBtObjectExchangeClient::initiateFolderBrowsing(const QString& folderPath)
+QList<QBtRemoteFileInfo*> QBtObjectExchangeClient::initiateFolderBrowsing(const QString& folderPath)
 {
 #ifdef Q_OS_WIN32
 	return _implPtr->InitiateFolderBrowsing(folderPath);
 #else
 	emit error(QBtObjectExchangeClient::OBEXFeatureNotSupported);
+	return  new QList<QBtRemoteFileInfo*>();
 #endif
 }
 

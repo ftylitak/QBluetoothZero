@@ -110,7 +110,7 @@ public:
 	 *	InitiateFolderBrowsing()
 	 *
 	 */
-	QList<QBtRemoteFileInfo>& InitiateFolderBrowsing(const QString& folderPath);
+	QList<QBtRemoteFileInfo*> InitiateFolderBrowsing(const QString& folderPath);
 
 	QString GetRemoteWorkingDirectory();
 
@@ -138,7 +138,7 @@ private:
     QBtObjectExchangeClient* p_ptr;
 
 	static QBtObjectExchangeClientPrivate* thisPtr;
-	static QList<QBtRemoteFileInfo> files;
+	static QList<QBtRemoteFileInfo*>* files;
 	static QString currentWorkingDirectory;
 };
 QBT_NAMESPACE_END
