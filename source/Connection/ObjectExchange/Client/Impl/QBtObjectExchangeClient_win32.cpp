@@ -22,6 +22,7 @@
 #include <string>
 #include <cstdlib>
 #include <QByteArray>
+#include <QFile>
 
 QBT_NAMESPACE_BEGIN
 
@@ -177,6 +178,9 @@ void QBtObjectExchangeClientPrivate::GetFile(const QString& localPath, const QSt
 	if (connectionHandle == BTSDK_INVALID_HANDLE)
 		return;
 
+	//save current working directory to restore it after operation
+	QString cwd = GetRemoteWorkingDirectory();
+
 	int slashPosition = remoteFileNameFull.lastIndexOf("\\");
 
 	QString localPathStr = localPath;
@@ -191,7 +195,7 @@ void QBtObjectExchangeClientPrivate::GetFile(const QString& localPath, const QSt
 	if(remoteFilePath != currentWorkingDirectory)
 	{
 		SetPath("");
-		SetPath(currentWorkingDirectory);
+		SetPath(remoteFilePath);
 	}
 	
 	//////////////////////////////////////////////////////////////////////////
@@ -217,6 +221,9 @@ void QBtObjectExchangeClientPrivate::GetFile(const QString& localPath, const QSt
 		emit p_ptr->fileReceived(QString(localPathStr));
 	else
 		emit p_ptr->error(QBtObjectExchangeClient::OBEXClientReceiveError);
+
+	//restore current working directory to the one before the operation starts
+	SetPath(cwd);
 		
 	return;
 }
@@ -263,7 +270,8 @@ bool QBtObjectExchangeClientPrivate::SetPath (const QString & path)
 
 
 	QString pathEdited = path;
-	pathEdited.prepend("\\");
+	if(pathEdited[0] != QChar('\\'))
+		pathEdited.prepend("\\");
 
 	// first try if file is in relative path form
 	iErrorCode = Btsdk_FTPSetRmtDir(connectionHandle, (BTUINT8*)pathEdited.toUtf8().constData());
@@ -312,7 +320,7 @@ QString QBtObjectExchangeClientPrivate::GetRemoteWorkingDirectory()
 	if (connectionHandle == BTSDK_INVALID_HANDLE)
 	{
 		emit p_ptr->error(QBtObjectExchangeClient::OBEXClientConnectionError);
-		return "";
+		return QString("");
 	}
 
 	BTUINT8 remoteCurrentDir[MAX_FILENAME];
@@ -328,10 +336,10 @@ QString QBtObjectExchangeClientPrivate::GetRemoteWorkingDirectory()
 		return "";
 }
 
-QList<QBtRemoteFileInfo*> QBtObjectExchangeClientPrivate::InitiateFolderBrowsing(const QString& folderPath)
+QList<QBtRemoteFileInfo*> QBtObjectExchangeClientPrivate::InitiateFolderBrowsing(const QString folderPath)
 {
 	BTINT32 result = BTSDK_FALSE;
-	QString folderPathStr = QString(folderPath);
+	QString folderPathStr = folderPath;
 	QString currentdir(GetRemoteWorkingDirectory());
 
 	currentWorkingDirectory = currentdir;
@@ -341,6 +349,9 @@ QList<QBtRemoteFileInfo*> QBtObjectExchangeClientPrivate::InitiateFolderBrowsing
 		emit p_ptr->error(QBtObjectExchangeClient::OBEXClientConnectionError);
 		return QList<QBtRemoteFileInfo*>();
 	}
+
+	if(folderPath == "")
+		folderPathStr = currentdir;
 
 	SafeDelete(files);
 	files = new QList<QBtRemoteFileInfo*>();
@@ -369,13 +380,91 @@ QList<QBtRemoteFileInfo*> QBtObjectExchangeClientPrivate::InitiateFolderBrowsing
 	}
 
 	//if not empty then it means that there was some error
-	if (!(result == 0X6a4))
-	{
+	if (!(result == 0X6a4))	
 		emit p_ptr->error(QBtObjectExchangeClient::OBEXClientBrowseError);
-		//return QList<QBtRemoteFileInfo*>();
-	}
 
 	return QList<QBtRemoteFileInfo*>(*files);
+}
+
+QList<QBtRemoteFileInfo*> QBtObjectExchangeClientPrivate::locateFiles(QRegExp* regex, QString folder)
+{
+	static int refCounter=0;
+	QString cwd;
+	if(!refCounter++)
+	{
+		//save current working directory to restore it after operation
+		cwd = GetRemoteWorkingDirectory();
+		selectedFiles.clear();
+	}
+
+	QList<QBtRemoteFileInfo*>& results = InitiateFolderBrowsing(folder);
+
+	if(regex == NULL)
+	{
+		regex = new QRegExp("*");
+		regex->setPatternSyntax(QRegExp::Wildcard);
+		regex->setCaseSensitivity(Qt::CaseInsensitive);
+	}
+
+	for(int i=0; i<results.size(); i++)
+	{
+		if(results[i]->isDir)
+		{
+			locateFiles(regex, results[i]->fileName);
+			SetPath("..");
+		}
+		else{
+			if(regex == NULL)
+				return QList<QBtRemoteFileInfo*>();
+
+			if (results[i]->fileName.contains(*regex))
+			{
+				//currently adds all the non directory files in
+				selectedFiles.append(results[i]);
+			}
+		}
+	}
+
+	if(!--refCounter)
+	{
+		//restore current working directory to the one before the operation starts
+		SetPath(cwd);
+		return selectedFiles;
+	}
+	else
+		return QList<QBtRemoteFileInfo*>();
+}
+
+void QBtObjectExchangeClientPrivate::batchFileRetrieval(const QList<QBtRemoteFileInfo*>& files, 
+																 const QString destinationFolder,
+																 bool retrieveOnlyNewFiles)
+{
+	QList<QBtRemoteFileInfo*> filesEdited;
+	QString destFolderEdited = destinationFolder;
+
+	if(retrieveOnlyNewFiles)
+	{
+		for(int i=0; i<files.size(); i++)
+		{
+			if(destFolderEdited.lastIndexOf("\\") != destFolderEdited.size() -1)
+				destFolderEdited.append("\\");
+
+			QString fileLocalAbsolute = destFolderEdited + files[i]->fileName;
+			//check local file system if file is already there
+			if(!QFile(fileLocalAbsolute).exists())
+			{
+				filesEdited.append(files[i]);
+				cout << "File: " << files[i]->fileName.toAscii().data() << " queued for download." << endl;
+			}
+		}
+	}
+
+	if(retrieveOnlyNewFiles)
+		for(int i=0; i<filesEdited.size(); i++)
+			GetFile(destinationFolder, filesEdited[i]->absolutePath);
+	else
+		for(int i=0; i<files.size(); i++)
+			GetFile(destinationFolder, files[i]->absolutePath);
 }
 
 /************************************************************************/

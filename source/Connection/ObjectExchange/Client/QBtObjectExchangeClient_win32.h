@@ -109,10 +109,50 @@ public:
 	/**
 	 *	InitiateFolderBrowsing()
 	 *
+	 *	Browse the files of a selected folder. 
+	 *
+	 *  @param folder The folder path must either be absolute (e.g. \E:\Images), or it must be the name of the folder
+	 *  you are going to browse as long as the folder is inside the current working directory of yours.
+	 *  
+	 *  @return QList<QBtRemoteFileInfo*> a list of the files/folders found and their attributes
 	 */
-	QList<QBtRemoteFileInfo*> InitiateFolderBrowsing(const QString& folderPath);
+	QList<QBtRemoteFileInfo*> InitiateFolderBrowsing(const QString folderPath="");
 
+	/**
+	 * GetRemoteWorkingDirectory
+	 * 
+	 * Return as QString holding the absolute path of the current working directory
+	 */
 	QString GetRemoteWorkingDirectory();
+
+	/**
+	 *	locateFiles
+	 *
+	 *	Locate files/folders that comply to the regex passed as arguments. For example can be used to isolate 
+	 *	files of specific type.
+	 *
+	 *	@param regex The regex that describes the files that are needed to be selected. If this parameter is not set, the default
+	 *	operation is to select all the files in the specified folder.
+	 *
+	 *	@param folder The folder path must either be absolute (e.g. \E:\Images), or it must be the name of the folder
+	 *  you are going to browse as long as the folder is inside the current working directory of yours. If this parameter is not set, 
+	 *	the default operation is to search in the current working directory.
+	 */
+	QList<QBtRemoteFileInfo*> locateFiles(QRegExp* regex=0, QString folder="");
+
+	/**
+	 *	batchFileRetrieval
+	 *
+	 *	Convenient method to retrieve multiple files in the row.
+	 *
+	 *	@param files The list of files to retrieve
+	 *	@param destinationFolder The folder in the local file system where the files will be stored. The files are placed all
+	 *	in that directory same directory so the structure in the remote file system is not preserved.
+	 */
+	void batchFileRetrieval(const QList<QBtRemoteFileInfo*>& files,
+		const QString destinationFolder,
+		bool retrieveOnlyNewFiles = false);
+
 
 private:
     // Callback containing file transfer info
@@ -134,6 +174,7 @@ private:
     BTDEVHDL connectionHandle;
     QBtDevice* server;
     QBtService* connectingService;
+	QList<QBtRemoteFileInfo*> selectedFiles;
 
     QBtObjectExchangeClient* p_ptr;
 

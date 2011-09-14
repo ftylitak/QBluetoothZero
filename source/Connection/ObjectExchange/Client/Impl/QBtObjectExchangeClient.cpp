@@ -133,4 +133,25 @@ bool QBtObjectExchangeClient::isConnected() const
 	return _implPtr->IsConnected();
 }
 
+QList<QBtRemoteFileInfo*> QBtObjectExchangeClient::locateFiles(QRegExp* regex, QString folder)
+{
+#ifdef Q_OS_WIN32
+	return _implPtr->locateFiles(regex, folder);
+#else
+	emit error(QBtObjectExchangeClient::OBEXFeatureNotSupported);
+#endif
+}
+
+void QBtObjectExchangeClient::batchFileRetrieval(const QList<QBtRemoteFileInfo*>& files,
+		const QString destinationFolder,
+		bool retrieveOnlyNewFiles)
+{
+#ifdef Q_OS_WIN32
+	return _implPtr->batchFileRetrieval(files, destinationFolder, retrieveOnlyNewFiles);
+#else
+	emit error(QBtObjectExchangeClient::OBEXFeatureNotSupported);
+#endif
+}
+
+
 QBT_NAMESPACE_END
