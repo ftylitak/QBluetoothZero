@@ -97,7 +97,7 @@ QList<QBtRemoteFileInfo*> QBtObjectExchangeClient::initiateFolderBrowsing(const 
 	return _implPtr->InitiateFolderBrowsing(folderPath);
 #else
 	emit error(QBtObjectExchangeClient::OBEXFeatureNotSupported);
-	return  new QList<QBtRemoteFileInfo*>();
+        return  QList<QBtRemoteFileInfo*>();
 #endif
 }
 

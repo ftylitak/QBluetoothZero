@@ -321,6 +321,7 @@ void QBtSerialPortClientPrivate::SerialCallback(Tserial_event *com_source, uint3
 				//{
 					QString newArray = QString::fromUtf8(buffer, size);
 					emit p_ptr->dataReceived(newArray);
+					emit p_ptr->dataReceived(QByteArray(buffer));
 				//	incomingDataBuffer.append(newArray);
 				//}
 			}

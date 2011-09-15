@@ -156,6 +156,12 @@ signals:
     void dataReceived(const QString & data);
 
     /**
+     * Emitted the instance the dataReceived(const QString&) signal is emitted. User
+     * decides which format wants to read.
+     */
+    void dataReceived(const QByteArray & data);
+
+    /**
      * Emitted in case of error.
      */
     void error(QBtSerialPortClient::ErrorCode error);
