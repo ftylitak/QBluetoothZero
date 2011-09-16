@@ -372,6 +372,15 @@ QList<QBtRemoteFileInfo*> QBtObjectExchangeClientPrivate::InitiateFolderBrowsing
 	}
 	else
 	{
+		//in case we have absolute paths for folder in a tree bench other than the one we are at.
+		if(folderPathStr[0] == QChar('\\'))
+		{
+			SetPath("");
+			folderPathStr = folderPathStr.right(folderPathStr.size()-1);
+			currentWorkingDirectory = "\\";
+		}
+		//else the path is relative to the current working directory
+
 		if(currentWorkingDirectory.size() != 1)
 			currentWorkingDirectory += "\\";
 		currentWorkingDirectory += folderPathStr;
@@ -505,6 +514,7 @@ void QBtObjectExchangeClientPrivate::FTPBrowsingCallback(BTUINT8 *pFileInfo)
 	if (NULL == pFileInfo) return;
 
 	pFindData = (WIN32_FIND_DATA *)pFileInfo;	
+
 	file.fileName = QString::fromUtf8((char*)pFindData->cFileName);
 	file.size = pFindData->nFileSizeLow;
 	file.type = pFindData->dwFileAttributes;

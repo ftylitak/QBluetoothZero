@@ -187,7 +187,7 @@ public:
 	 *  
 	 *  @return QList<QBtRemoteFileInfo*> a list of the files/folders found and their attributes
 	 */
-	QList<QBtRemoteFileInfo*> initiateFolderBrowsing(const QString& folderPath);
+	QList<QBtRemoteFileInfo*> initiateFolderBrowsing(const QString& folderPath = "");
 
 	/**
 	 *	locateFiles
