@@ -33,8 +33,9 @@
 
 //using namespace QBluetooth;
 
-//#if QT_VERSION > 0x040603
+#if QT_VERSION > 0x040603
 #include <qdeclarative.h>
+#endif
 
 namespace QBluetooth
 {
@@ -42,20 +43,21 @@ namespace QBluetooth
     {
         qRegisterMetaType<QBtDevice>("QBtDevice");
         qRegisterMetaType<QBtService>("QBtService");
-		qRegisterMetaType<QBtAddress>("QBtAddress");
-		qRegisterMetaType<QBtUuid>("QBtUuid");
-		qRegisterMetaType<QBtRemoteFileInfo>("QBtRemoteFileInfo");
+                qRegisterMetaType<QBtAddress>("QBtAddress");
+                qRegisterMetaType<QBtUuid>("QBtUuid");
+                qRegisterMetaType<QBtRemoteFileInfo>("QBtRemoteFileInfo");
     }
 
     static void registerQMLTypes()
     {
+        #if QT_VERSION > 0x040603
         //qmlRegisterType<QBtConstants>("QBtConstants", 1, 0, "QBtConstants");
         qmlRegisterType<QBtUuid>(QML_LIBRARY_NAME, 1, 0, "QBtUuid");
         qmlRegisterType<QBtAddress>(QML_LIBRARY_NAME, 1, 0, "QBtAddress");
         qmlRegisterType<QBtDevice>(QML_LIBRARY_NAME, 1, 0, "QBtDevice");
         qmlRegisterType<QBtService>(QML_LIBRARY_NAME, 1, 0, "QBtService");
         qmlRegisterType<QBtDeviceDiscoverer>(QML_LIBRARY_NAME, 1, 0, "QBtDeviceDiscoverer");
-		qmlRegisterType<QBtRemoteFileInfo>(QML_LIBRARY_NAME, 1, 0, "QBtRemoteFileInfo");
+                qmlRegisterType<QBtRemoteFileInfo>(QML_LIBRARY_NAME, 1, 0, "QBtRemoteFileInfo");
         //qmlRegisterType<QBtServiceDiscoverer>("QBtServiceDiscoverer", 1, 0, "QBtServiceDiscoverer");
         //qmlRegisterType<QBtServiceAdvertiser>("QBtServiceAdvertiser", 1, 0, "QBtServiceAdvertiser");
         //qmlRegisterType<QBtLocalDevice>("QBtLocalDevice", 1, 0, "QBtLocalDevice");
@@ -64,6 +66,7 @@ namespace QBluetooth
         //qmlRegisterType<QBtSerialPortClient>("QBtSerialPortClient", 1, 0, "QBtSerialPortClient");
         //qmlRegisterType<QBtObjectExchangeServer>("QBtObjectExchangeServer", 1, 0, "QBtObjectExchangeServer");
         //qmlRegisterType<QBtObjectExchangeClient>("QBtObjectExchangeClient", 1, 0, "QBtObjectExchangeClient");
+        #endif
     }
 
 }

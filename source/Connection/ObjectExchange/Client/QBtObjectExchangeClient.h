@@ -173,7 +173,7 @@ public:
 	 *
 	 * Return as QString holding the absolute path of the current working directory
 	 */
-	QString QBtObjectExchangeClient::getWorkingPath();
+        QString getWorkingPath();
 
 	/**
 	 *	initiateFolderBrowsing() 
