@@ -19,7 +19,7 @@ class DLL_EXPORT QBtUuid : public QObject
       /**
        * Constructs an empty instance.
        */
-      QBtUuid ();
+      QBtUuid (QObject* parent=NULL);
 
       /**
        * Constructs an instance from a string representation.
@@ -142,6 +142,6 @@ inline TUUID QBtUuidToSymbianUuid (const QBtUuid & value)
 
 QBT_NAMESPACE_END
 
-Q_DECLARE_METATYPE(QBT_NAMESPACE_NAME::QBtUuid)
+Q_DECLARE_METATYPE(QBT_PREPEND_NAMESPACE(QBtUuid))
 
 #endif // QBTUUID_H

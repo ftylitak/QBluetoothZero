@@ -85,4 +85,13 @@ bool QBtDeviceDiscoverer::isBusy() const
 	return _implPtr->IsBusy();
 }
 
+void QBtDeviceDiscoverer::emitDummySignalTest()
+{
+	QBtDevice* device = new QBtDevice();
+	device->setName("TestDevice");
+	device->setAddress(QBtAddress(QString("00:26:69:4F:F9:5E")));
+	device->setType(QBtDevice::Phone);
+	emit newDeviceFound(*device);
+}
+
 QBT_NAMESPACE_END

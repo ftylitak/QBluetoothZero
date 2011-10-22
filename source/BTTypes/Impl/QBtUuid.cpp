@@ -122,7 +122,7 @@ inline QString UintToString (uint uuid)
 
 //____________________________________________________________________________
 
-QBtUuid::QBtUuid() : QObject()
+QBtUuid::QBtUuid(QObject* parent) : QObject(parent)
 {
    _uuid.clear();
 }

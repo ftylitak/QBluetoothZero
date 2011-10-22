@@ -146,7 +146,7 @@ QBtDevice& QBtDevice::operator= (const QBtDevice& dev)
 
 //////////////////////////////////////////////////////////////////////////
 
-QString QBtDevice::name()
+QString QBtDevice::name() const
 {
 	return _name;
 }

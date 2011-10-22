@@ -2,6 +2,8 @@ uid3 = 0xA003328D
 
 QT += core
 
+VERSION = 1.1.0
+
 lessThan(QT_VERSION, 4.7):
 else:QT += declarative
 

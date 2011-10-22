@@ -25,22 +25,26 @@
 #define DLL_EXPORT Q_DECL_IMPORT
 #endif
 
-#if QT_VERSION > 0x040603
-#include <QtDeclarative/qdeclarative.h>
+#if QT_VERSION >= 0x040700
+#include <QtDeclarative>
 #endif
-
-//#define ENABLE_QBLUETOOTH_NAMESPACE
-
+/*
+#define ENABLE_QBLUETOOTH_NAMESPACE
+*/
 #define QML_LIBRARY_NAME "QBluetooth"
 
 #ifdef ENABLE_QBLUETOOTH_NAMESPACE
+#define QBT_PREPEND_NAMESPACE(name)	::QBluetooth::name
 #define QBT_NAMESPACE_NAME QBluetooth
 #define QBT_NAMESPACE_BEGIN	namespace QBT_NAMESPACE_NAME{
 #define QBT_NAMESPACE_END	}
+#define QBT_USE_NAMESPACE	using namespace QBT_NAMESPACE_NAME;
 #else
-#define QBT_NAMESPACE_NAME
+#define QBT_PREPEND_NAMESPACE(name)	name
+#define QBT_NAMESPACE_NAME 
 #define QBT_NAMESPACE_BEGIN
 #define QBT_NAMESPACE_END
+#define QBT_USE_NAMESPACE
 #endif
 
 

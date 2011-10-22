@@ -57,13 +57,15 @@ public:
      *
      * returns a reference to the list of devices found (if any)
      */
-    const QBtDevice::List& getInquiredDevices() const;
+    Q_INVOKABLE const QBtDevice::List& getInquiredDevices() const;
     
     
     /**
      * Returns true if the class if performing a device discovery.
      */
     bool isBusy () const;
+
+	Q_INVOKABLE void emitDummySignalTest();
 
 public slots:
     /**
@@ -91,7 +93,7 @@ signals:
 	void newDeviceFound (QBtDevice remoteDevice);
 	
 	//changed to the above because @ emit the classes already written, pass as argument
-	// a local variable QBtDevice so i am not sure if the reference will continue to make sence
+	// a local variable QBtDevice so i am not sure if the reference will continue to make senses
 	// (may be the variable will be destroyed). Alternative we could return a *(new QBtDevice())
 	//  but that would lead to memory leak.
 	//void newDeviceFound (const QBtDevice & remoteDevice);
@@ -121,5 +123,7 @@ private:
 };
 
 QBT_NAMESPACE_END
+
+//Q_DECLARE_METATYPE(QBT_PREPEND_NAMESPACE(QBtDeviceDiscoverer))
 
 #endif /* QBTDEVICEDISCOVERER_H_ */

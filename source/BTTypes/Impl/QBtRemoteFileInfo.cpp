@@ -1,5 +1,7 @@
 #include <QBtRemoteFileInfo.h>
 
+QBT_NAMESPACE_BEGIN
+
 QBtRemoteFileInfo::QBtRemoteFileInfo(QObject* parent) : QObject(parent){}
 
 QBtRemoteFileInfo::QBtRemoteFileInfo(const QBtRemoteFileInfo& fileInfo) : QObject(fileInfo.parent())
@@ -31,3 +33,5 @@ QBtRemoteFileInfo& QBtRemoteFileInfo::operator=(const QBtRemoteFileInfo& fileInf
 
 	return *this;
 }
+
+QBT_NAMESPACE_END
