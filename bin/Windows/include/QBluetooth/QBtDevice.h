@@ -89,7 +89,7 @@ public:
     
     bool serviceListUpdated() const;
 
-	QString name();
+	Q_INVOKABLE QString name() const;
     Q_INVOKABLE QString getName() const;
     const QBtAddress& getAddress() const;
     DeviceMajor getType() const;
@@ -113,10 +113,14 @@ private:
     bool _serviceListUpdated;
 };
 
+QML_DECLARE_TYPE (QBtDevice)
+//Q_DECLARE_METATYPE(QBtDevice)
+//Q_DECLARE_METATYPE(QBtDevice::DeviceMajor)
+
+
 QBT_NAMESPACE_END
 
-Q_DECLARE_METATYPE(QBtDevice)
-Q_DECLARE_METATYPE(QBtDevice::DeviceMajor)
+Q_DECLARE_METATYPE(QBT_PREPEND_NAMESPACE(QBtDevice))
 
 
 

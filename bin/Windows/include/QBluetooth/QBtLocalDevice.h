@@ -22,9 +22,12 @@
 
 QBT_NAMESPACE_BEGIN
 
-class DLL_EXPORT QBtLocalDevice : public QObject
+//This class contains only static functions. How can it be used through QML
+// TYPE == Q_STATIC
+
+class DLL_EXPORT QBtLocalDevice //: public QObject
 {
-    Q_OBJECT
+    //Q_OBJECT
 public:
 
     ///////////////////////////////////////
@@ -130,5 +133,12 @@ public:
 };
 
 QBT_NAMESPACE_END
+
+Q_DECLARE_METATYPE(QBT_PREPEND_NAMESPACE(QBtLocalDevice))
+
+#if QT_VERSION >= 0x040700
+//QML_DECLARE_TYPEINFO(QBT_PREPEND_NAMESPACE(QBtLocalDevice))
+#endif
+
 
 #endif // QBTLOCALDEVICE_H

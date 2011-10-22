@@ -120,7 +120,7 @@ inline void _Break_Here (const QString & file, const QString & line)
 
 #include <windows.h>
 #include <conio.h>
-#include "BTTypes/QBtAddress.h"
+#include <QBtAddress.h>
 
 extern "C"{
 #include "./BlueSoleil_SDK_2.0.5/include/Btsdk_ui.h"

@@ -33,31 +33,27 @@
 
 //using namespace QBluetooth;
 
-#if QT_VERSION > 0x040603
-#include <qdeclarative.h>
-#endif
-
 namespace QBluetooth
 {
     static void registerTypes()
     {
-        qRegisterMetaType<QBtDevice>("QBtDevice");
-        qRegisterMetaType<QBtService>("QBtService");
-                qRegisterMetaType<QBtAddress>("QBtAddress");
-                qRegisterMetaType<QBtUuid>("QBtUuid");
-                qRegisterMetaType<QBtRemoteFileInfo>("QBtRemoteFileInfo");
+        qRegisterMetaType<QBT_PREPEND_NAMESPACE(QBtDevice)>("QBtDevice");
+        qRegisterMetaType<QBT_PREPEND_NAMESPACE(QBtService)>("QBtService");
+        qRegisterMetaType<QBT_PREPEND_NAMESPACE(QBtAddress)>("QBtAddress");
+        qRegisterMetaType<QBT_PREPEND_NAMESPACE(QBtUuid)>("QBtUuid");
+        qRegisterMetaType<QBT_PREPEND_NAMESPACE(QBtRemoteFileInfo)>("QBtRemoteFileInfo");
     }
 
     static void registerQMLTypes()
     {
-        #if QT_VERSION > 0x040603
-        //qmlRegisterType<QBtConstants>("QBtConstants", 1, 0, "QBtConstants");
-        qmlRegisterType<QBtUuid>(QML_LIBRARY_NAME, 1, 0, "QBtUuid");
-        qmlRegisterType<QBtAddress>(QML_LIBRARY_NAME, 1, 0, "QBtAddress");
-        qmlRegisterType<QBtDevice>(QML_LIBRARY_NAME, 1, 0, "QBtDevice");
-        qmlRegisterType<QBtService>(QML_LIBRARY_NAME, 1, 0, "QBtService");
-        qmlRegisterType<QBtDeviceDiscoverer>(QML_LIBRARY_NAME, 1, 0, "QBtDeviceDiscoverer");
-                qmlRegisterType<QBtRemoteFileInfo>(QML_LIBRARY_NAME, 1, 0, "QBtRemoteFileInfo");
+        #if QT_VERSION > 0x040700
+        qmlRegisterType<QBT_PREPEND_NAMESPACE(QBtConstants)>(QML_LIBRARY_NAME, 1, 0, "QBtConstants");
+        qmlRegisterType<QBT_PREPEND_NAMESPACE(QBtUuid)>(QML_LIBRARY_NAME, 1, 0, "QBtUuid");
+        qmlRegisterType<QBT_PREPEND_NAMESPACE(QBtAddress)>(QML_LIBRARY_NAME, 1, 0, "QBtAddress");
+        qmlRegisterType<QBT_PREPEND_NAMESPACE(QBtDevice)>(QML_LIBRARY_NAME, 1, 0, "QBtDevice");
+        qmlRegisterType<QBT_PREPEND_NAMESPACE(QBtService)>(QML_LIBRARY_NAME, 1, 0, "QBtService");
+        qmlRegisterType<QBT_PREPEND_NAMESPACE(QBtDeviceDiscoverer)>(QML_LIBRARY_NAME, 1, 0, "QBtDeviceDiscoverer");
+        qmlRegisterType<QBT_PREPEND_NAMESPACE(QBtRemoteFileInfo)>(QML_LIBRARY_NAME, 1, 0, "QBtRemoteFileInfo");
         //qmlRegisterType<QBtServiceDiscoverer>("QBtServiceDiscoverer", 1, 0, "QBtServiceDiscoverer");
         //qmlRegisterType<QBtServiceAdvertiser>("QBtServiceAdvertiser", 1, 0, "QBtServiceAdvertiser");
         //qmlRegisterType<QBtLocalDevice>("QBtLocalDevice", 1, 0, "QBtLocalDevice");
