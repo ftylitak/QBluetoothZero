@@ -22,8 +22,10 @@
 
 #include <QBtGlobal.h>
 #include <QBtTypes.h>
-#include <QObject>
-#include <QByteArray>
+#include <QtCore/QObject>
+#include <QtCore/QByteArray>
+
+QBT_NAMESPACE_BEGIN
 
 //forward declaration
 class QBtSerialPortClientPrivate;
@@ -154,6 +156,12 @@ signals:
     void dataReceived(const QString & data);
 
     /**
+     * Emitted the instance the dataReceived(const QString&) signal is emitted. User
+     * decides which format wants to read.
+     */
+    void dataReceived(const QByteArray & data);
+
+    /**
      * Emitted in case of error.
      */
     void error(QBtSerialPortClient::ErrorCode error);
@@ -162,5 +170,7 @@ private:
     friend class QBtSerialPortClientPrivate;
     QBtSerialPortClientPrivate* _implPtr;
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTSERIALPORTCLIENT_H_ */

@@ -23,18 +23,17 @@
 #include <QBtGlobal.h>
 #include <QBtTypes.h>
 #include <QBtServiceAdvertiser.h>
-#include <QObject>
+#include <QtCore/QObject>
+
+QBT_NAMESPACE_BEGIN
 
 //Forward declaration
 class QBtObjectExchangeServerPrivate;
-
 
 // suggestion: (LV)
 //
 // use smart pointers for the service advertiser and reset it when
 // 'startServer' is called
-
-
 
 /**
  * This class is used to create an OBEX server.
@@ -79,7 +78,7 @@ public:
      * the user can acquire the information of the transmitting service that
      * represents this server to the outside world.
      */
-    QBtService getTransmittingServiceInfo();
+    QBtService& getTransmittingServiceInfo();
 
 protected:
     void setTransmittingService(const QBtService& service);
@@ -184,5 +183,7 @@ private:
     
     friend class QBtObjectExchangeServerPrivate;
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTOBJECTEXCHANGESERVER_H_ */

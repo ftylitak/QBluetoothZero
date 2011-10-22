@@ -2,22 +2,24 @@
 #define QBTUUID_H
 
 #include <QBtGlobal.h>
-#include <QString>
+#include <QtCore/QString>
 
+QBT_NAMESPACE_BEGIN
 
 /**
  * This class represents a UUID for Bluetooth, either in short format (16 or 32-bits) or full (128-bit).
  *
  */
-class DLL_EXPORT QBtUuid
+class DLL_EXPORT QBtUuid : public QObject
 {
+	Q_OBJECT
+
    public:
 
       /**
        * Constructs an empty instance.
        */
       QBtUuid ();
-
 
       /**
        * Constructs an instance from a string representation.
@@ -29,13 +31,15 @@ class DLL_EXPORT QBtUuid
        */
       QBtUuid (const QString & uuid);
 
-
       /**
        * Constructs an instance from a short uuid representation, a 16-bit or 32-bit value.
        */
-
       explicit QBtUuid (uint uuid);
 
+	  /**
+	   * Copy constructor
+	   */
+	  QBtUuid(const QBtUuid& uuid);
    public:
 
       /**
@@ -60,7 +64,6 @@ class DLL_EXPORT QBtUuid
        */
       uint get() const;
 
-
       /**
        * If this is a full uuid, splits it four 32-bit values. If this is a short
        * uuid, all values are set to zero.
@@ -68,43 +71,42 @@ class DLL_EXPORT QBtUuid
        */
       void get (uint & highWord1, uint & highWord2, uint & lowWord1, uint & lowWord2) const;
 
-
       /**
        * If short format, returns the equivalent uint. If full uuid, returns 0.
        *
        */
       bool isFull () const;
 
-
       /**
        * Returns true if this is an empty instance.
        *
        */
       bool isNull () const;
-
       /**
        * Returns a string representation.
        *
        */
       QString toString() const;
 
-
       /**
        * Resets to a null UUID.
        */
       void clear();
 
-
       /**
-       *
+       * 
        */
       bool operator == (const QBtUuid & obj) const;
 
-
-      /**
+	  /**
        *
        */
       bool operator != (const QBtUuid & obj) const;
+
+	  /**
+	   *	
+	   */
+	  QBtUuid& operator=(class QBtUuid const &uuid);
 
 
    private:
@@ -113,8 +115,6 @@ class DLL_EXPORT QBtUuid
 
 
 };
-
-
 
 #ifdef Q_OS_SYMBIAN
 #include <bttypes.h>
@@ -139,5 +139,9 @@ inline TUUID QBtUuidToSymbianUuid (const QBtUuid & value)
 }
 
 #endif
+
+QBT_NAMESPACE_END
+
+Q_DECLARE_METATYPE(QBT_NAMESPACE_NAME::QBtUuid)
 
 #endif // QBTUUID_H

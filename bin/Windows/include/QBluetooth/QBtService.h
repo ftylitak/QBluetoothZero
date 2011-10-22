@@ -16,18 +16,22 @@
 #ifndef QBTSERVICE_H
 #define QBTSERVICE_H
 
-#include <QString>
-#include <QList>
+#include <QtCore/QString>
+#include <QtCore/QList>
 #include <QBtGlobal.h>
 #include <QBtConstants.h>
 #include <QBtUuid.h>
+
+QBT_NAMESPACE_BEGIN
 
 /**
  * Class containing all the necessary information about a bluetooth service
  * of a remote device.
  */
-class DLL_EXPORT QBtService
+class DLL_EXPORT QBtService : public QObject
 {
+	Q_OBJECT
+
    public:
       typedef QList<QBtService> List;
 
@@ -46,31 +50,30 @@ class DLL_EXPORT QBtService
        */
       typedef QList<QBtUuid> ProtocolList;
 
-
       /**
        * Constructs an empty instance.
        */
-      QBtService();
+      QBtService(QObject* parent = 0);
+
+	  /**
+	   *  Copy constructor
+	   */
+	  QBtService(const QBtService& service, QObject* parent = 0);
     
-
-
       /**
        * Gets the protocol list used by this service.
        */
       ProtocolList getProtocols() const;
-
 
       /**
        * Gets the service id of this service.
        */
       QBtUuid getClass () const;
 
-
       /**
        * Gets the service name.
        */
       QString getName() const;
-
 
       /**
        * Gets the service description.
@@ -90,7 +93,6 @@ class DLL_EXPORT QBtService
       /**
        * Adds a protocol to the service protocol list.
        */
-
       void addProtocol(const QBtUuid & uuid);
 
       bool removeProtocol (const QBtUuid & uuid);
@@ -106,13 +108,13 @@ class DLL_EXPORT QBtService
       void setPort(uint newPort);
 
       void setHandle (uint newHandle);
-
-
+	
+	  QBtService& operator=(const QBtService& service);
 
    private:
 
       // protocol list is mainly used on symbian
-      // on windows tha connections are done using classUUID
+      // on windows the connections are done using classUUID
       QBtUuid       _serviceUuid;
       ProtocolList  _protocolList;
       QString       _name;
@@ -124,5 +126,9 @@ class DLL_EXPORT QBtService
       uint          _port;
 
 };
+
+QBT_NAMESPACE_END
+
+Q_DECLARE_METATYPE(QBT_NAMESPACE_NAME::QBtService)
 
 #endif // QBTSERVICE_H

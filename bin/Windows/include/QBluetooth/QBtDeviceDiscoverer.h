@@ -20,8 +20,10 @@
 #define QBTDEVICEDISCOVERER_H_
 
 #include <QBtGlobal.h>
-#include <QObject>
+#include <QtCore/QObject>
 #include <QBtTypes.h>
+
+QBT_NAMESPACE_BEGIN
 
 //Forward declaration
 class QBtDeviceDiscovererPrivate;
@@ -86,10 +88,16 @@ signals:
      * Signaled for every device detected
      * @param remoteDevice The remote device
      */
-    void newDeviceFound (const QBtDevice & remoteDevice);
+	void newDeviceFound (QBtDevice remoteDevice);
+	
+	//changed to the above because @ emit the classes already written, pass as argument
+	// a local variable QBtDevice so i am not sure if the reference will continue to make sence
+	// (may be the variable will be destroyed). Alternative we could return a *(new QBtDevice())
+	//  but that would lead to memory leak.
+	//void newDeviceFound (const QBtDevice & remoteDevice);
 
     /**
-     * Signal to report that discovery has stopped (either cancelled or no new devices to detect)
+     * Signal to report that discovery has stopped (either canceled or no new devices to detect)
      */
     void discoveryStopped();
 
@@ -111,5 +119,7 @@ private:
     friend class QBtDeviceDiscovererPrivate;
     
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTDEVICEDISCOVERER_H_ */

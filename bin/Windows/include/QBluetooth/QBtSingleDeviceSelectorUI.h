@@ -20,10 +20,12 @@
 #ifndef QBTSINGLEDEVICESELECTORUI_H_
 #define QBTSINGLEDEVICESELECTORUI_H_
 
-#include <QObject>
-#include <QWidget>
+#include <QtCore/QObject>
+#include <QtGui/QWidget>
 #include <QBtGlobal.h>
 #include <QBtDevice.h>
+
+QBT_NAMESPACE_BEGIN
 
 class QBtSingleDeviceSelectorUIPrivate;
 
@@ -95,5 +97,7 @@ private:
     friend class QBtSingleDeviceSelectorUIPrivate;
 
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTSINGLEDEVICESELECTORUI_H_ */

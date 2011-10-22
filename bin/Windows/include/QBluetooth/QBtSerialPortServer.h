@@ -19,10 +19,12 @@
 #include <QBtGlobal.h>
 #include <QBtTypes.h>
 #include <QBtServiceAdvertiser.h>
-#include <QObject>
-#include <QByteArray>
+#include <QtCore/QObject>
+#include <QtCore/QByteArray>
 
 #include <QBtUuid.h>
+
+QBT_NAMESPACE_BEGIN
 
 //forward declaration
 class QBtSerialPortServerPrivate;
@@ -195,5 +197,7 @@ private:
     friend class QBtSerialPortServerPrivate;
     
 };
+
+QBT_NAMESPACE_END
 
 #endif // QBTSERIALPORTSERVER_H

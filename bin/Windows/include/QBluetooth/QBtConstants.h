@@ -18,12 +18,16 @@
 
 #include <QBtGlobal.h>
 
+QBT_NAMESPACE_BEGIN
+
 /**
  * Basic enumerations of bluetooth UUIDs
  */
-class DLL_EXPORT QBtConstants
+class DLL_EXPORT QBtConstants : public QObject
 {
-
+	Q_OBJECT
+	Q_ENUMS(ServiceClass)
+	Q_ENUMS(ServiceProtocol)
 public:
 
     /**
@@ -123,5 +127,9 @@ public:
         };
 };
 
+QBT_NAMESPACE_END
+
+Q_DECLARE_METATYPE(QBT_NAMESPACE_NAME::QBtConstants::ServiceClass)
+Q_DECLARE_METATYPE(QBT_NAMESPACE_NAME::QBtConstants::ServiceProtocol)
 
 #endif // QBTCONSTANTS_H

@@ -23,7 +23,9 @@
 #include <QBtGlobal.h>
 #include <QBtTypes.h>
 #include <QBtServiceAdvertiser.h>
-#include <QObject>
+#include <QtCore/QObject>
+
+QBT_NAMESPACE_BEGIN
 
 //forward declaration
 class QBtObjectExchangeClientPrivate;
@@ -84,7 +86,9 @@ public:
         OBEXClientInternalError,
         OBEXClientNoSelectedDevice,
         OBEXClientNoSelectedService,
-        OBEXClientUnableToSetPath
+        OBEXClientUnableToSetPath,
+		OBEXFeatureNotSupported,
+		OBEXClientBrowseError
     };
 
 public:
@@ -118,7 +122,7 @@ public:
      * @param remoteFileNameFull the name of the file to be transfered
      *							containing the full path of its remote location
      */
-    void getFile(const QString& localPath, const QString& remoteFileNameFull);
+    void getFile(const QString& remoteFileAbsolutePath, const QString& destinationFolder);
 
     /**
      * getByteBuffer(const QString& dataName)
@@ -143,7 +147,7 @@ public:
      * send the server a byte sequence.
      * @param data,  the data of the buffer
      * @param bufferName, the name of the buffer (used for convenience on the data
-     * 		proccessing of the server)
+     * 		processing of the server)
      */
     void putByteBuffer(const QByteArray& data, const QString& bufferName);
 
@@ -162,19 +166,74 @@ public:
      */
     void setPath(const QString & path);
 
-    // accessor commands
+	/**
+	 * getWorkingPath
+	 *
+	 *	ONLY FOR WINDOWS
+	 *
+	 * Return as QString holding the absolute path of the current working directory
+	 */
+        QString getWorkingPath();
+
+	/**
+	 *	initiateFolderBrowsing() 
+	 *
+	 *	ONLY FOR WINDOWS
+	 *
+	 *	Browse the files of a selected folder. 
+	 *
+	 *  @param folder The folder path must either be absolute (e.g. \E:\Images), or it must be the name of the folder
+	 *  you are going to browse as long as the folder is inside the current working directory of yours.
+	 *  
+	 *  @return QList<QBtRemoteFileInfo*> a list of the files/folders found and their attributes
+	 */
+	QList<QBtRemoteFileInfo*> initiateFolderBrowsing(const QString& folderPath = "");
+
+	/**
+	 *	locateFiles
+	 *
+	 *	ONLY FOR WINDOWS
+	 *
+	 *	Locate files/folders that comply to the regex passed as arguments. For example can be used to isolate 
+	 *	files of specific type.
+	 *
+	 *	@param regex The regex that describes the files that are needed to be selected. If this parameter is not set, the default
+	 *	operation is to select all the files in the specified folder.
+	 *
+	 *	@param folder The folder path must either be absolute (e.g. \E:\Images), or it must be the name of the folder
+	 *  you are going to browse as long as the folder is inside the current working directory of yours. If this parameter is not set, 
+	 *	the default operation is to search in the current working directory.
+	 */
+	QList<QBtRemoteFileInfo*> locateFiles(QRegExp* regex=0, QString folder="");
+
+	/**
+	 *	batchFileRetrieval
+	 *
+	 *	ONLY FOR WINDOWS
+	 *
+	 *	Convenient method to retrieve multiple files in the row.
+	 *
+	 *	@param files The list of files to retrieve
+	 *	@param destinationFolder The folder in the local file system where the files will be stored. The files are placed all
+	 *	in that directory same directory so the structure in the remote file system is not preserved.
+	 *	@param retrieveOnlyNewFiles If set true, then it first check if the file defined already exists in the
+	 *	destination folder. If it does then it skips it. By default it is set to copy every file it founds.
+	 */
+	void batchFileRetrieval(const QList<QBtRemoteFileInfo*>& files,
+		const QString destinationFolder,
+		bool retrieveOnlyNewFiles = false);
 
     /**
      * Get info about the service connected to.
      * @return An object containing the service info
      */
-    QBtService getTransmittingService();
+    QBtService& getTransmittingService();
 
     /**
      * Get info about the server connected to.
      * @return An object containing the remote server device info.
      */
-    QBtDevice getServerDevice();
+    QBtDevice& getServerDevice();
     
     
     /**
@@ -187,9 +246,6 @@ public:
      */
     bool isConnected() const;
     
-    
-    
-
 public slots:
     void disconnect();
 
@@ -231,9 +287,19 @@ signals:
      */
     void remotePathSet (const QString & pathName);
 
+	/**
+	 *	Emitted after calling initiateFolderBrowsing function for every result
+	 *	found from browsing.
+	 *
+	 *	@param file The file info. See QBtRemoteFileInfo class for the info provided.
+	 */
+	void folderBrowsingResultElement(const QBtRemoteFileInfo& file);
+
 private:
     friend class QBtObjectExchangeClientPrivate;
     QBtObjectExchangeClientPrivate* _implPtr;
 };
+
+QBT_NAMESPACE_END
 
 #endif /* QBTOBJECTEXCHANGECLIENT_H_ */

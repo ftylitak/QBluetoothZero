@@ -18,8 +18,9 @@
 
 #include <QBtGlobal.h>
 #include <QBtTypes.h>
-#include <QObject>
+#include <QtCore/QObject>
 
+QBT_NAMESPACE_BEGIN
 
 class DLL_EXPORT QBtLocalDevice : public QObject
 {
@@ -127,5 +128,7 @@ public:
      */
     static bool unpairDevice(const QBtAddress& address);
 };
+
+QBT_NAMESPACE_END
 
 #endif // QBTLOCALDEVICE_H
