@@ -2,7 +2,7 @@ uid3 = 0xA003328D
 
 QT += core
 
-VERSION = 2.0.0
+VERSION = 2.0.1
 
 #lessThan(QT_VERSION, 4.7):
 #else:QT += declarative
@@ -135,7 +135,7 @@ else {
     win32 { 
         LIBS += -lBlueSoleil_SDK_2.0.5/Bin/BsSDK
 		
-        INCLUDEPATH = ./ \
+        INCLUDEPATH = . \
             BTTypes	\
             BlueSoleil_SDK_2.0.5/SDKheaders/include \
             Connection/ObjectExchange/Server \

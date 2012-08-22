@@ -106,7 +106,10 @@ void QBtObjectExchangeClientPrivate::Disconnect()
 		if(result != BTSDK_OK)
 			emit p_ptr->error(QBtObjectExchangeClient::OBEXClientConnectionError);
 		else
+		{
+			connectionHandle = BTSDK_INVALID_HANDLE;
 			emit p_ptr->disconnectedFromServer();
+		}
 	}
 }
 
