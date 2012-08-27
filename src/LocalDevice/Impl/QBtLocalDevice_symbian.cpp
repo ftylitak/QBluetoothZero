@@ -70,35 +70,32 @@ TBool QBtLocalDevicePrivate::IsVisible()
 
     QT_TRAP_THROWING(
     {
-        #ifdef __SERIES60_31__
-            TBTDiscoverabilityMode mode;
-    CBTMCMSettings* b = CBTMCMSettings::NewLC ();
-    User::LeaveIfError (b->GetDiscoverabilityMode (mode) );
+#ifdef __SERIES60_31__
+        TBTDiscoverabilityMode mode;
+        CBTMCMSettings* b = CBTMCMSettings::NewLC ();
+        User::LeaveIfError (b->GetDiscoverabilityMode (mode) );
 
-    if (EBTDiscModeHidden == mode)
-        value = EFalse;
-    else
-        value = ETrue;
+        if (EBTDiscModeHidden == mode)
+            value = EFalse;
+        else
+            value = ETrue;
 
 #else
-            TBTVisibilityMode mode;
-    CBTEngSettings* b = CBTEngSettings::NewLC();
-    User::LeaveIfError(b->GetVisibilityMode (mode) );
+        TBTVisibilityMode mode;
+        CBTEngSettings* b = CBTEngSettings::NewLC();
+        User::LeaveIfError(b->GetVisibilityMode (mode) );
 
-    if (EBTVisibilityModeHidden  == mode)
-        value = EFalse;
-    else
-        value = ETrue;
+        if (EBTVisibilityModeHidden  == mode)
+            value = EFalse;
+        else
+            value = ETrue;
 
 #endif
 
-    CleanupStack::PopAndDestroy();
-}
-);
+        CleanupStack::PopAndDestroy();
+    });
 
-
-return value;
-
+    return value;
 }
 
 
@@ -139,10 +136,7 @@ void QBtLocalDevicePrivate::SetVisible (TBool value)
 #endif
 
     CleanupStack::PopAndDestroy();
-}
-);
-
-
+    });
 }
 
 QBtDevice::DeviceMajor QBtLocalDevicePrivate::GetDeviceClass()
@@ -259,35 +253,35 @@ TBool QBtLocalDevicePrivate::AddNewDevice(const QBtDevice& device)
     try
     {
         CBTDevice* newDev;
-                RBTRegServ regServ;
-                RBTRegistry view;
-                TRequestStatus stat;
-                QT_TRAP_THROWING
-                (
-                    newDev = CBTDevice::NewL(device.getAddress().convertToSymbianBtDevAddr()));
-                    newDev->SetDeviceClass(TBTDeviceClass(device.getType()));
-                    TBuf8<4> psd(_L8("0000"));
-                    TPINCodeV10 pinCode10;
-                    pinCode10.iLength = 4;
-                    memcpy(pinCode10.iPIN,psd.Ptr(),4);
-                    TBTPinCode pinCode(pinCode10);
-                    TPtrC8 name8((const TUint8 *)device.getName().toUtf8().data(),device.getName().toUtf8().size());
-                    TPtrC16 name16(device.getName().utf16());
-                QT_TRAP_THROWING(
-                {
-                    newDev->SetDeviceNameL(name8);
-                    newDev->SetFriendlyNameL(name16);
-                    newDev->SetPaired(ETrue);
-                    newDev->SetPassKey(pinCode);
-                    regServ.Connect();
-                    view.Open(regServ);
-                    view.AddDeviceL(*newDev,stat);
-                });
-                User::WaitForRequest(stat);
-                stat.Int();
-                view.Close();
-                regServ.Close();
-                SafeDelete(newDev);
+        RBTRegServ regServ;
+        RBTRegistry view;
+        TRequestStatus stat;
+        QT_TRAP_THROWING
+        (
+        newDev = CBTDevice::NewL(device.getAddress().convertToSymbianBtDevAddr()));
+        newDev->SetDeviceClass(TBTDeviceClass(device.getType()));
+        TBuf8<4> psd(_L8("0000"));
+        TPINCodeV10 pinCode10;
+        pinCode10.iLength = 4;
+        memcpy(pinCode10.iPIN,psd.Ptr(),4);
+        TBTPinCode pinCode(pinCode10);
+        TPtrC8 name8((const TUint8 *)device.getName().toUtf8().data(),device.getName().toUtf8().size());
+        TPtrC16 name16(device.getName().utf16());
+        QT_TRAP_THROWING(
+        {
+                newDev->SetDeviceNameL(name8);
+        newDev->SetFriendlyNameL(name16);
+        newDev->SetPaired(ETrue);
+        newDev->SetPassKey(pinCode);
+        regServ.Connect();
+        view.Open(regServ);
+        view.AddDeviceL(*newDev,stat);
+    });
+    User::WaitForRequest(stat);
+    stat.Int();
+    view.Close();
+    regServ.Close();
+    SafeDelete(newDev);
 }
 catch(char* str)
 {

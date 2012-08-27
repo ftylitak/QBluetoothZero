@@ -114,13 +114,13 @@ symbian {
     	
     LIBS += $$BT_PLUGIN_LIB
     
-    #TARGET.CAPABILITY = All -TCB -AllFiles -DRM
+#    TARGET.CAPABILITY = All -TCB -AllFiles -DRM
     TARGET.CAPABILITY += LocalServices \
         NetworkServices \
         ReadUserData \
         UserEnvironment \
         WriteUserData \
-        Location
+         Location
     
     for(header, exportheaders.sources):BLD_INF_RULES.prj_exports += "$$header $$deploy.path$$exportheaders.path/QBluetoothZero/$$basename(header)"
 	
