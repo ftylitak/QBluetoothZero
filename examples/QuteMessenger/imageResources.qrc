@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="programIcon" >
+    <file>val1.png</file>
+  </qresource>
+  <qresource prefix="ICON" >
+    <file>val1.svg</file>
+  </qresource>
+  <qresource prefix="Backgraound" >
+    <file>background.PNG</file>
+  </qresource>
+</RCC>
